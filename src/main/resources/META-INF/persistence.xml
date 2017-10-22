@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
+    <persistence-unit name="RailwayPU" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <class>com.tsystems.jschool.railway.persistence.Board</class>
+        <class>com.tsystems.jschool.railway.persistence.Passenger</class>
+        <class>com.tsystems.jschool.railway.persistence.Route</class>
+        <class>com.tsystems.jschool.railway.persistence.Station</class>
+        <class>com.tsystems.jschool.railway.persistence.Ticket</class>
+        <class>com.tsystems.jschool.railway.persistence.Train</class>
+        <class>com.tsystems.jschool.railway.persistence.User</class>
+        <class>com.tsystems.jschool.railway.persistence.Waypoint</class>
+        <validation-mode>AUTO</validation-mode>
+        <properties>
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/railway"/>
+            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
+            <property name="hibernate.connection.username" value="root"/>
+            <property name="hibernate.connection.password" value="vika905"/>
+            <property name="hibernate.archive.autodetection" value="class"/>
+            <property name="hibernate.show_sql" value="false"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="javax.persistence.validation.mode" value="AUTO" />
+            <property name="hibernate.validator.autoregister_listeners" value="true" />
+            <property name="javax.persistence.validation.group.pre-persist" value="javax.validation.groups.Default"/>
+            <property name="javax.persistence.validation.group.pre-update" value="javax.validation.groups.Default"/>
+        </properties>
+    </persistence-unit>
+</persistence>
