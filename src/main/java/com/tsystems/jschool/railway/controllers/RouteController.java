@@ -21,7 +21,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 public class RouteController {
@@ -121,6 +123,9 @@ public class RouteController {
                 waypointTravellTime.add(travelTime);
                 waypointTravelStopTime.add(travelStopTime);
             }
+
+            Set<String> set = new HashSet<>(waypointStations);
+            if (waypointStations.size() != set.size()) throw new ControllerException(ErrorController.DUPLICATE_STATIONS_IN_ROUTE);
 
             saveRouteDto.setWaypointStations(waypointStations);
             saveRouteDto.setWaypointTravellTime(waypointTravellTime);

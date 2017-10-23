@@ -38,7 +38,7 @@ public class ManagerBoardController {
                            @RequestParam("date") String date, @RequestParam int trainId, RedirectAttributes redirectAttributes){
         LOGGER.info("try to add new trip: route number " + route + " , train name " + trainName + " , date " + date);
         try {
-            if (date.trim().length() != 0)
+            if (date.trim().length() == 0)
                 throw new ControllerException(ErrorController.INCORRECT_DATE_FORMAT);
             Date boardDate;
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");

@@ -14,7 +14,8 @@ public enum ErrorController {
     INCORRECT_CAPACITY(11, "The number of seats must be between 18 and 1080.", "incorrect number of seats"),
     INCORRECT_ROUTE_NUMBER(12, "Enter the number of the route, please.", "route's name is empty"),
     INCORRECT_TRAVEL_TIME(13, "The field 'Travel time' cannot be empty", "travel time is empty"),
-    INCORRECT_STOP_TIME(14, "The field 'Stop time' cannot be empty", "stop time is empty");
+    INCORRECT_STOP_TIME(14, "The field 'Stop time' cannot be empty", "stop time is empty"),
+    DUPLICATE_STATIONS_IN_ROUTE(15, "The route cannot contain duplicate stations", "duplicate stations in the route");
 
     private final int id;
     private final String message;
