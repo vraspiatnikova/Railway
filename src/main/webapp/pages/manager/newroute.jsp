@@ -36,7 +36,7 @@
                                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
                                         <div class="form-group">
                                             <select name="stations" class="form-control" required>
-                                                <option value="0">Select the station</option>
+                                                <option value="">Select the station</option>
                                                 <c:forEach items="${allStations}" var="station">
                                                     <option value="${station.name}">${station.name}</option>
                                                 </c:forEach>
@@ -66,7 +66,7 @@
                                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
                                         <div class="form-group">
                                             <select name="stations" class="form-control" required>
-                                                <option value="0">Select the station</option>
+                                                <option value="">Select the station</option>
                                                 <c:forEach items="${allStations}" var="station">
                                                     <option value="${station.name}">${station.name}</option>
                                                 </c:forEach>

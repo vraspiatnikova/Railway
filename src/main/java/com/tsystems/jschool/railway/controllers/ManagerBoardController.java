@@ -35,9 +35,11 @@ public class ManagerBoardController {
 
     @RequestMapping(value = "/addTrainRoute", method = RequestMethod.POST)
     public String addBoard(@RequestParam("route") String route, @RequestParam("trainName") String trainName,
-                           @RequestParam("date") String date, RedirectAttributes redirectAttributes){
+                           @RequestParam("date") String date, @RequestParam int trainId, RedirectAttributes redirectAttributes){
         LOGGER.info("try to add new trip: route number " + route + " , train name " + trainName + " , date " + date);
         try {
+            if (date.trim().length() != 0)
+                throw new ControllerException(ErrorController.INCORRECT_DATE_FORMAT);
             Date boardDate;
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
             try {
@@ -48,20 +50,20 @@ public class ManagerBoardController {
             boardService.addBoard(boardDate, trainName, route);
             LOGGER.info("new trip: route number " + route + " , train name " + trainName + " , date " + date +" has been added");
             redirectAttributes.addFlashAttribute("message", "The trip has been added successfully!");
-            return "redirect:/allTrainsRoutes";
         } catch (ControllerException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
             redirectAttributes.addFlashAttribute("exception", e.getError().getMessage());
-            return "redirect:/allTrainsRoutes";
+            return "redirect:/addroute/" + trainId;
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
             redirectAttributes.addFlashAttribute("exception", e.getError().getMessage());
-            return "redirect:/allTrainsRoutes";
+            return "redirect:/addroute/" + trainId;
         } catch (Exception e) {
             LOGGER.warn(e.getMessage(), e);
             redirectAttributes.addFlashAttribute("exception", e.getMessage());
-            return "redirect:/allTrainsRoutes";
+            return "redirect:/addroute/" + trainId;
         }
+        return "redirect:/allTrainsRoutes";
     }
 
     @RequestMapping(value = "/allTrainsRoutes", method = RequestMethod.GET)
@@ -70,16 +72,14 @@ public class ManagerBoardController {
         try {
             model.addAttribute("board", new BoardDto());
             model.addAttribute("listBoards", this.boardService.getAllBoardsDto());
-            return "manager/alltrainsroutes";
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
             model.addAttribute("exception", e.getError().getMessage());
-            return "manager/alltrainsroutes";
         } catch (Exception e) {
             LOGGER.warn(e.getMessage(), e);
             model.addAttribute("exception", e.getMessage());
-            return "manager/alltrainsroutes";
         }
+        return "manager/alltrainsroutes";
     }
 
     @RequestMapping("registredpassengers/{id}")
@@ -89,15 +89,13 @@ public class ManagerBoardController {
             Board board = boardService.findBoardById(id);
             List<Passenger> passengers = boardService.findRegisteredPassengers(board);
             model.addAttribute("allPassengers", passengers);
-            return "manager/registredpassengers";
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
             model.addAttribute("exception", e.getError().getMessage());
-            return "manager/registredpassengers";
         } catch (Exception e) {
             LOGGER.warn(e.getMessage(), e);
             model.addAttribute("exception", e.getMessage());
-            return "manager/registredpassengers";
         }
+        return "manager/registredpassengers";
     }
 }

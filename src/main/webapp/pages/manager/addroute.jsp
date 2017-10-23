@@ -17,6 +17,7 @@
         <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
+                    <c:import url="../message.jsp"/>
                     <div class="header">
                         <h2>
                             ADD ROUTE
@@ -24,6 +25,7 @@
                     </div>
                     <div class="body">
                         <form method="post" action="${pageContext.request.contextPath}/addTrainRoute">
+                            <input type="hidden" value="${train.id}" name="trainId">
                             <label for="train_num">Train number</label>
                             <div class="form-group">
                                 <div class="form-line">
@@ -40,7 +42,7 @@
                             <div class="form-group">
                                 <div class="form-line">
                                     <select id = "route" class="form-control" name="route" required>
-                                        <option value="0">Select the route</option>
+                                        <option value="">Select the route</option>
                                         <c:forEach items="${allRoutes}" var="route">
                                             <option value="${route.number}">${route.number}</option>
                                         </c:forEach>
@@ -50,7 +52,7 @@
                             <label for="date">Select date</label>
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" id="date" class="form-control" placeholder="dd-MM-yyyy HH:mm" value="" name="date" required >
+                                    <input type="text" id="date" class="form-control" placeholder="dd-MM-yyyy HH:mm" value="" name="date" >
                                 </div>
                             </div>
                             <br>

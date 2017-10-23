@@ -108,10 +108,11 @@ public class RouteController {
 
             for (int i = 0; i < waypoints.length(); i++) {
                 String station = waypoints.getJSONObject(i).getString("station");
+                if (station.trim().length() == 0) throw new ControllerException(ErrorController.INCORRECT_STATION_NAME);
                 String travelTimeStr = waypoints.getJSONObject(i).getString("travelTime");
-                if (travelTimeStr.trim().length() == 0) travelTimeStr = "0";
+                if (travelTimeStr.trim().length() == 0) throw new ControllerException(ErrorController.INCORRECT_TRAVEL_TIME);
                 String stopTimeStr = waypoints.getJSONObject(i).getString("stopTime");
-                if (stopTimeStr.trim().length() == 0) stopTimeStr = "0";
+                if (stopTimeStr.trim().length() == 0) throw new ControllerException(ErrorController.INCORRECT_STOP_TIME);
                 Integer travelTime = Integer.parseInt(travelTimeStr);
                 Integer travelStopTime = Integer.parseInt(stopTimeStr) + travelTime;
 

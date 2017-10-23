@@ -77,7 +77,7 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = ServiceException.class)
     public void saveRoute(SaveRouteDto saveRouteDto) throws ServiceException {
         LOGGER.info("try to save new route");
         try {
