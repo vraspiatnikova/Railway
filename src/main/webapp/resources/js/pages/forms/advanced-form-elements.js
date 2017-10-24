@@ -18,7 +18,7 @@ $(function () {
     $demoMaskedInput.find('.time24').inputmask('hh:mm', { placeholder: '__:__ _m', alias: 'time24', hourFormat: '24' });
 
     //Date Time
-    $demoMaskedInput.find('.datetime').inputmask('d/m/y h:s', { placeholder: '__/__/____ __:__', alias: "datetime", hourFormat: '24' });
+    $demoMaskedInput.find('.datetime').inputmask('d-m-y h:s', { placeholder: '__-__-____ __:__', alias: "datetime", hourFormat: '24' });
 
     //Mobile Phone Number
     $demoMaskedInput.find('.mobile-phone-number').inputmask('+99 (999) 999-99-99', { placeholder: '+__ (___) ___-__-__' });

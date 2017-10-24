@@ -2,6 +2,8 @@ package com.tsystems.jschool.railway.controllers;
 
 import com.tsystems.jschool.railway.dto.BoardByStationDto;
 import com.tsystems.jschool.railway.dto.SearchTripDto;
+import com.tsystems.jschool.railway.exceptions.ControllerException;
+import com.tsystems.jschool.railway.exceptions.ErrorController;
 import com.tsystems.jschool.railway.exceptions.ServiceException;
 import com.tsystems.jschool.railway.persistence.Station;
 import com.tsystems.jschool.railway.services.interfaces.BoardService;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.apache.log4j.Logger;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -37,30 +40,34 @@ public class UserBoardController {
             model.addAttribute("searchTripDto", new SearchTripDto());
             model.addAttribute("station", new Station());
             model.addAttribute("allStations", this.stationService.getAllStations());
-            return "user/searchtripsuser";
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
             model.addAttribute("exception", e.getError().getMessage());
-            return "user/searchtripsuser";
         } catch (Exception e) {
             LOGGER.warn(e.getMessage(), e);
             model.addAttribute("exception", e.getMessage());
-            return "user/searchtripsuser";
         }
+        return "user/searchtripsuser";
     }
 
     @RequestMapping(value = "findTripUser", method = RequestMethod.POST)
-    public String findTripsUser(@ModelAttribute("searchTripDto") SearchTripDto searchTripDto, Model model){
+    public String findTripsUser(@ModelAttribute("searchTripDto") SearchTripDto searchTripDto, Model model, RedirectAttributes redirectAttributes){
         try {
+            if(searchTripDto.getStationFrom().length() == 0 || searchTripDto.getStationTo().length() == 0)
+                throw new ControllerException(ErrorController.INCORRECT_STATION_NAME);
             model.addAttribute("suitableTrips", boardService.findAllSuitableTrips(searchTripDto));
+        } catch (ControllerException e) {
+            LOGGER.warn(e.getError().getMessageForLog(), e);
+            redirectAttributes.addFlashAttribute("exception", e.getError().getMessage());
+            return "redirect:/searchTripUser";
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
-            model.addAttribute("exception", e.getError().getMessage());
-            return "user/searchtripsuser";
+            redirectAttributes.addFlashAttribute("exception", e.getError().getMessage());
+            return "redirect:/searchTripUser";
         } catch (Exception e) {
             LOGGER.warn(e.getMessage(), e);
-            model.addAttribute("exception", e.getMessage());
-            return "user/searchtripsuser";
+            redirectAttributes.addFlashAttribute("exception", e.getMessage());
+            return "redirect:/searchTripUser";
         }
         return "user/suitabletripsuser";
     }
@@ -69,16 +76,14 @@ public class UserBoardController {
     public String getBoardByStationUser(Model model){
         try {
             model.addAttribute("allStations", stationService.getAllStations());
-            return "user/boardbystationuser";
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
             model.addAttribute("exception", e.getError().getMessage());
-            return "user/boardbystationuser";
         } catch (Exception e) {
             LOGGER.warn(e.getMessage(), e);
             model.addAttribute("exception", e.getMessage());
-            return "user/boardbystationuser";
         }
+        return "user/boardbystationuser";
     }
 
     @RequestMapping(value = "showBoardByStationUser", method = RequestMethod.POST)
@@ -86,15 +91,13 @@ public class UserBoardController {
         try {
             List<BoardByStationDto> boardByStationDtos = boardService.getAllBoardByStationDto(stationName);
             model.addAttribute("allBoards", boardByStationDtos);
-            return "user/showboarduser";
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
             model.addAttribute("exception", e.getError().getMessage());
-            return "user/showboarduser";
         } catch (Exception e) {
             LOGGER.warn(e.getMessage(), e);
             model.addAttribute("exception", e.getMessage());
-            return "user/showboarduser";
         }
+        return "user/showboarduser";
     }
 }

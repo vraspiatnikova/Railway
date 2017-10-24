@@ -5,6 +5,7 @@ import com.tsystems.jschool.railway.exceptions.ErrorDao;
 import com.tsystems.jschool.railway.dao.interfaces.GenericDao;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.lang.reflect.ParameterizedType;
@@ -57,6 +58,8 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
     public T findById(Integer id) throws DaoException{
         try {
             return (T) em.find(entityClass, id);
+        } catch (NoResultException nre){
+            return null;
         } catch (Exception e) {
             throw new DaoException(ErrorDao.DATABASE_EXCEPTION, e);
         }

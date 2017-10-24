@@ -35,7 +35,7 @@
                                 <div class="row waypoint-row">
                                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
                                         <div class="form-group">
-                                            <select name="stations" class="form-control" required>
+                                            <select name="stations" class="form-control show-tick" data-live-search="true" required>
                                                 <option value="">Select the station</option>
                                                 <c:forEach items="${allStations}" var="station">
                                                     <option value="${station.name}">${station.name}</option>
@@ -65,7 +65,7 @@
                                 <div class="row waypoint-row">
                                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
                                         <div class="form-group">
-                                            <select name="stations" class="form-control" required>
+                                            <select name="stations" class="form-control show-tick" data-live-search="true" required>
                                                 <option value="">Select the station</option>
                                                 <c:forEach items="${allStations}" var="station">
                                                     <option value="${station.name}">${station.name}</option>
@@ -84,16 +84,28 @@
                                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
                                         <div class="form-group form-float">
                                             <div class="form-line">
-                                                <input type="text" name="stopTime" value="0" readonly class="form-control" required>
+                                                <input type="text" name="stopTime" class="form-control" required>
                                                 <label class="form-label">Stop time (min)</label>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <div class="row clearfix">
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                                <button type="button" class="btn btn-success" name="addWaypoint">Add</button>
+                                <button type="button" class="btn btn-danger disabled" name="delWaypoint">Delete</button>
+                                </div>
+                            </div>
+                            <div class="row clearfix">
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                                <button type="button" class="btn bg-red waves-effect" name="saveRoute">
+                                    <i class="material-icons">save</i>
+                                    <span>SAVE</span>
+                                </button>
+                                </div>
+                            </div>
 
-                            <br>
-                            <button type="button" class="btn bg-red waves-effect" name="saveRoute">Save</button>
                         </form>
                     </div>
                 </div>
@@ -104,7 +116,8 @@
 </section>
 
 <!-- Jquery Core Js -->
-<script async="" src="https://www.google-analytics.com/analytics.js"></script><script src="../../resources/plugins/jquery/jquery.min.js"></script>
+<script async="" src="https://www.google-analytics.com/analytics.js"></script>
+<script src="../../resources/plugins/jquery/jquery.min.js"></script>
 
 <!-- Bootstrap Core Js -->
 <script src="../../resources/plugins/bootstrap/js/bootstrap.js"></script>

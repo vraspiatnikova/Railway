@@ -54,18 +54,4 @@ public class StationServiceImpl implements StationService {
         }
         return listOfStations;
     }
-
-//    @Override
-//    @Transactional
-//    public Station getStationById(Integer stationId) throws ServiceException {
-//        LOGGER.info("try to find train by id (" + stationId + ")");
-//        Station station;
-//        try {
-//            station = stationDao.findById(stationId);
-//        } catch (DaoException e) {
-//            LOGGER.error(e.getMessage(), e);
-//            throw new ServiceException(ErrorService.DATABASE_EXCEPTION, e);
-//        }
-//        return station;
-//    }
 }

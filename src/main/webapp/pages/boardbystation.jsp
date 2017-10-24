@@ -26,15 +26,17 @@
                     <div class="body">
                         <form method="post" action="${pageContext.request.contextPath}/showBoardByStation">
                             <div class="row clearfix">
-                                <div class="col-sm-6">
-                                        <select class="selectpicker"  name="stationName" required>
-                                        <option value="0">Select the station</option>
-                                        <c:forEach items="${allStations}" var="station">
-                                            <option value="${station.name}">${station.name}</option>
-                                        </c:forEach>
-                                    </select></div>
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                        <div class="form-line">
+                                            <select class="form-control show-tick" name="stationName" data-live-search="true" required>
+                                            <option value="">Select the station</option>
+                                            <c:forEach items="${allStations}" var="station">
+                                                <option value="${station.name}">${station.name}</option>
+                                            </c:forEach>
+                                            </select>
+                                    </div>
                                 </div>
-                                <div class="col-sm-6">
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                                     <button type="submit" class="btn bg-red waves-effect">Show timetable</button>
                                 </div>
                             </div>

@@ -6,9 +6,6 @@ public class BoardByStationDto {
     private String depatureDateTime;
     private String arrivaDatelTime;
 
-    public BoardByStationDto() {
-    }
-
     public String getTrainName() {
         return trainName;
     }

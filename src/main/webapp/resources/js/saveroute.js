@@ -1,3 +1,15 @@
+jQuery(document).on('click', '[name="addWaypoint"]', function () {
+    jQuery('#routeForm .waypoint-row:last').after($('#routeForm .waypoint-row:last').clone());
+    jQuery('#routeForm .waypoint-row:last input').val('');
+    jQuery('#routeForm .waypoint-row:last select').val('');
+    if (jQuery('#routeForm .waypoint-row').length > 2) $('[name="delWaypoint"]').removeClass("disabled");
+});
+
+jQuery(document).on('click', '[name="delWaypoint"]:not(.disabled)', function () {
+    jQuery('#routeForm .waypoint-row:last').remove();
+    if (jQuery('#routeForm .waypoint-row').length < 3) $('[name="delWaypoint"]').addClass("disabled");
+});
+
 jQuery(document).on('click', '[name="saveRoute"]', function () {
     var pst = {};
     pst.routeNumber = jQuery('[name="routeNumber"]').val();
@@ -13,6 +25,5 @@ jQuery(document).on('click', '[name="saveRoute"]', function () {
     var json = JSON.stringify(pst);
     jQuery.post('saveroute', {json: json}, function (data) {
         jQuery('#routeForm').after(data);
-        // window.location.href="/allRoutes"
     })
 });

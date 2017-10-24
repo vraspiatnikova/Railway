@@ -23,35 +23,71 @@
                         <h2>FIND THE TRIP</h2>
                     </div>
                     <div class="body">
-                        <form:form method="POST" action="findTrip" modelAttribute="searchTripDto">
+                        <form:form id="find-trip"  method="POST" action="findTrip" modelAttribute="searchTripDto">
                             <table class="table">
                                 <tr>
                                     <td><form:label path="stationFrom">Select the station of departure :</form:label></td>
-                                    <td><form:select class="form-control" path="stationFrom">
-                                        <form:option value="0">station of departure</form:option>
-                                        <c:forEach items="${allStations}" var="station">
-                                            <form:option value="${station.name}">${station.name}</form:option>
-                                        </c:forEach>
-                                    </form:select>
+                                    <td>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <form:select class="form-control show-tick" path="stationFrom" data-live-search="true" required = "">
+                                                <form:option value="">station of departure</form:option>
+                                                    <c:forEach items="${allStations}" var="station">
+                                                    <form:option value="${station.name}">${station.name}</form:option>
+                                                    </c:forEach>
+                                                </form:select>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td><form:label path="stationFrom">Select the station of arrival :</form:label></td>
-                                    <td><form:select class="form-control" path="stationTo">
-                                        <form:option value="0">station of arrival</form:option>
-                                        <c:forEach items="${allStations}" var="station">
-                                            <form:option value="${station.name}">${station.name}</form:option>
-                                        </c:forEach>
-                                    </form:select>
+                                    <td>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <form:select class="form-control show-tick" path="stationTo" data-live-search="true" required = "">
+                                                <form:option value="">station of arrival</form:option>
+                                                    <c:forEach items="${allStations}" var="station">
+                                                    <form:option value="${station.name}">${station.name}</form:option>
+                                                    </c:forEach>
+                                                </form:select>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td><form:label path="dateTimeFrom">Select start date</form:label></td>
-                                    <td><form:input path="dateTimeFrom" type="text" value="" class="form-control" placeholder="dd-MM-yyyy HH:mm"/></td>
+                                    <td>
+                                        <div class="demo-masked-input">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="material-icons">date_range</i>
+                                            </span>
+                                                <div class="form-line">
+                                                    <form:input path="dateTimeFrom" type="text" class="form-control datetime" placeholder="dd-MM-yyyy HH:mm"/>
+                                                </div>
+                                        </div>
+                                        </div>
+                                        </div>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td><form:label path="dateTimeTo">Select end date</form:label></td>
-                                    <td><form:input path="dateTimeTo" type="text" value="" class="form-control" placeholder="dd-MM-yyyy HH:mm"/></td>
+                                    <td>
+                                        <div class="demo-masked-input">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                     <i class="material-icons">date_range</i>
+                                                </span>
+                                            <div class="form-line">
+                                                <form:input path="dateTimeTo" type="text" value="" class="form-control datetime" placeholder="dd-MM-yyyy HH:mm"/>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </td>
                                 </tr>
                                 </tr>
                                     <td><input class="btn bg-red waves-effect" type="submit" value="Submit"/></td>
@@ -95,5 +131,13 @@
 
 <!-- Demo Js -->
 <script src="../resources/js/demo.js"></script>
+
+<!-- Jquery Validation Plugin Css -->
+<script src="../resources/plugins/jquery-validation/jquery.validate.js"></script>
+
+<script src="../resources/js/pages/forms/advanced-form-elements.js"></script>
+
+
+<%--<script src="../resources/js/validation.js"></script>--%>
 </body></html>
 
