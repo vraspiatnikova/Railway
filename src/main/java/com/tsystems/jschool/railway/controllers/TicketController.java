@@ -123,4 +123,20 @@ public class TicketController {
         }
         return "user/message_user";
     }
+
+    @RequestMapping(value = "myTickets", method = RequestMethod.GET)
+    public String getMyTickets (Model model){
+        try {
+            UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            User user = userService.findUserByEmail(userDetails.getUsername());
+            model.addAttribute("tickets", ticketService.findAllTicketsByUser(user));
+        } catch (ServiceException e) {
+            LOGGER.warn(e.getError().getMessageForLog(), e);
+            model.addAttribute("exception", e.getError().getMessage());
+        } catch (Exception e) {
+            LOGGER.warn(e.getMessage(), e);
+            model.addAttribute("exception", e.getMessage());
+        }
+        return "user/mytickets";
+    }
 }

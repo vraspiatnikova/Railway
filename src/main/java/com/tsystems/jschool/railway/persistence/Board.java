@@ -7,12 +7,13 @@ import java.util.Date;
 @NamedQueries({
         @NamedQuery(name = "Board.findBoardsBetweenDates",
                 query = "SELECT board FROM Board board WHERE board.dateTime BETWEEN :dateTimeFrom AND :dateTimeTo"),
-
         @NamedQuery(name = "Board.findBoardByRouteNumber",
                 query = "SELECT board FROM Board board WHERE board.route.number = :routeNumber"),
         @NamedQuery(name = "Board.findBoardByStationName", query = "SELECT board FROM Board board" +
                 " JOIN FETCH board.route route JOIN FETCH route.waypoints wp JOIN FETCH wp.station station " +
-                "WHERE station.name = :stationName")
+                "WHERE station.name = :stationName"),
+        @NamedQuery(name = "Board.findBoardByTrainNameAndRoute", query = "SELECT board FROM Board board " +
+                "WHERE board.route.number =:routeNumber AND board.train.name =:trainName")
 })
 @Entity
 @Table(name = "board", schema = "railway")

@@ -44,18 +44,16 @@
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
-                                        <div class="form-group form-float">
+                                        <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" name="travelTime" value="0" readonly class="form-control" required>
-                                                <label class="form-label">Travel time (min)</label>
+                                                <input type="text" name="travelTime" value="0" readonly class="form-control" placeholder="Travel time (min)" required>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
-                                        <div class="form-group form-float">
+                                        <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" name="stopTime" value="0" readonly class="form-control" required>
-                                                <label class="form-label">Stop time (min)</label>
+                                                <input type="text" name="stopTime" value="0" readonly class="form-control" placeholder="Stop time (min)" required>
                                             </div>
                                         </div>
                                     </div>
@@ -74,18 +72,16 @@
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
-                                        <div class="form-group form-float">
+                                        <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" name="travelTime" class="form-control" required>
-                                                <label class="form-label">Travel time (min)</label>
+                                                <input type="text" name="travelTime" class="form-control" placeholder="Travel time (min)" required>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
-                                        <div class="form-group form-float">
+                                        <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" name="stopTime" class="form-control" required>
-                                                <label class="form-label">Stop time (min)</label>
+                                                <input type="text" name="stopTime" class="form-control" placeholder="Stop time (min)" required>
                                             </div>
                                         </div>
                                     </div>

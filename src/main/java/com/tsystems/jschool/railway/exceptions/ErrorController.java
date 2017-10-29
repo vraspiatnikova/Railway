@@ -15,7 +15,8 @@ public enum ErrorController {
     INCORRECT_ROUTE_NUMBER(12, "Enter the number of the route, please.", "route's name is empty"),
     INCORRECT_TRAVEL_TIME(13, "The field 'Travel time' cannot be empty", "travel time is empty"),
     INCORRECT_STOP_TIME(14, "The field 'Stop time' cannot be empty", "stop time is empty"),
-    DUPLICATE_STATIONS_IN_ROUTE(15, "The route cannot contain duplicate stations", "duplicate stations in the route");
+    DUPLICATE_STATIONS_IN_ROUTE(15, "The route cannot contain duplicate stations", "duplicate stations in the route"),
+    DUPLICATE_TRAINS_ROUTE(16, "Train with the same route is already exists", "duplicate train's route");
 
     private final int id;
     private final String message;

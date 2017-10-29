@@ -2,56 +2,61 @@
 <%--
   Created by IntelliJ IDEA.
   User: Вика
-  Date: 16.10.2017
-  Time: 9:13
+  Date: 01.10.2017
+  Time: 13:42
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html class="chrome">
 <c:import url="../head.jsp"/>
-
 <body class="theme-red ls-closed">
 <c:import url="navbar_user.jsp"/>
 <section class="content">
     <div class="container-fluid">
-        <div class="block-header">
-        </div>
-        <!-- Select -->
+
         <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
                     <div class="header">
-                        <h2>STATION'S TIMETABLE</h2>
+                        <h2>
+                            MY TICKETS
+                        </h2>
                     </div>
-                    <div class="body">
-                        <form method="post" action="${pageContext.request.contextPath}/showBoardByStationUser">
-                            <div class="row clearfix">
-                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                    <div class="form-line">
-                                        <select class="form-control show-tick" name="stationName" data-live-search="true" required>
-                                            <option value="">Select the station</option>
-                                            <c:forEach items="${allStations}" var="station">
-                                                <option value="${station.name}">${station.name}</option>
-                                            </c:forEach>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                    <button type="submit" class="btn bg-red waves-effect">Show timetable</button>
-                                </div>
-                            </div>
-                        </form>
+                    <div class="body table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Train name</th>
+                                <th>Route</th>
+                                <th>Departure station</th>
+                                <th>Departure date</th>
+                                <th>Arrival station</th>
+                                <th>Arrival date</th>
+                                <th>Price</th>
+                            </tr>
+                            </thead>
+                            <c:forEach items="${tickets}" var="ticket">
+                                <tr>
+                                    <td>${ticket.trainName}</td>
+                                    <td>${ticket.route}</td>
+                                    <td>${ticket.stationFrom}</td>
+                                    <td>${ticket.arrivalDateTime}</td>
+                                    <td>${ticket.stationTo}</td>
+                                    <td>${ticket.depatureDateTime}</td>
+                                    <td>${ticket.price}</td>
+                                </tr>
+                            </c:forEach>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
-    <!-- #END# Select -->
+
     </div>
 </section>
 
 <!-- Jquery Core Js -->
-<script async="" src="https://www.google-analytics.com/analytics.js"></script>
-<script src="../../resources/plugins/jquery/jquery.min.js"></script>
+<script async="" src="https://www.google-analytics.com/analytics.js"></script><script src="../../resources/plugins/jquery/jquery.min.js"></script>
 
 <!-- Bootstrap Core Js -->
 <script src="../../resources/plugins/bootstrap/js/bootstrap.js"></script>
@@ -80,5 +85,5 @@
 
 <!-- Demo Js -->
 <script src="../../resources/js/demo.js"></script>
-
-</body></html>
+</body>
+</html>

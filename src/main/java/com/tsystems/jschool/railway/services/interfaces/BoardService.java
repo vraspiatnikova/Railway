@@ -7,6 +7,8 @@ import com.tsystems.jschool.railway.dto.SuitableTripDto;
 import com.tsystems.jschool.railway.persistence.Board;
 import com.tsystems.jschool.railway.persistence.Passenger;
 import com.tsystems.jschool.railway.exceptions.ServiceException;
+import com.tsystems.jschool.railway.persistence.Route;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -20,4 +22,5 @@ public interface BoardService {
     SuitableTripDto constractSuitableTripDto(Board board, String stationFrom, String stationTo) throws ServiceException;
     List<Passenger> findRegisteredPassengers(Board board) throws ServiceException;
     List<BoardByStationDto> getAllBoardByStationDto(String stationName) throws ServiceException;
+    List<Board> findBoardByTrainNameAndRoute(String trainName, String routeNumber) throws ServiceException;
 }

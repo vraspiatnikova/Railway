@@ -48,30 +48,36 @@
         <div class="menu">
             <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 368px;">
                 <ul class="list" style="overflow: hidden; width: auto; height: 368px;">
-                        <li class="active">
-                            <a href="${pageContext.request.contextPath}/user_start_page" class="toggled waves-effect waves-block">
-                                <i class="material-icons">home</i>
-                                <span>Home</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="${pageContext.request.contextPath}/boardByStationUser" class=" waves-effect waves-block">
-                                <i class="material-icons">text_fields</i>
-                                <span>Station timetable</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="${pageContext.request.contextPath}/searchTripUser" class=" waves-effect waves-block">
-                                <i class="material-icons">layers</i>
-                                <span>Buy ticket</span>
-                            </a>
-                        </li>
-                            <li>
-                                <a href="${pageContext.request.contextPath}/signout" class=" waves-effect waves-block">
-                                    <i class="material-icons">input</i>
-                                    <span>Sign out </span>
-                                </a>
-                            </li>
+                    <li class="active">
+                        <a href="${pageContext.request.contextPath}/user_start_page" class="toggled waves-effect waves-block">
+                            <i class="material-icons">home</i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="${pageContext.request.contextPath}/boardByStationUser" class=" waves-effect waves-block">
+                            <i class="material-icons">text_fields</i>
+                            <span>Station timetable</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="${pageContext.request.contextPath}/searchTripUser" class=" waves-effect waves-block">
+                            <i class="material-icons">layers</i>
+                            <span>Buy ticket</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="${pageContext.request.contextPath}/myTickets" class=" waves-effect waves-block">
+                            <i class="material-icons">assignment</i>
+                            <span>My tickets</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="${pageContext.request.contextPath}/signout" class=" waves-effect waves-block">
+                            <i class="material-icons">input</i>
+                            <span>Sign out </span>
+                        </a>
+                    </li>
                 </ul><div class="slimScrollBar" style="background: rgba(0, 0, 0, 0.5); width: 4px; position: absolute; top: 0px; opacity: 0.4; display: none; border-radius: 0px; z-index: 99; right: 1px; height: 368px;"></div><div class="slimScrollRail" style="width: 4px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 0px; background: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px;"></div></div>
         </div>
         <!-- #Menu -->

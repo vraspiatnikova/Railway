@@ -1,5 +1,6 @@
 package com.tsystems.jschool.railway.services.implementations;
 
+import com.tsystems.jschool.railway.dto.SuitableTripDto;
 import com.tsystems.jschool.railway.exceptions.DaoException;
 import com.tsystems.jschool.railway.dao.interfaces.BoardDao;
 import com.tsystems.jschool.railway.dao.interfaces.PassengerDao;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.apache.log4j.Logger;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -78,5 +80,52 @@ public class TicketServiceImpl implements TicketService {
             LOGGER.error(e.getMessage(), e);
             throw new ServiceException(ErrorService.DATABASE_EXCEPTION, e);
         }
+    }
+
+    @Override
+    @Transactional
+    public List<Ticket> findTicketsByPassenger(Passenger passenger) throws ServiceException {
+        LOGGER.info("try to get all tickets by passenger");
+        List<Ticket> ticketList;
+        try {
+            ticketList = ticketDao.findTicketsByPassenger(passenger);
+        } catch (DaoException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new ServiceException(ErrorService.DATABASE_EXCEPTION, e);
+        }
+        return ticketList;
+    }
+
+    @Override
+    @Transactional
+    public List<SuitableTripDto> findAllTicketsByUser(User user) throws ServiceException {
+        try {
+            Passenger passenger = passengerDao.findPassengerByUserInfo(user);
+            if (passenger == null) throw new ServiceException(ErrorService.NO_PASSENGER_BY_USER);
+            List<SuitableTripDto> tickets = new ArrayList<>();
+            for(Ticket ticket : findTicketsByPassenger(passenger)) {
+                tickets.add(constructTicket(ticket));
+            }
+
+            return tickets;
+        } catch (DaoException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new ServiceException(ErrorService.DATABASE_EXCEPTION, e);
+        }
+    }
+
+    private SuitableTripDto constructTicket(Ticket ticket) throws ServiceException {
+        SuitableTripDto ticketDto = new SuitableTripDto();
+        Board board = ticket.getBoard();
+        ticketDto.setTrainName(board.getTrain().getName());
+        Route route = board.getRoute();
+        String routeName = route.findFirstWaypoint().getStation().getName()+" - "+route.findLastWaypoint().getStation().getName();
+        ticketDto.setRoute(routeName);
+        ticketDto.setStationFrom(ticket.getWaypointFrom().getStation().getName());
+        ticketDto.setStationTo(ticket.getWaypointTo().getStation().getName());
+        ticketDto.setDepatureDateTime(ticket.getWaypointTo().departureDateTime(board.getDateTime()));
+        ticketDto.setArrivalDateTime(ticket.getWaypointFrom().arrivalDateTime(board.getDateTime()));
+        ticketDto.setPrice(ticket.getPrice());
+        return ticketDto;
     }
 }

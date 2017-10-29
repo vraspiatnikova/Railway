@@ -251,4 +251,18 @@ public class BoardServiceImpl implements BoardService {
             throw new ServiceException(ErrorService.DATABASE_EXCEPTION, e);
         }
     }
+
+    @Override
+    @Transactional
+    public List<Board> findBoardByTrainNameAndRoute(String trainName, String routeNumber) throws ServiceException {
+        List<Board> boardList;
+        LOGGER.info("try to get all boards by train name and route");
+        try {
+            boardList = boardDao.findBoardByTrainNameAndRoute(trainName, routeNumber);
+        } catch (DaoException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new ServiceException(ErrorService.DATABASE_EXCEPTION, e);
+        }
+        return boardList;
+    }
 }

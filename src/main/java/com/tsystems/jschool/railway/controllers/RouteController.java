@@ -116,7 +116,7 @@ public class RouteController {
                 String stopTimeStr = waypoints.getJSONObject(i).getString("stopTime");
                 if (stopTimeStr.trim().length() == 0) throw new ControllerException(ErrorController.INCORRECT_STOP_TIME);
                 Integer travelTime = Integer.parseInt(travelTimeStr);
-                Integer travelStopTime = Integer.parseInt(stopTimeStr) + travelTime;
+                Integer travelStopTime = Integer.parseInt(stopTimeStr);
 
                 prevTravelStopTime = travelStopTime;
                 waypointStations.add(station);
@@ -126,9 +126,16 @@ public class RouteController {
 
             Set<String> set = new HashSet<>(waypointStations);
             if (waypointStations.size() != set.size()) throw new ControllerException(ErrorController.DUPLICATE_STATIONS_IN_ROUTE);
-
             saveRouteDto.setWaypointStations(waypointStations);
+
+            for (int i = 2; i < waypointTravellTime.size(); i++) {
+                waypointTravellTime.set(i, waypointTravellTime.get(i-1)+waypointTravellTime.get(i));
+            }
             saveRouteDto.setWaypointTravellTime(waypointTravellTime);
+
+            for (int i = 0; i < waypointTravelStopTime.size(); i++) {
+                waypointTravelStopTime.set(i, waypointTravellTime.get(i) + waypointTravelStopTime.get(i));
+            }
             saveRouteDto.setWaypointTravelStopTime(waypointTravelStopTime);
 
             routeService.saveRoute(saveRouteDto);

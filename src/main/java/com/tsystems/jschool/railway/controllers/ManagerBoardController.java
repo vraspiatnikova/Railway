@@ -47,6 +47,8 @@ public class ManagerBoardController {
             } catch (ParseException e) {
                 throw new ControllerException(ErrorController.INCORRECT_DATE_FORMAT, e);
             }
+            if (!boardService.findBoardByTrainNameAndRoute(trainName, route).isEmpty())
+                throw new ControllerException(ErrorController.DUPLICATE_TRAINS_ROUTE);
             boardService.addBoard(boardDate, trainName, route);
             LOGGER.info("new trip: route number " + route + " , train name " + trainName + " , date " + date +" has been added");
             redirectAttributes.addFlashAttribute("message", "The trip has been added successfully!");

@@ -12,4 +12,5 @@ public interface UserService {
 
     @Transactional
     User regUser(String email, String password) throws ServiceException;
+
 }

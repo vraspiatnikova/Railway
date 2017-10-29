@@ -26,12 +26,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             User userInfo = userService.findUserByEmail(email);
             Set<GrantedAuthority> roles = new HashSet<>();
             roles.add(new SimpleGrantedAuthority(userInfo.getRole().name()));
-            UserDetails userDetails =
-                    new org.springframework.security.core.userdetails.User(userInfo.getEmail(),
-                            userInfo.getPassword(), true, true, true, true,
-                            roles);
-            System.out.println(userDetails.getAuthorities());
-            return userDetails;
+            return new org.springframework.security.core.userdetails.User(userInfo.getEmail(),
+                    userInfo.getPassword(), true, true, true, true,
+                    roles);
         } catch (ServiceException e) {
             throw new UsernameNotFoundException(e.getError().getMessage());
         }

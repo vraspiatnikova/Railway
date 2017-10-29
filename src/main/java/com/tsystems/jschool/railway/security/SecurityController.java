@@ -39,7 +39,7 @@ public class SecurityController {
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     public String signUpUser(ModelMap model, @RequestParam String email, @RequestParam String password,
-                                @RequestParam String confirmPassword) {
+                                @RequestParam String confirm) {
         try {
             email = email.trim();
             Pattern p = Pattern.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
@@ -53,7 +53,7 @@ public class SecurityController {
                 model.addAttribute("passwordError", ErrorController.INCORRECT_PASSWORD.getMessage());
                 throw new ControllerException(ErrorController.INCORRECT_PASSWORD);
             }
-            if (!confirmPassword.equals(password)) {
+            if (!confirm.equals(password)) {
                 model.addAttribute("confirmError", ErrorController.INCORRECT_CONFIRM_PASSWORD.getMessage());
                 throw new ControllerException(ErrorController.INCORRECT_CONFIRM_PASSWORD);
                 }

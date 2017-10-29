@@ -4,8 +4,12 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
-@NamedQuery(name = "Ticket.findTicketsByBoard",
-        query = "SELECT ticket FROM Ticket ticket WHERE ticket.board = :board")
+@NamedQueries({
+        @NamedQuery(name = "Ticket.findTicketsByBoard",
+                query = "SELECT ticket FROM Ticket ticket WHERE ticket.board = :board"),
+        @NamedQuery(name = "Ticket.findTicketsByPassenger",
+                query = "SELECT ticket FROM Ticket ticket WHERE ticket.passenger = :passenger")
+})
 @Entity
 @Table(name = "ticket", schema = "railway")
 public class Ticket {
