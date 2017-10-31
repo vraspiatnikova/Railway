@@ -83,6 +83,13 @@
             <version>20160810</version>
         </dependency>
 
+        <!-- joda-time -->
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.9.9</version>
+        </dependency>
+
         <!-- Hibernate -->
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -113,6 +120,7 @@
             <artifactId>commons-logging</artifactId>
             <version>1.2</version>
         </dependency>
+
 
         <!-- Servlet -->
         <dependency>
@@ -186,8 +194,18 @@
                     </webapps>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+                <version>1.2.1.Final</version>
+                <configuration>
+                    <username>railway</username>
+                    <password>railway123</password>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
-
 
 </project>

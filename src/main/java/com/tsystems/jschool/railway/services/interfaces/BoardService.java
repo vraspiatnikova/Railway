@@ -8,13 +8,14 @@ import com.tsystems.jschool.railway.persistence.Board;
 import com.tsystems.jschool.railway.persistence.Passenger;
 import com.tsystems.jschool.railway.exceptions.ServiceException;
 import com.tsystems.jschool.railway.persistence.Route;
+import org.joda.time.DateTime;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
 
 public interface BoardService {
-    Board addBoard(Date dateTime, String trainName, String routeNumber) throws ServiceException;
+    void addBoard(List<DateTime> dateTimeList, String trainName, String routeNumber) throws ServiceException;
     List<Board> getAllBoards() throws ServiceException;
     List<BoardDto> getAllBoardsDto() throws ServiceException;
     List<SuitableTripDto> findAllSuitableTrips(SearchTripDto searchTripDto) throws ServiceException;

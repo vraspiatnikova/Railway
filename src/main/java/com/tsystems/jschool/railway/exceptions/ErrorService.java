@@ -13,7 +13,7 @@ public enum ErrorService {
     TRIP_NOT_EXIST(9, "The trip doesn't exist.", "the trip doesn't exist"),
     LESS_THAN_10_MIN_LEFT(10, "You cannot buy a ticket because there are less than 10 minutes left before the departure of the train", "less than 10 minutes left before the departure of the train"),
     NO_AVAILABLE_TICKETS(11, "Sorry, there are no available tickets", "there are no available tickets"),
-    INCORRECT_DATE_FORMAT(11, "Date format must be DD-MM-YYYY HH:MM", "error while parsing date"),
+    INCORRECT_DATE_FORMAT(11, "The field date cannot be empty", "error while parsing date"),
     NO_PASSENGER_BY_USER(12, "You havn't bought any ticket yet", "no passenger by user");
 
     private final int id;

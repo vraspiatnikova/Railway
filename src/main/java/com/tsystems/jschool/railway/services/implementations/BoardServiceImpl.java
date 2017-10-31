@@ -10,6 +10,7 @@ import com.tsystems.jschool.railway.persistence.*;
 import com.tsystems.jschool.railway.exceptions.ErrorService;
 import com.tsystems.jschool.railway.exceptions.ServiceException;
 import com.tsystems.jschool.railway.services.interfaces.BoardService;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,19 +43,18 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional
-    public Board addBoard(Date dateTime, String trainName, String routeNumber) throws ServiceException {
-        LOGGER.info("try to add trip with date " + dateTime + " train name " + trainName + " and route number " + routeNumber);
-        Board result;
+    public void addBoard(List<DateTime> dateTimeList, String trainName, String routeNumber) throws ServiceException {
+        LOGGER.info("try to add trip with train name " + trainName + " and route number " + routeNumber);
         try {
             Route route = routeDao.findByNumber(routeNumber);
             Train train = trainDao.findByName(trainName);
-            Board board = new Board(dateTime, route, train);
-            result = boardDao.create(board);
+            for (DateTime dateTime : dateTimeList) {
+                boardDao.create(new Board(dateTime.toDate(), route, train));
+            }
         } catch (DaoException e) {
             LOGGER.error(e.getMessage(), e);
             throw new ServiceException(ErrorService.DATABASE_EXCEPTION, e);
         }
-        return result;
     }
 
     @Override
@@ -147,7 +147,7 @@ public class BoardServiceImpl implements BoardService {
                 suitableTripDto.setDepatureDateTime(wpTo.departureDateTime(board.getDateTime()));
                 suitableTripDto.setStationFrom(stationFrom);
                 suitableTripDto.setStationTo(stationTo);
-                suitableTripDto.setPrice(new BigDecimal(Math.abs(to - from)).multiply(Ticket.FACTOR));
+                suitableTripDto.setPrice(new BigDecimal(Math.abs(from - to)).multiply(Ticket.FACTOR));
             }
             else suitableTripDto = null;
             return suitableTripDto;
@@ -164,7 +164,7 @@ public class BoardServiceImpl implements BoardService {
         LOGGER.info("try to get all suitable trips");
         try {
             List<SuitableTripDto> suitableTripDtos = new ArrayList<>();
-            DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+            DateFormat dateFormat = new SimpleDateFormat("EEEE dd MMMM yyyy - HH:mm", Locale.ENGLISH);
             try {
                 Date dateTimeFrom = dateFormat.parse(searchTripDto.getDateTimeFrom());
                 Date dateTimeTo = dateFormat.parse(searchTripDto.getDateTimeTo());

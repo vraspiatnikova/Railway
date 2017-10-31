@@ -49,12 +49,47 @@
                                     </select>
                                 </div>
                             </div>
-                            <label for="date">Select date</label>
-                            <div class="form-group">
-                                <div class="form-line">
-                                    <input type="text" id="date" class="form-control" placeholder="dd-MM-yyyy HH:mm" value="" name="date" >
+
+                            <div class="row clearfix">
+                                <div class="col-sm-4">
+                                    <label for="startDate">Select start date</label>
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <input type="text" id="startDate" class="datepicker form-control" placeholder="Please choose a start date" name="startDate" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <label for="endDate">Select end date</label>
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <input type="text" id="endDate" class="datepicker form-control" placeholder="Please choose a end date" name="endDate" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <label for="time">Select time</label>
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <input type="text" id = "time" class="timepicker form-control" placeholder="Please choose a time" name="time" required>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                                <label for="route">Select days of week</label>
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <select id="daysOfWeek" class="form-control show-tick" multiple name="daysOfWeek" required>
+                                            <option>Sunday</option>
+                                            <option>Monday</option>
+                                            <option>Tuesday</option>
+                                            <option>Wednesday</option>
+                                            <option>Thursday</option>
+                                            <option>Friday</option>
+                                            <option>Saturday</option>
+                                        </select>
+                                    </div>
+                                </div>
                             <br>
                             <button type="submit" class="btn bg-red waves-effect">Submit</button>
                         </form>
@@ -67,7 +102,8 @@
 </section>
 
 <!-- Jquery Core Js -->
-<script async="" src="https://www.google-analytics.com/analytics.js"></script><script src="../../resources/plugins/jquery/jquery.min.js"></script>
+<script async="" src="https://www.google-analytics.com/analytics.js"></script>
+<script src="../../resources/plugins/jquery/jquery.min.js"></script>
 
 <!-- Bootstrap Core Js -->
 <script src="../../resources/plugins/bootstrap/js/bootstrap.js"></script>

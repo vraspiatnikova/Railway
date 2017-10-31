@@ -7,6 +7,10 @@ import com.tsystems.jschool.railway.exceptions.ServiceException;
 import com.tsystems.jschool.railway.persistence.Board;
 import com.tsystems.jschool.railway.persistence.Passenger;
 import com.tsystems.jschool.railway.services.interfaces.BoardService;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeConstants;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,10 +21,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.apache.log4j.Logger;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Controller
 public class ManagerBoardController {
@@ -35,22 +39,50 @@ public class ManagerBoardController {
 
     @RequestMapping(value = "/addTrainRoute", method = RequestMethod.POST)
     public String addBoard(@RequestParam("route") String route, @RequestParam("trainName") String trainName,
-                           @RequestParam("date") String date, @RequestParam int trainId, RedirectAttributes redirectAttributes){
-        LOGGER.info("try to add new trip: route number " + route + " , train name " + trainName + " , date " + date);
+                           @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate,
+                           @RequestParam("time") String time, @RequestParam int trainId,
+                           @RequestParam("daysOfWeek") String daysOfWeek, RedirectAttributes redirectAttributes){
+        LOGGER.info("try to add new trip: route number " + route + " , train name " + trainName
+                + " start date "+ startDate+" end date "+endDate+" time "+time+" days of week "+daysOfWeek);
         try {
-            if (date.trim().length() == 0)
-                throw new ControllerException(ErrorController.INCORRECT_DATE_FORMAT);
-            Date boardDate;
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-            try {
-                boardDate = simpleDateFormat.parse(date);
-            } catch (ParseException e) {
-                throw new ControllerException(ErrorController.INCORRECT_DATE_FORMAT, e);
+            List<DateTime> dates = new ArrayList<>();
+            DateTimeFormatter fmt = DateTimeFormat.forPattern("EEEE dd MMMM yyyy");
+            DateTimeFormatter pattern = fmt.withLocale(Locale.ENGLISH);
+            DateTime start = pattern.parseDateTime(startDate);
+            DateTime end = pattern.parseDateTime(endDate);
+            if (end.isBefore(start)) throw new ControllerException(ErrorController.INCORRECT_START_END);
+            String[] selectedDays = daysOfWeek.split(",");
+            List<Integer> days = new ArrayList<>();
+            for (String s: selectedDays){
+                switch (s){
+                    case "Sunday": days.add(DateTimeConstants.SUNDAY); break;
+                    case "Monday": days.add(DateTimeConstants.MONDAY); break;
+                    case "Tuesday": days.add(DateTimeConstants.TUESDAY); break;
+                    case "Wednesday": days.add(DateTimeConstants.WEDNESDAY); break;
+                    case "Thursday": days.add(DateTimeConstants.THURSDAY); break;
+                    case "Friday": days.add(DateTimeConstants.FRIDAY); break;
+                    case "Saturday": days.add(DateTimeConstants.SATURDAY); break;
+                }
+            }
+
+            for (Integer i: days){
+                DateTime startTmp = start;
+                while (startTmp.isBefore(end)){
+                    if ( startTmp.getDayOfWeek() == i ){
+                        startTmp = startTmp.hourOfDay().setCopy(time.split(":")[0]);
+                        startTmp = startTmp.minuteOfHour().setCopy(time.split(":")[1]);
+                        dates.add(startTmp);
+                    }
+                    startTmp = startTmp.plusDays(1);
+                }
             }
             if (!boardService.findBoardByTrainNameAndRoute(trainName, route).isEmpty())
                 throw new ControllerException(ErrorController.DUPLICATE_TRAINS_ROUTE);
-            boardService.addBoard(boardDate, trainName, route);
-            LOGGER.info("new trip: route number " + route + " , train name " + trainName + " , date " + date +" has been added");
+
+            boardService.addBoard(dates, trainName, route);
+
+            LOGGER.info("new trip: route number " + route + " , train name " + trainName
+                    + " start date "+ startDate+" end date "+endDate+" time "+time+" days of week "+daysOfWeek);
             redirectAttributes.addFlashAttribute("message", "The trip has been added successfully!");
         } catch (ControllerException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);

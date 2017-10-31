@@ -28,6 +28,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 @Controller
 public class TicketController {
@@ -88,7 +89,7 @@ public class TicketController {
             UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             User user = userService.findUserByEmail(userDetails.getUsername());
             try {
-                DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                DateFormat dateFormat = new SimpleDateFormat("EEEE dd MMMM yyyy", Locale.ENGLISH);
                 Date birthdateDate = dateFormat.parse(birthdate);
                 DateFormat dateTimeFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
                 Date startDate = dateTimeFormat.parse(dateTime);

@@ -58,34 +58,20 @@
                                 <tr>
                                     <td><form:label path="dateTimeFrom">Select start date</form:label></td>
                                     <td>
-                                        <div class="demo-masked-input">
                                         <div class="form-group">
-                                            <div class="input-group">
-                                            <span class="input-group-addon">
-                                                <i class="material-icons">date_range</i>
-                                            </span>
-                                                <div class="form-line">
-                                                    <form:input path="dateTimeFrom" type="text" class="form-control datetime" placeholder="dd-MM-yyyy HH:mm"/>
-                                                </div>
-                                        </div>
-                                        </div>
+                                            <div class="form-line">
+                                                <form:input path="dateTimeFrom" type="text" class="datetimepicker form-control" placeholder="Please choose date & time"/>
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td><form:label path="dateTimeTo">Select end date</form:label></td>
                                     <td>
-                                        <div class="demo-masked-input">
                                         <div class="form-group">
-                                            <div class="input-group">
-                                                <span class="input-group-addon">
-                                                     <i class="material-icons">date_range</i>
-                                                </span>
                                             <div class="form-line">
-                                                <form:input path="dateTimeTo" type="text" value="" class="form-control datetime" placeholder="dd-MM-yyyy HH:mm"/>
+                                                <form:input path="dateTimeTo" type="text" class="datetimepicker form-control" placeholder="Please choose date & time"/>
                                             </div>
-                                            </div>
-                                        </div>
                                         </div>
                                     </td>
                                 </tr>
@@ -138,6 +124,5 @@
 <script src="../resources/js/pages/forms/advanced-form-elements.js"></script>
 
 
-<%--<script src="../resources/js/validation.js"></script>--%>
 </body></html>
 

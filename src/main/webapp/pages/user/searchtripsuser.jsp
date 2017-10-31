@@ -8,13 +8,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: Вика
-  Date: 01.10.2017
-  Time: 13:42
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html class="chrome">
 <c:import url="../head.jsp"/>
@@ -66,16 +59,9 @@
                                 <tr>
                                     <td><form:label path="dateTimeFrom">Select start date</form:label></td>
                                     <td>
-                                        <div class="demo-masked-input">
-                                            <div class="form-group">
-                                                <div class="input-group">
-                                            <span class="input-group-addon">
-                                                <i class="material-icons">date_range</i>
-                                            </span>
-                                                    <div class="form-line">
-                                                        <form:input path="dateTimeFrom" type="text" class="form-control datetime" placeholder="dd-MM-yyyy HH:mm"/>
-                                                    </div>
-                                                </div>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <form:input path="dateTimeFrom" type="text" class="datetimepicker form-control" placeholder="Please choose date & time"/>
                                             </div>
                                         </div>
                                     </td>
@@ -83,22 +69,15 @@
                                 <tr>
                                     <td><form:label path="dateTimeTo">Select end date</form:label></td>
                                     <td>
-                                        <div class="demo-masked-input">
-                                            <div class="form-group">
-                                                <div class="input-group">
-                                                <span class="input-group-addon">
-                                                     <i class="material-icons">date_range</i>
-                                                </span>
-                                                    <div class="form-line">
-                                                        <form:input path="dateTimeTo" type="text" value="" class="form-control datetime" placeholder="dd-MM-yyyy HH:mm"/>
-                                                    </div>
-                                                </div>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <form:input path="dateTimeTo" type="text" class="datetimepicker form-control" placeholder="Please choose date & time"/>
                                             </div>
                                         </div>
                                     </td>
                                 </tr>
                                 </tr>
-                                <td><input class="btn bg-red waves-effect" type="submit" value="Submit"/></td>
+                                    <td><input class="btn bg-red waves-effect" type="submit" value="Submit"/></td>
                                 </tr>
                             </table>
                         </form:form>

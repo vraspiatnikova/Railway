@@ -75,12 +75,10 @@
                                     <label class="form-label">Last name</label>
                                 </div>
                             </div>
-                            <div class="form-group form-float">
+                            <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" class="form-control" name="birthdate" value="${birthdate}" required="" aria-required="true">
-                                    <label class="form-label">Birth date</label>
+                                    <input type="text" class="datepicker form-control" name="birthdate" placeholder="Please choose a birth date" value="${birthdate}" required="" aria-required="true">
                                 </div>
-                                <div class="help-info">DD-MM-YYYY format</div>
                             </div>
                             <div class="form-group form-float">
                                 <div class="form-line">

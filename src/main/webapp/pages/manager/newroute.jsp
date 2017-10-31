@@ -44,16 +44,18 @@
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
-                                        <div class="form-group">
+                                        <div class="form-group form-float">
                                             <div class="form-line">
-                                                <input type="text" name="travelTime" value="0" readonly class="form-control" placeholder="Travel time (min)" required>
+                                                <input type="text" name="travelTime" value="0" readonly class="form-control" required="" aria-required="true">
+                                                <label class="form-label">Travel time (min)</label>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
-                                        <div class="form-group">
+                                        <div class="form-group form-float">
                                             <div class="form-line">
-                                                <input type="text" name="stopTime" value="0" readonly class="form-control" placeholder="Stop time (min)" required>
+                                                <input type="text" name="stopTime" value="0" readonly class="form-control" required="" aria-required="true">
+                                                <label class="form-label">Stop time (min)</label>
                                             </div>
                                         </div>
                                     </div>

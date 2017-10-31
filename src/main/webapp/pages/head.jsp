@@ -27,6 +27,9 @@
     <!-- Animation Css -->
     <link rel="stylesheet" href="<c:url value="/resources/plugins/animate-css/animate.css"/>"/>
 
+    <!-- Bootstrap Material Datetime Picker Css -->
+    <link rel="stylesheet" href="<c:url value="/resources/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css"/>"/>
+
     <!-- Wait Me Css -->
     <link rel="stylesheet" href="<c:url value="/resources/plugins/waitme/waitMe.css"/>"/>
 
