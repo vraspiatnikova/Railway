@@ -15,18 +15,17 @@
     <div class="error-code">404</div>
     <div class="error-message">This page doesn't exist</div>
     <div class="button-place">
-        <a href="/" class="btn btn-default btn-lg waves-effect">GO TO HOMEPAGE</a>
+        <a href="${pageContext.request.contextPath}/" class="btn btn-default btn-lg waves-effect">GO TO HOMEPAGE</a>
     </div>
 </div>
 
 <!-- Jquery Core Js -->
-<script src="resources/plugins/jquery/jquery.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/jquery/jquery.min.js"></script>
 
 <!-- Bootstrap Core Js -->
-<script src="resources/plugins/bootstrap/js/bootstrap.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/bootstrap/js/bootstrap.js"></script>
 
 <!-- Waves Effect Plugin Js -->
-<script src="resources/plugins/node-waves/waves.js"></script>
-
+<script src="${pageContext.request.contextPath}/resources/plugins/node-waves/waves.js"></script>
 
 </body></html>

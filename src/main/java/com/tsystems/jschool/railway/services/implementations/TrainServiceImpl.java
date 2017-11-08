@@ -2,6 +2,7 @@ package com.tsystems.jschool.railway.services.implementations;
 
 import com.tsystems.jschool.railway.exceptions.DaoException;
 import com.tsystems.jschool.railway.dao.interfaces.TrainDao;
+import com.tsystems.jschool.railway.jms.Sender;
 import com.tsystems.jschool.railway.persistence.Train;
 import com.tsystems.jschool.railway.exceptions.ErrorService;
 import com.tsystems.jschool.railway.exceptions.ServiceException;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.apache.log4j.Logger;
 
+import javax.jms.JMSException;
 import java.util.List;
 
 @Service
@@ -18,10 +20,12 @@ public class TrainServiceImpl implements TrainService {
 
     private static final Logger LOGGER = Logger.getLogger(TrainServiceImpl.class);
     private final TrainDao trainDao;
+  //  private Sender sender;
 
     @Autowired
     public TrainServiceImpl(TrainDao trainDao) {
         this.trainDao = trainDao;
+     //   this.sender = sender;
     }
 
     @Override
@@ -32,6 +36,8 @@ public class TrainServiceImpl implements TrainService {
         try {
             if (trainDao.findByName(train.getName()) != null) throw new ServiceException(ErrorService.DUPLICATE_TRAIN);
             result = trainDao.create(train);
+            String msg = "Train with name " + train.getName() + " and capacity " + train.getCapacity() + " added";
+         //   sender.sendMessage(msg);
         } catch (DaoException e) {
             LOGGER.error(e.getMessage(), e);
             throw new ServiceException(ErrorService.DATABASE_EXCEPTION, e);

@@ -12,7 +12,7 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <title>Home</title>
     <!-- Favicon-->
-    <link rel="icon" type="image/x-icon" href="<c:url value="/resources/favicon.ico"/>"/>
+    <link rel="icon" type="image/x-icon" href="<c:url value="${pageContext.request.contextPath}/resources/favicon.ico"/>"/>
 
     <!-- Google Fonts -->
     <link rel="stylesheet" type="text/css" href="<c:url value="https://fonts.googleapis.com/css?family=Roboto:400,700&amp;subset=latin,cyrillic-ext"/>"/>
@@ -26,6 +26,9 @@
 
     <!-- Animation Css -->
     <link rel="stylesheet" href="<c:url value="/resources/plugins/animate-css/animate.css"/>"/>
+
+    <!-- JQuery DataTable Css -->
+    <link rel="stylesheet" href="<c:url value="/resources/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css"/>"/>
 
     <!-- Bootstrap Material Datetime Picker Css -->
     <link rel="stylesheet" href="<c:url value="/resources/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css"/>"/>

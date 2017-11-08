@@ -69,7 +69,7 @@
                         </h2>
                     </div>
                     <div class="body table-responsive">
-                        <table class="table table-hover">
+                        <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
                             <thead>
                             <tr>
                                 <th>Name</th>
@@ -77,6 +77,13 @@
                                 <th>Assign the route</th>
                             </tr>
                             </thead>
+                            <tfoot>
+                            <tr>
+                                <th>Name</th>
+                                <th>Capacity</th>
+                                <th>Assign the route</th>
+                            </tr>
+                            </tfoot>
                             <tbody>
                                 <c:forEach items="${listTrains}" var="train">
                                     <tr>
@@ -97,43 +104,57 @@
 </section>
 
 <!-- Jquery Core Js -->
-<script async="" src="https://www.google-analytics.com/analytics.js"></script><script src="../../resources/plugins/jquery/jquery.min.js"></script>
+<script async="" src="https://www.google-analytics.com/analytics.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/jquery/jquery.min.js"></script>
 
 <!-- Bootstrap Core Js -->
-<script src="../../resources/plugins/bootstrap/js/bootstrap.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/bootstrap/js/bootstrap.js"></script>
 
 <!-- Select Plugin Js -->
-<script src="../../resources/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/bootstrap-select/js/bootstrap-select.js"></script>
 
 <!-- Slimscroll Plugin Js -->
-<script src="../../resources/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
 
 <!-- Jquery Validation Plugin Css -->
-<script src="../../resources/plugins/jquery-validation/jquery.validate.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/jquery-validation/jquery.validate.js"></script>
 
 <!-- JQuery Steps Plugin Js -->
-<script src="../../resources/plugins/jquery-steps/jquery.steps.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/jquery-steps/jquery.steps.js"></script>
 
 <!-- Sweet Alert Plugin Js -->
-<script src="../../resources/plugins/sweetalert/sweetalert.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/sweetalert/sweetalert.min.js"></script>
 
 <!-- Waves Effect Plugin Js -->
-<script src="../../resources/plugins/node-waves/waves.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/node-waves/waves.js"></script>
+
+<!-- Jquery DataTable Plugin Js -->
+<script src="${pageContext.request.contextPath}/resources/plugins/jquery-datatable/jquery.dataTables.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
 
 <!-- Autosize Plugin Js -->
-<script src="../../resources/plugins/autosize/autosize.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/autosize/autosize.js"></script>
 
 <!-- Moment Plugin Js -->
-<script src="../../resources/plugins/momentjs/moment.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/momentjs/moment.js"></script>
 
 <!-- Bootstrap Material Datetime Picker Plugin Js -->
-<script src="../../resources/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
 
 <!-- Custom Js -->
-<script src="../../resources/js/admin.js"></script>
-<script src="../../resources/js/pages/forms/basic-form-elements.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/admin.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/pages/forms/basic-form-elements.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/pages/tables/jquery-datatable.js"></script>
 
 <!-- Demo Js -->
-<script src="../../resources/js/demo.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/demo.js"></script>
+
 </body></html>
 

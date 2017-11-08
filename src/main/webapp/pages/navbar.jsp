@@ -49,7 +49,7 @@
             <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 368px;">
                 <ul class="list" style="overflow: hidden; width: auto; height: 368px;">
                     <li class="active">
-                        <a href="/" class="toggled waves-effect waves-block">
+                        <a href="${pageContext.request.contextPath}/" class="toggled waves-effect waves-block">
                             <i class="material-icons">home</i>
                             <span>Home</span>
                         </a>

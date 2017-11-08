@@ -55,20 +55,21 @@
 </div>
 
 <!-- Jquery Core Js -->
-<script async="" src="https://www.google-analytics.com/analytics.js"></script><script src="../resources/plugins/jquery/jquery.min.js"></script>
+<script async="" src="https://www.google-analytics.com/analytics.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/jquery/jquery.min.js"></script>
 
 <!-- Bootstrap Core Js -->
-<script src="../resources/plugins/bootstrap/js/bootstrap.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/bootstrap/js/bootstrap.js"></script>
 
 <!-- Waves Effect Plugin Js -->
-<script src="../resources/plugins/node-waves/waves.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/node-waves/waves.js"></script>
 
 <!-- Validation Plugin Js -->
-<script src="../resources/plugins/jquery-validation/jquery.validate.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/jquery-validation/jquery.validate.js"></script>
 
 <!-- Custom Js -->
-<script src="../resources/js/admin.js"></script>
-<script src="../resources/js/pages/forms/basic-form-elements.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/admin.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/pages/forms/basic-form-elements.js"></script>
 
 
 </body></html>

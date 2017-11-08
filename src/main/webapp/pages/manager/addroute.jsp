@@ -100,37 +100,37 @@
 
     </div>
 </section>
-
 <!-- Jquery Core Js -->
 <script async="" src="https://www.google-analytics.com/analytics.js"></script>
-<script src="../../resources/plugins/jquery/jquery.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/jquery/jquery.min.js"></script>
 
 <!-- Bootstrap Core Js -->
-<script src="../../resources/plugins/bootstrap/js/bootstrap.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/bootstrap/js/bootstrap.js"></script>
 
 <!-- Select Plugin Js -->
-<script src="../../resources/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/bootstrap-select/js/bootstrap-select.js"></script>
 
 <!-- Slimscroll Plugin Js -->
-<script src="../../resources/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
 
 <!-- Waves Effect Plugin Js -->
-<script src="../../resources/plugins/node-waves/waves.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/node-waves/waves.js"></script>
 
 <!-- Autosize Plugin Js -->
-<script src="../../resources/plugins/autosize/autosize.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/autosize/autosize.js"></script>
 
 <!-- Moment Plugin Js -->
-<script src="../../resources/plugins/momentjs/moment.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/momentjs/moment.js"></script>
 
 <!-- Bootstrap Material Datetime Picker Plugin Js -->
-<script src="../../resources/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
 
 <!-- Custom Js -->
-<script src="../../resources/js/admin.js"></script>
-<script src="../../resources/js/pages/forms/basic-form-elements.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/admin.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/pages/forms/basic-form-elements.js"></script>
 
 <!-- Demo Js -->
-<script src="../../resources/js/demo.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/demo.js"></script>
+
 </body>
 </html>
