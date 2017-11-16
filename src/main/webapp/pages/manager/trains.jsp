@@ -27,7 +27,7 @@
                         <h2>ADD NEW TRAIN</h2>
                     </div>
                     <div class="body">
-                        <form:form method="POST" action="addTrain" modelAttribute="train" novalidate = "novalidate">
+                        <form:form method="POST" action="addTrain" modelAttribute="train" id="form_validation" novalidate = "novalidate">
                             <table class="table">
                                 <tr>
                                     <td><form:label path="name">Name</form:label></td>
@@ -75,6 +75,7 @@
                                 <th>Name</th>
                                 <th>Capacity</th>
                                 <th>Assign the route</th>
+                                <th>Edit</th>
                             </tr>
                             </thead>
                             <tfoot>
@@ -82,6 +83,7 @@
                                 <th>Name</th>
                                 <th>Capacity</th>
                                 <th>Assign the route</th>
+                                <th>Edit</th>
                             </tr>
                             </tfoot>
                             <tbody>
@@ -91,6 +93,18 @@
                                         <td>${train.capacity}</td>
                                         <td>
                                             <a href="<c:url value='/addroute/${train.id}'/>">Add route</a>
+                                        </td>
+                                        <td>
+                                            <a href ="<c:url value='/editTrain/${train.id}'/>">
+                                                <button type="button" class="btn btn-primary btn-circle waves-effect waves-circle waves-float">
+                                                    <i class="material-icons">mode_edit</i>
+                                                </button>
+                                            </a>
+                                            <a href ="<c:url value='/deleteTrain/${train.id}'/>">
+                                                <button type="button" class="btn btn-danger btn-circle waves-effect waves-circle waves-float">
+                                                    <i class="material-icons">delete_forever</i>
+                                                </button>
+                                            </a>
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -152,6 +166,7 @@
 <script src="${pageContext.request.contextPath}/resources/js/admin.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/pages/forms/basic-form-elements.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/pages/tables/jquery-datatable.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/pages/forms/form-validation.js"></script>
 
 <!-- Demo Js -->
 <script src="${pageContext.request.contextPath}/resources/js/demo.js"></script>

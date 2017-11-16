@@ -24,13 +24,14 @@
                         </h2>
                     </div>
                     <div class="body table-responsive">
-                        <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                        <table id="example" class="table table-bordered table-striped table-hover js-basic-example dataTable">
                             <thead>
                             <tr>
                                 <th>Train Number</th>
                                 <th>Route</th>
                                 <th>Date</th>
                                 <th>Registered passengers</th>
+                                <th>Edit</th>
                             </tr>
                             </thead>
                             <tfoot>
@@ -39,6 +40,7 @@
                                 <th>Route</th>
                                 <th>Date</th>
                                 <th>Registered passengers</th>
+                                <th>Edit</th>
                             </tr>
                             </tfoot>
                             <tbody>
@@ -48,7 +50,19 @@
                                     <td>${board.routeWaypoints}</td>
                                     <td>${board.date}</td>
                                     <td>
-                                        <a href="<c:url value='/registredpassengers/${board.boardId}'/>">Find registered passengers</a>
+                                        <a href="<c:url value='/registredpassengers/${board.boardId}'/>">show passengers</a>
+                                    </td>
+                                    <td>
+                                        <a href ="<c:url value='/editTrip/${board.boardId}'/>">
+                                            <button type="button" class="btn btn-primary btn-circle waves-effect waves-circle waves-float">
+                                                <i class="material-icons">mode_edit</i>
+                                            </button>
+                                        </a>
+                                        <a href ="<c:url value='/deleteBoard/${board.boardId}'/>">
+                                            <button type="button" class="btn btn-danger btn-circle waves-effect waves-circle waves-float">
+                                                <i class="material-icons">delete_forever</i>
+                                            </button>
+                                        </a>
                                     </td>
                                 </tr>
                             </c:forEach>
@@ -105,5 +119,6 @@
 
 <!-- Demo Js -->
 <script src="${pageContext.request.contextPath}/resources/js/demo.js"></script>
+
 </body>
 </html>

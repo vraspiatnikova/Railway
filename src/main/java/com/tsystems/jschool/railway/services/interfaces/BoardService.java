@@ -17,6 +17,10 @@ import java.util.List;
 public interface BoardService {
     void addBoard(List<DateTime> dateTimeList, String trainName, String routeNumber) throws ServiceException;
     List<Board> getAllBoards() throws ServiceException;
+
+    @Transactional
+    BoardDto constructBoardDto(Board board);
+
     List<BoardDto> getAllBoardsDto() throws ServiceException;
     List<SuitableTripDto> findAllSuitableTrips(SearchTripDto searchTripDto) throws ServiceException;
     Board findBoardById(Integer id) throws ServiceException;
@@ -24,4 +28,10 @@ public interface BoardService {
     List<Passenger> findRegisteredPassengers(Board board) throws ServiceException;
     List<BoardByStationDto> getAllBoardByStationDto(String stationName) throws ServiceException;
     List<Board> findBoardByTrainNameAndRoute(String trainName, String routeNumber) throws ServiceException;
+
+    @Transactional
+    void updateBoard(Board board) throws ServiceException;
+
+    @Transactional
+    void deleteBoard(Board board) throws ServiceException;
 }

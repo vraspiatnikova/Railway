@@ -1,8 +1,8 @@
 package com.tsystems.jschool.railway.services.implementations;
 
+import com.tsystems.jschool.railway.dao.interfaces.BoardDao;
 import com.tsystems.jschool.railway.exceptions.DaoException;
 import com.tsystems.jschool.railway.dao.interfaces.TrainDao;
-import com.tsystems.jschool.railway.jms.Sender;
 import com.tsystems.jschool.railway.persistence.Train;
 import com.tsystems.jschool.railway.exceptions.ErrorService;
 import com.tsystems.jschool.railway.exceptions.ServiceException;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.apache.log4j.Logger;
 
-import javax.jms.JMSException;
 import java.util.List;
 
 @Service
@@ -20,12 +19,12 @@ public class TrainServiceImpl implements TrainService {
 
     private static final Logger LOGGER = Logger.getLogger(TrainServiceImpl.class);
     private final TrainDao trainDao;
-  //  private Sender sender;
+    private final BoardDao boardDao;
 
     @Autowired
-    public TrainServiceImpl(TrainDao trainDao) {
+    public TrainServiceImpl(TrainDao trainDao, BoardDao boardDao) {
         this.trainDao = trainDao;
-     //   this.sender = sender;
+        this.boardDao = boardDao;
     }
 
     @Override
@@ -36,8 +35,6 @@ public class TrainServiceImpl implements TrainService {
         try {
             if (trainDao.findByName(train.getName()) != null) throw new ServiceException(ErrorService.DUPLICATE_TRAIN);
             result = trainDao.create(train);
-            String msg = "Train with name " + train.getName() + " and capacity " + train.getCapacity() + " added";
-         //   sender.sendMessage(msg);
         } catch (DaoException e) {
             LOGGER.error(e.getMessage(), e);
             throw new ServiceException(ErrorService.DATABASE_EXCEPTION, e);
@@ -71,5 +68,32 @@ public class TrainServiceImpl implements TrainService {
             throw new ServiceException(ErrorService.DATABASE_EXCEPTION, e);
         }
         return train;
+    }
+
+    @Override
+    @Transactional
+    public void deleteTrain(Train train) throws ServiceException {
+        LOGGER.info("try to delete train with name " + train.getName());
+        try {
+            if (!boardDao.findBoardByTrainName(train.getName()).isEmpty()){
+                throw new ServiceException(ErrorService.CANNOT_DELETE_TRAIN);
+            }
+            trainDao.delete(train);
+        } catch (DaoException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new ServiceException(ErrorService.DATABASE_EXCEPTION, e);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void updateTrain(Train train) throws ServiceException {
+        LOGGER.info("try to update train with name " + train.getName());
+        try {
+            trainDao.update(train);
+        } catch (DaoException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new ServiceException(ErrorService.DATABASE_EXCEPTION, e);
+        }
     }
 }

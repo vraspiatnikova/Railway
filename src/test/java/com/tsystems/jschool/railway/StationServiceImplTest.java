@@ -22,8 +22,8 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class StationServiceImplTest {
 
-    Station existStation;
-    Station newStation;
+    private Station existStation;
+    private Station newStation;
 
     @Mock
     private StationDao stationDao;
@@ -57,5 +57,18 @@ public class StationServiceImplTest {
     public void testAddNewStation() throws DaoException, ServiceException {
         when(stationDao.create(newStation)).thenReturn(newStation);
         assertEquals(newStation, stationService.addStation(newStation));
+    }
+
+    @Test
+    public void testDeleteStation() throws DaoException, ServiceException{
+        stationDao.delete(newStation);
+        when(stationDao.findById(newStation.getId())).thenReturn(null);
+    }
+
+    @Test
+    public void testUpdateStation() throws DaoException, ServiceException{
+        newStation.setName("UpdateStation");
+        stationDao.update(newStation);
+        when(stationDao.findByName("UpdateStation")).thenReturn(newStation);
     }
 }

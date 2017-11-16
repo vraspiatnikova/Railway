@@ -1,11 +1,9 @@
 package com.tsystems.jschool.railway.services.implementations;
 
-import com.tsystems.jschool.railway.dto.BoardByStationDto;
-import com.tsystems.jschool.railway.dto.BoardDto;
-import com.tsystems.jschool.railway.dto.SearchTripDto;
-import com.tsystems.jschool.railway.dto.SuitableTripDto;
+import com.tsystems.jschool.railway.dto.*;
 import com.tsystems.jschool.railway.exceptions.DaoException;
 import com.tsystems.jschool.railway.dao.interfaces.*;
+import com.tsystems.jschool.railway.jms.Sender;
 import com.tsystems.jschool.railway.persistence.*;
 import com.tsystems.jschool.railway.exceptions.ErrorService;
 import com.tsystems.jschool.railway.exceptions.ServiceException;
@@ -16,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.apache.log4j.Logger;
 
+import javax.jms.JMSException;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -31,14 +30,16 @@ public class BoardServiceImpl implements BoardService {
     private final TrainDao trainDao;
     private final WaypointDao waypointDao;
     private final TicketDao ticketDao;
+    private final Sender sender;
 
     @Autowired
-    public BoardServiceImpl(BoardDao boardDao, RouteDao routeDao, TrainDao trainDao, WaypointDao waypointDao, TicketDao ticketDao) {
+    public BoardServiceImpl(BoardDao boardDao, RouteDao routeDao, TrainDao trainDao, WaypointDao waypointDao, TicketDao ticketDao, Sender sender) {
         this.boardDao = boardDao;
         this.routeDao = routeDao;
         this.trainDao = trainDao;
         this.waypointDao = waypointDao;
         this.ticketDao = ticketDao;
+        this.sender = sender;
     }
 
     @Override
@@ -51,6 +52,10 @@ public class BoardServiceImpl implements BoardService {
             for (DateTime dateTime : dateTimeList) {
                 boardDao.create(new Board(dateTime.toDate(), route, train));
             }
+            sender.sendMessage("boards added");
+        } catch (JMSException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new ServiceException(ErrorService.JMS_EXCEPTION, e);
         } catch (DaoException e) {
             LOGGER.error(e.getMessage(), e);
             throw new ServiceException(ErrorService.DATABASE_EXCEPTION, e);
@@ -64,6 +69,7 @@ public class BoardServiceImpl implements BoardService {
         List<Board> listOfBoards;
         try {
             listOfBoards = boardDao.findAll();
+            Collections.sort(listOfBoards);
         } catch (DaoException e) {
             LOGGER.error(e.getMessage(), e);
             throw new ServiceException(ErrorService.DATABASE_EXCEPTION, e);
@@ -85,7 +91,9 @@ public class BoardServiceImpl implements BoardService {
         return board;
     }
 
-    private BoardDto constructBoardDto(Board board) {
+    @Override
+    @Transactional
+    public BoardDto constructBoardDto(Board board) {
         BoardDto boardDto = new BoardDto();
         boardDto.setBoardId(board.getId());
         StringBuilder routeWaypoints = new StringBuilder();
@@ -100,7 +108,7 @@ public class BoardServiceImpl implements BoardService {
             routeWaypoints.append(station.getName()).append(" ");
         }
         boardDto.setRouteWaypoints(routeWaypoints.toString().trim());
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
         boardDto.setDate(simpleDateFormat.format(board.getDateTime()));
         return boardDto;
     }
@@ -181,6 +189,7 @@ public class BoardServiceImpl implements BoardService {
             } catch (ParseException e) {
                 throw new ServiceException(ErrorService.INCORRECT_DATE_FORMAT, e);
             }
+            suitableTripDtos.sort(new SortedSuitableTripDto());
             return suitableTripDtos;
 
         } catch (DaoException e) {
@@ -223,6 +232,7 @@ public class BoardServiceImpl implements BoardService {
             for(Board board : boards) {
                 boardByStationDtos.add(constructBoardByStationDto(board, stationName));
             }
+            boardByStationDtos.sort(new SortedBoardByStationDto());
             return boardByStationDtos;
         } catch (DaoException e) {
             LOGGER.error(e.getMessage(), e);
@@ -264,5 +274,38 @@ public class BoardServiceImpl implements BoardService {
             throw new ServiceException(ErrorService.DATABASE_EXCEPTION, e);
         }
         return boardList;
+    }
+
+    @Override
+    @Transactional
+    public void updateBoard(Board board) throws ServiceException {
+        try {
+            boardDao.update(board);
+            sender.sendMessage("board updated");
+        } catch (JMSException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new ServiceException(ErrorService.JMS_EXCEPTION, e);
+        } catch (DaoException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new ServiceException(ErrorService.DATABASE_EXCEPTION, e);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void deleteBoard(Board board) throws ServiceException {
+        try {
+            if (!ticketDao.findTicketsByBoard(board).isEmpty()){
+                throw new ServiceException(ErrorService.CANNOT_DELETE_BOARD);
+            }
+            boardDao.delete(board);
+            sender.sendMessage("board deleted");
+        } catch (JMSException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new ServiceException(ErrorService.JMS_EXCEPTION, e);
+        } catch (DaoException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new ServiceException(ErrorService.DATABASE_EXCEPTION, e);
+        }
     }
 }

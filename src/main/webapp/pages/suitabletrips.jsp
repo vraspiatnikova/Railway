@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%--
   Created by IntelliJ IDEA.
   User: Вика
@@ -11,7 +12,17 @@
 <c:import url="head.jsp"/>
 
 <body class="theme-red ls-closed">
-<c:import url="navbar.jsp"/>
+
+<sec:authorize var="loggedIn" access="isAuthenticated()"/>
+<c:choose>
+    <c:when test="${loggedIn}">
+        <c:import url="user/navbar_user.jsp"/>
+    </c:when>
+    <c:otherwise>
+        <c:import url="navbar.jsp"/>
+    </c:otherwise>
+</c:choose>
+
 <section class="content">
     <div class="container-fluid">
         <div class="card">
@@ -30,6 +41,7 @@
                         <th>Departure date</th>
                         <th>Arrival station</th>
                         <th>Arrival date</th>
+                        <th>Buy ticket</th>
                     </tr>
                     </thead>
                     <tfoot>
@@ -40,6 +52,7 @@
                         <th>Departure date</th>
                         <th>Arrival station</th>
                         <th>Arrival date</th>
+                        <th>Buy ticket</th>
                     </tr>
                     </tfoot>
                     <tbody>
@@ -51,6 +64,18 @@
                             <td>${trip.arrivalDateTime}</td>
                             <td>${trip.stationTo}</td>
                             <td>${trip.depatureDateTime}</td>
+                            <td>
+                            <sec:authorize var="loggedIn" access="isAuthenticated()"/>
+                            <c:choose>
+                                <c:when test="${loggedIn}">
+                                    <a href="<c:url value='/buyticket/${trip.boardId}/${trip.waypointFromId}/${trip.waypointToId}'/>">Buy ticket</a>
+                                </c:when>
+                                <c:otherwise>
+                                    <a href="<c:url value='/login'/>">Buy ticket</a>
+                                </c:otherwise>
+                            </c:choose>
+
+                            </td>
                         </tr>
                     </c:forEach>
                     </tbody>

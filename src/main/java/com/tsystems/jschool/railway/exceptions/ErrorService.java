@@ -14,7 +14,12 @@ public enum ErrorService {
     LESS_THAN_10_MIN_LEFT(10, "You cannot buy a ticket because there are less than 10 minutes left before the departure of the train", "less than 10 minutes left before the departure of the train"),
     NO_AVAILABLE_TICKETS(11, "Sorry, there are no available tickets", "there are no available tickets"),
     INCORRECT_DATE_FORMAT(11, "The field date cannot be empty", "error while parsing date"),
-    NO_PASSENGER_BY_USER(12, "You havn't bought any ticket yet", "no passenger by user");
+    NO_PASSENGER_BY_USER(12, "You havn't bought any ticket yet", "no passenger by user"),
+    CANNOT_DELETE_BOARD(13, "You cannot delete trip as there are tickets", "cannot delete board"),
+    JMS_EXCEPTION(14, "Message sending error", "message sending error"),
+    CANNOT_DELETE_STATION(15, "You cannot delete the station because there is a waypoint with this station", "there is a waypoint with station"),
+    CANNOT_DELETE_TRAIN(16, "You cannot delete the train because there is a trip with this train", "there is a board with train"),
+    CANNOT_DELETE_ROUTE(17, "You cannot delete the route because there is a trip with this route", "there is a board with route");
 
     private final int id;
     private final String message;

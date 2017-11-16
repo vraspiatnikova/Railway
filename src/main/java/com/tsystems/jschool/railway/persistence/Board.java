@@ -9,15 +9,14 @@ import java.util.Date;
                 query = "SELECT board FROM Board board WHERE board.dateTime BETWEEN :dateTimeFrom AND :dateTimeTo"),
         @NamedQuery(name = "Board.findBoardByRouteNumber",
                 query = "SELECT board FROM Board board WHERE board.route.number = :routeNumber"),
-        @NamedQuery(name = "Board.findBoardByStationName", query = "SELECT board FROM Board board" +
-                " JOIN FETCH board.route route JOIN FETCH route.waypoints wp JOIN FETCH wp.station station " +
-                "WHERE station.name = :stationName"),
+        @NamedQuery(name = "Board.findBoardByTrainName", query = "SELECT board FROM Board board " +
+                "WHERE board.train.name =:trainName"),
         @NamedQuery(name = "Board.findBoardByTrainNameAndRoute", query = "SELECT board FROM Board board " +
                 "WHERE board.route.number =:routeNumber AND board.train.name =:trainName")
 })
 @Entity
 @Table(name = "board", schema = "railway")
-public class Board {
+public class Board implements Comparable<Board>{
     private int id;
     private Date dateTime;
     private Route route;
@@ -96,5 +95,10 @@ public class Board {
 
     public void setTickets(Collection<Ticket> tickets) {
         this.tickets = tickets;
+    }
+
+    @Override
+    public int compareTo(Board o) {
+        return getDateTime().compareTo(o.getDateTime());
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -39,7 +40,7 @@ public class SecurityController {
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     public String signUpUser(ModelMap model, @RequestParam String email, @RequestParam String password,
-                                @RequestParam String confirm) {
+                             @RequestParam String confirm) {
         try {
             email = email.trim();
             Pattern p = Pattern.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
@@ -48,7 +49,7 @@ public class SecurityController {
             if (!isEmail) {
                 model.addAttribute("emailError", ErrorController.INCORRECT_EMAIL.getMessage());
                 throw new ControllerException(ErrorController.INCORRECT_EMAIL);
-                }
+            }
             if (password.length() < 4 || password.length() > 20) {
                 model.addAttribute("passwordError", ErrorController.INCORRECT_PASSWORD.getMessage());
                 throw new ControllerException(ErrorController.INCORRECT_PASSWORD);
@@ -56,31 +57,33 @@ public class SecurityController {
             if (!confirm.equals(password)) {
                 model.addAttribute("confirmError", ErrorController.INCORRECT_CONFIRM_PASSWORD.getMessage());
                 throw new ControllerException(ErrorController.INCORRECT_CONFIRM_PASSWORD);
-                }
-            //  String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-            userService.regUser(email, password);
+            }
+            String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+            userService.regUser(email, hashedPassword);
             return "redirect:/login";
         } catch (ControllerException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
             model.addAttribute("exception", e.getError().getMessage());
-            return "/login";
+            return "/signup";
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
             model.addAttribute("exception", e.getError().getMessage());
-            return "/login";
+            model.addAttribute("email", email);
+            return "/signup";
         } catch (Exception e) {
             LOGGER.warn(e.getMessage(), e);
             model.addAttribute("exception", e.getMessage());
-            return "/login";
+            return "/signup";
         }
     }
+
     @RequestMapping(value="/signout", method = RequestMethod.GET)
     public String signoutPage (HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null){
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
-        return "redirect:/";
+        return "redirect:/boardByStation";
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -92,11 +95,5 @@ public class SecurityController {
     public String adminStartPage() {
         return "manager/admin_start_page";
     }
-
-    @RequestMapping(value = "/user_start_page", method = RequestMethod.GET)
-    public String userStartPage() {
-        return "user/user_start_page";
-    }
-
 
 }

@@ -17,6 +17,7 @@
         <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
+                    <c:import url="../message.jsp"/>
                     <div class="header">
                         <h2>
                             ALL ROUTES
@@ -28,12 +29,14 @@
                             <tr>
                                 <th>Number</th>
                                 <th>Waypoints</th>
+                                <th>Edit</th>
                             </tr>
                             </thead>
                             <tfoot>
                             <tr>
                                 <th>Number</th>
                                 <th>Waypoints</th>
+                                <th>Edit</th>
                             </tr>
                             </tfoot>
                             <tbody>
@@ -41,6 +44,18 @@
                                 <tr>
                                     <td>${route.routeNumber}</td>
                                     <td>${route.routeWaypoints}</td>
+                                    <td>
+                                        <a href ="<c:url value='/editRoute/${route.id}'/>">
+                                            <button type="button" class="btn btn-primary btn-circle waves-effect waves-circle waves-float">
+                                                <i class="material-icons">mode_edit</i>
+                                            </button>
+                                        </a>
+                                        <a href ="<c:url value='/deleteRoute/${route.id}'/>">
+                                            <button type="button" class="btn btn-danger btn-circle waves-effect waves-circle waves-float">
+                                                <i class="material-icons">delete_forever</i>
+                                            </button>
+                                        </a>
+                                    </td>
                                 </tr>
                             </c:forEach>
                             </tbody>

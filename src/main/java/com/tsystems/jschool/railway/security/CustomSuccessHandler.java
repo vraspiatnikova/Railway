@@ -41,10 +41,12 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             roles.add(a.getAuthority());
         }
 
-        if (isAdmin(roles)) {
+        if (isManager(roles)) {
             url = "/admin_start_page";
         } else if (isUser(roles)) {
-            url = "/user_start_page";
+            url = "/myTickets";
+        } else if (isAdmin(roles)) {
+            url = "/users";
         } else {
             url = "/";
         }
@@ -55,8 +57,12 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         return roles.contains("ROLE_USER");
     }
 
-    private boolean isAdmin(List<String> roles) {
+    private boolean isManager(List<String> roles) {
         return roles.contains("ROLE_MANAGER");
+    }
+
+    private boolean isAdmin(List<String> roles) {
+        return roles.contains("ROLE_ADMIN");
     }
 
     public void setRedirectStrategy(RedirectStrategy redirectStrategy) {

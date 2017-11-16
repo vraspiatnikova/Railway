@@ -23,6 +23,7 @@ http://www.springframework.org/schema/security/spring-security-4.0.xsd">
         <intercept-url pattern="/showBoardByStationUser" access="hasRole('ROLE_USER')"/>
         <intercept-url pattern="/buyticket/**" access="hasRole('ROLE_USER')"/>
         <intercept-url pattern="/addTicket" access="hasRole('ROLE_USER')"/>
+        <intercept-url pattern="/myTickets" access="hasRole('ROLE_USER')"/>
 
         <intercept-url pattern="/admin_start_page" access="hasRole('ROLE_MANAGER')"/>
         <intercept-url pattern="/stations" access="hasRole('ROLE_MANAGER')"/>
@@ -34,6 +35,25 @@ http://www.springframework.org/schema/security/spring-security-4.0.xsd">
         <intercept-url pattern="/registredpassengers" access="hasRole('ROLE_MANAGER')"/>
         <intercept-url pattern="/allRoutes" access="hasRole('ROLE_MANAGER')"/>
         <intercept-url pattern="/saveroute" access="hasRole('ROLE_MANAGER')"/>
+        <intercept-url pattern="/editTrip/**" access="hasRole('ROLE_MANAGER')"/>
+        <intercept-url pattern="/updateBoard/**" access="hasRole('ROLE_MANAGER')"/>
+        <intercept-url pattern="/deleteBoard/**" access="hasRole('ROLE_MANAGER')"/>
+        <intercept-url pattern="/editTrain/**" access="hasRole('ROLE_MANAGER')"/>
+        <intercept-url pattern="/updateTrain/**" access="hasRole('ROLE_MANAGER')"/>
+        <intercept-url pattern="/deleteTrain/**" access="hasRole('ROLE_MANAGER')"/>
+        <intercept-url pattern="/editStation/**" access="hasRole('ROLE_MANAGER')"/>
+        <intercept-url pattern="/updateStation/**" access="hasRole('ROLE_MANAGER')"/>
+        <intercept-url pattern="/deleteStation/**" access="hasRole('ROLE_MANAGER')"/>
+        <intercept-url pattern="/editRoute/**" access="hasRole('ROLE_MANAGER')"/>
+        <intercept-url pattern="/updateRoute/**" access="hasRole('ROLE_MANAGER')"/>
+        <intercept-url pattern="/deleteRoute/**" access="hasRole('ROLE_MANAGER')"/>
+
+        <intercept-url pattern="/users" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/newUser" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/addUser" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/editUser/**" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/updateUser/**" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/deleteUser/**" access="hasRole('ROLE_ADMIN')"/>
 
         <csrf disabled="true"/>
 
@@ -51,11 +71,11 @@ http://www.springframework.org/schema/security/spring-security-4.0.xsd">
     <beans:bean id="userDetailsServiceImpl"
                 class="com.tsystems.jschool.railway.security.UserDetailsServiceImpl">
     </beans:bean>
-    <!--<beans:bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>-->
+    <beans:bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 
     <authentication-manager>
         <authentication-provider user-service-ref="userDetailsServiceImpl">
-            <!--<password-encoder ref="encoder"/>-->
+            <password-encoder ref="encoder"/>
         </authentication-provider>
     </authentication-manager>
 

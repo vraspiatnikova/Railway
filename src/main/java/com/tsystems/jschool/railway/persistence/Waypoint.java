@@ -1,7 +1,6 @@
 package com.tsystems.jschool.railway.persistence;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -121,7 +120,7 @@ public class Waypoint implements Comparable{
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.add(Calendar.MINUTE, this.travelTime);
-        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
         return dateFormat.format(calendar.getTime());
     }
 
@@ -129,7 +128,7 @@ public class Waypoint implements Comparable{
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.add(Calendar.MINUTE, this.travelStopTime);
-        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
         return dateFormat.format(calendar.getTime());
     }
 }

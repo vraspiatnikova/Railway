@@ -1,5 +1,6 @@
 package com.tsystems.jschool.railway;
 
+import com.tsystems.jschool.railway.dao.interfaces.BoardDao;
 import com.tsystems.jschool.railway.dao.interfaces.TrainDao;
 import com.tsystems.jschool.railway.exceptions.DaoException;
 import com.tsystems.jschool.railway.exceptions.ServiceException;
@@ -22,11 +23,14 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class TrainServiceImplTest {
 
-    Train existTrain;
-    Train newTrain;
+    private Train existTrain;
+    private Train newTrain;
 
     @Mock
     private TrainDao trainDao;
+
+    @Mock
+    private BoardDao boardDao;
 
     @InjectMocks
     private TrainServiceImpl trainService;
@@ -66,5 +70,18 @@ public class TrainServiceImplTest {
         trainService.findTrainById(newTrain.getId());
         verify(trainDao).findById(newTrain.getId());
         Assert.assertTrue(true);
+    }
+
+    @Test
+    public void testDeleteTrain() throws DaoException, ServiceException{
+        trainDao.delete(newTrain);
+        when(trainDao.findById(newTrain.getId())).thenReturn(null);
+    }
+
+    @Test
+    public void testUpdateTrain() throws DaoException, ServiceException{
+        newTrain.setName("UpdateTrain");
+        trainDao.update(newTrain);
+        when(trainDao.findByName("UpdateTrain")).thenReturn(newTrain);
     }
 }

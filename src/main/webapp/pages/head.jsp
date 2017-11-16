@@ -27,6 +27,9 @@
     <!-- Animation Css -->
     <link rel="stylesheet" href="<c:url value="/resources/plugins/animate-css/animate.css"/>"/>
 
+    <!-- Sweet Alert Css -->
+    <link rel="stylesheet" href="<c:url value="/resources/plugins/sweetalert/sweetalert.css"/>"/>
+
     <!-- JQuery DataTable Css -->
     <link rel="stylesheet" href="<c:url value="/resources/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css"/>"/>
 
@@ -37,7 +40,7 @@
     <link rel="stylesheet" href="<c:url value="/resources/plugins/waitme/waitMe.css"/>"/>
 
     <!-- Bootstrap Select Css -->
-    <link rel="stylesheet" href="<c:url value="/resources/plugins/bootstrap-select/css/bootstrap-select.css"/>"/> >
+    <link rel="stylesheet" href="<c:url value="/resources/plugins/bootstrap-select/css/bootstrap-select.css"/>"/>
 
     <!-- Custom Css -->
     <link rel="stylesheet" href="<c:url value="/resources/css/style.css" />"/>

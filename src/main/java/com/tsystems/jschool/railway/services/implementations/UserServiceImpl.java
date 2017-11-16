@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.apache.log4j.Logger;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -70,5 +72,58 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException(ErrorService.DATABASE_EXCEPTION, e);
         }
         return result;
+    }
+
+    @Override
+    @Transactional
+    public List<User> getAllUsers() throws ServiceException {
+        LOGGER.info("try to get all users");
+        List<User> users;
+        try {
+            users = userDao.findAll();
+        } catch (DaoException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new ServiceException(ErrorService.DATABASE_EXCEPTION, e);
+        }
+        return users;
+    }
+
+    @Override
+    @Transactional
+    public void updateUser(User user) throws ServiceException {
+        LOGGER.info("try to update user with email " + user.getEmail());
+        try {
+            userDao.update(user);
+        } catch (DaoException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new ServiceException(ErrorService.DATABASE_EXCEPTION, e);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void deleteUser(User user) throws ServiceException {
+        LOGGER.info("try to delete user with email " + user.getEmail());
+        try {
+            userDao.delete(user);
+        } catch (DaoException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new ServiceException(ErrorService.DATABASE_EXCEPTION, e);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void addUser(User user) throws ServiceException {
+        LOGGER.info("try to add new user");
+        try {
+            if (userDao.findUserByEmail(user.getEmail()) != null) {
+                throw new ServiceException(ErrorService.DUPLICATE_USER);
+            }
+            userDao.create(user);
+        } catch (DaoException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new ServiceException(ErrorService.DATABASE_EXCEPTION, e);
+        }
     }
 }

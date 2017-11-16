@@ -16,7 +16,7 @@
     <div class="error-code">500</div>
     <div class="error-message">Internal Server Error</div>
     <div class="button-place">
-        <a href="${pageContext.request.contextPath}/" class="btn btn-default btn-lg waves-effect">GO TO HOMEPAGE</a>
+        <a href="${pageContext.request.contextPath}/boardByStation" class="btn btn-default btn-lg waves-effect">GO TO HOMEPAGE</a>
     </div>
 </div>
 

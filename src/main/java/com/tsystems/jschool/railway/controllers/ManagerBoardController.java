@@ -22,6 +22,8 @@ import org.apache.log4j.Logger;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -104,8 +106,9 @@ public class ManagerBoardController {
     public String getAllTrainsAndRoutes(Model model){
         LOGGER.info("try to add get all trips page");
         try {
+            List<BoardDto> boardDtos = boardService.getAllBoardsDto();
             model.addAttribute("board", new BoardDto());
-            model.addAttribute("listBoards", this.boardService.getAllBoardsDto());
+            model.addAttribute("listBoards", boardDtos);
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
             model.addAttribute("exception", e.getError().getMessage());
@@ -114,6 +117,57 @@ public class ManagerBoardController {
             model.addAttribute("exception", e.getMessage());
         }
         return "manager/alltrainsroutes";
+    }
+
+    @RequestMapping(value = "editTrip/{id}", method = RequestMethod.GET)
+    public String editTrip(@PathVariable("id") int id, Model model){
+        try {
+            Board board = boardService.findBoardById(id);
+            BoardDto boardDto = boardService.constructBoardDto(board);
+            model.addAttribute("board", boardDto);
+            model.addAttribute("id", id);
+        } catch (ServiceException e) {
+            LOGGER.warn(e.getError().getMessageForLog(), e);
+            model.addAttribute("exception", e.getError().getMessage());
+        } catch (Exception e) {
+            LOGGER.warn(e.getMessage(), e);
+            model.addAttribute("exception", e.getMessage());
+        }
+        return "manager/editTrip";
+    }
+
+    @RequestMapping(value = "/updateBoard/{id}", method = RequestMethod.POST)
+    public String updateBoard(@PathVariable("id") int id, @RequestParam String date, RedirectAttributes redirectAttributes){
+        try {
+            Board board = boardService.findBoardById(id);
+            DateFormat dateFormat = new SimpleDateFormat("EEEE dd MMMM yyyy - HH:mm", Locale.ENGLISH);
+            board.setDateTime(dateFormat.parse(date));
+            boardService.updateBoard(board);
+            redirectAttributes.addFlashAttribute("message", "The trip has been updated successfully!");
+        } catch (ServiceException e) {
+            LOGGER.warn(e.getError().getMessageForLog(), e);
+            redirectAttributes.addFlashAttribute("exception", e.getError().getMessage());
+        } catch (Exception e) {
+            LOGGER.warn(e.getMessage(), e);
+            redirectAttributes.addFlashAttribute("exception", e.getMessage());
+        }
+        return "redirect:/allTrainsRoutes";
+    }
+
+    @RequestMapping(value = "deleteBoard/{id}", method = RequestMethod.GET)
+    public String deleteBoard(@PathVariable("id") int id, RedirectAttributes redirectAttributes){
+        try {
+            Board board = boardService.findBoardById(id);
+            boardService.deleteBoard(board);
+            redirectAttributes.addFlashAttribute("message", "The trip has been deleted successfully!");
+        } catch (ServiceException e) {
+            LOGGER.warn(e.getError().getMessageForLog(), e);
+            redirectAttributes.addFlashAttribute("exception", e.getError().getMessage());
+        } catch (Exception e) {
+            LOGGER.warn(e.getMessage(), e);
+            redirectAttributes.addFlashAttribute("exception", e.getMessage());
+        }
+        return "redirect:/allTrainsRoutes";
     }
 
     @RequestMapping("registredpassengers/{id}")

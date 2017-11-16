@@ -59,17 +59,31 @@
                             <thead>
                             <tr>
                                 <th>Station name</th>
+                                <th>Edit</th>
                             </tr>
                             </thead>
                             <tfoot>
                             <tr>
                                 <th>Station name</th>
+                                <th>Edit</th>
                             </tr>
                             </tfoot>
                             <tbody>
                             <c:forEach items="${listStations}" var="station">
                                 <tr>
                                     <td>${station.name}</td>
+                                    <td>
+                                        <a href ="<c:url value='/editStation/${station.id}'/>">
+                                            <button type="button" class="btn btn-primary btn-circle waves-effect waves-circle waves-float">
+                                                <i class="material-icons">mode_edit</i>
+                                            </button>
+                                        </a>
+                                        <a href ="<c:url value='/deleteStation/${station.id}'/>">
+                                            <button type="button" class="btn btn-danger btn-circle waves-effect waves-circle waves-float">
+                                                <i class="material-icons">delete_forever</i>
+                                            </button>
+                                        </a>
+                                    </td>
                                 </tr>
                             </c:forEach>
                             </tbody>

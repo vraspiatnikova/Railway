@@ -11,7 +11,7 @@
 
     <context:component-scan base-package="com.tsystems.jschool.railway"/>
 
-    <mvc:view-controller path="/" view-name="start_page"/>
+    <mvc:view-controller path="/boardByStation" view-name="boardbystation"/>
 
     <bean id="resolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/pages/"/>

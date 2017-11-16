@@ -15,7 +15,16 @@ public interface RouteService {
     List<Route> getAllRoutes() throws ServiceException;
 
     @Transactional
+    RouteDto constructRouteDto(Route route);
+
+    @Transactional
     List<RouteDto> getAllRoutesDto() throws ServiceException;
 
     Route findRouteById(Integer id) throws ServiceException;
+
+    @Transactional
+    void updateRoute(Route route) throws ServiceException;
+
+    @Transactional
+    void deleteRoute(Route route) throws ServiceException;
 }

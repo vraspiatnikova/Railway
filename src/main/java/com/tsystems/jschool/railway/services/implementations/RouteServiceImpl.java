@@ -25,12 +25,14 @@ public class RouteServiceImpl implements RouteService {
     private final StationDao stationDao;
     private final RouteDao routeDao;
     private final WaypointDao waypointDao;
+    private final BoardDao boardDao;
 
     @Autowired
-    public RouteServiceImpl(StationDao stationDao, RouteDao routeDao, WaypointDao waypointDao) {
+    public RouteServiceImpl(StationDao stationDao, RouteDao routeDao, WaypointDao waypointDao, BoardDao boardDao) {
         this.stationDao = stationDao;
         this.routeDao = routeDao;
         this.waypointDao = waypointDao;
+        this.boardDao = boardDao;
     }
 
     @Override
@@ -100,9 +102,12 @@ public class RouteServiceImpl implements RouteService {
         }
     }
 
-    private RouteDto constructRouteDto(Route route) {
+    @Override
+    @Transactional
+    public RouteDto constructRouteDto(Route route) {
         RouteDto routeDto = new RouteDto();
         routeDto.setRouteNumber(route.getNumber());
+        routeDto.setId(route.getId());
         StringBuilder routeWaypoints = new StringBuilder();
         List<Station> stations = new ArrayList<>();
         TreeSet<Waypoint> waypoints = new TreeSet<>(route.getWaypoints());
@@ -124,5 +129,32 @@ public class RouteServiceImpl implements RouteService {
             routeDtos.add(constructRouteDto(route));
         }
         return routeDtos;
+    }
+
+    @Override
+    @Transactional
+    public void updateRoute(Route route) throws ServiceException {
+        LOGGER.info("try to update route with id (" + route.getId() + ")");
+        try {
+            routeDao.update(route);
+        } catch (DaoException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new ServiceException(ErrorService.DATABASE_EXCEPTION, e);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void deleteRoute(Route route) throws ServiceException {
+        LOGGER.info("try to delete route with id (" + route.getId() + ")");
+        try {
+            if (!boardDao.findBoardByRouteNumber(route.getNumber()).isEmpty()){
+                throw new ServiceException(ErrorService.CANNOT_DELETE_ROUTE);
+            }
+            routeDao.delete(route);
+        } catch (DaoException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new ServiceException(ErrorService.DATABASE_EXCEPTION, e);
+        }
     }
 }

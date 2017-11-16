@@ -16,6 +16,9 @@
     <div class="card">
         <div class="body">
             <form id="sign_up" method="POST" novalidate = "novalidate" action="${pageContext.request.contextPath}/signup">
+                <c:if test="${confirmError == null && emailError == null && passwordError == null}">
+                    <c:import url="message.jsp"/>
+                </c:if>
                 <div class="msg">Register a new user</div>
 
                 <div class="input-group">
@@ -23,7 +26,8 @@
                             <i class="material-icons">email</i>
                         </span>
                     <div class="form-line">
-                        <input type="email" class="form-control" name="email" placeholder="Email Address" required="" aria-required="true">
+                        <input type="email" class="form-control" name="email" value="${email}" placeholder="Email Address" required="" aria-required="true">
+                        <c:if test="${emailError != null}"><span class="error">${emailError}</span></c:if>
                     </div>
                 </div>
                 <div class="input-group">
@@ -31,7 +35,8 @@
                             <i class="material-icons">lock</i>
                         </span>
                     <div class="form-line">
-                        <input type="password" class="form-control" name="password" minlength="6" placeholder="Password" required="" aria-required="true">
+                        <input type="password" class="form-control" name="password" minlength="4" maxlength="20" placeholder="Password" required="" aria-required="true">
+                        <c:if test="${passwordError != null}"><span class="error">${passwordError}</span></c:if>
                     </div>
                 </div>
                 <div class="input-group">
@@ -39,7 +44,8 @@
                             <i class="material-icons">lock</i>
                         </span>
                     <div class="form-line">
-                        <input type="password" class="form-control" name="confirm" minlength="6" placeholder="Confirm Password" required="" aria-required="true">
+                        <input type="password" class="form-control" name="confirm" placeholder="Confirm Password" required="" aria-required="true">
+                        <c:if test="${confirmError != null}"><span class="error">${confirmError}</span></c:if>
                     </div>
                 </div>
 
@@ -55,7 +61,6 @@
 </div>
 
 <!-- Jquery Core Js -->
-<script async="" src="https://www.google-analytics.com/analytics.js"></script>
 <script src="${pageContext.request.contextPath}/resources/plugins/jquery/jquery.min.js"></script>
 
 <!-- Bootstrap Core Js -->
@@ -69,7 +74,6 @@
 
 <!-- Custom Js -->
 <script src="${pageContext.request.contextPath}/resources/js/admin.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/pages/forms/basic-form-elements.js"></script>
-
+<script src="${pageContext.request.contextPath}/resources/js/pages/examples/sign-up.js"></script>
 
 </body></html>

@@ -2,5 +2,6 @@ package com.tsystems.jschool.railway.persistence.roles;
 
 public enum UserRole {
     ROLE_USER,
-    ROLE_MANAGER
+    ROLE_MANAGER,
+    ROLE_ADMIN
 }

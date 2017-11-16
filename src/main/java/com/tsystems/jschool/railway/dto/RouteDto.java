@@ -4,10 +4,19 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class RouteDto {
+    private int id;
     private String routeNumber;
     private String routeWaypoints;
 
     public RouteDto() {
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getRouteNumber() {

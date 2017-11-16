@@ -8,9 +8,7 @@ import com.tsystems.jschool.railway.services.interfaces.StationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.apache.log4j.Logger;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -58,6 +56,55 @@ public class StationController {
         } catch (ControllerException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
             redirectAttributes.addFlashAttribute("exception", e.getError().getMessage());
+        } catch (ServiceException e) {
+            LOGGER.warn(e.getError().getMessageForLog(), e);
+            redirectAttributes.addFlashAttribute("exception", e.getError().getMessage());
+        } catch (Exception e) {
+            LOGGER.warn(e.getMessage(), e);
+            redirectAttributes.addFlashAttribute("exception", e.getMessage());
+        }
+        return "redirect:/stations";
+    }
+
+    @RequestMapping(value = "editStation/{id}", method = RequestMethod.GET)
+    public String editTrain(@PathVariable("id") int id, Model model){
+        try {
+            Station station = stationService.findStationById(id);
+            model.addAttribute("station", station);
+            model.addAttribute("id", id);
+        } catch (ServiceException e) {
+            LOGGER.warn(e.getError().getMessageForLog(), e);
+            model.addAttribute("exception", e.getError().getMessage());
+        } catch (Exception e) {
+            LOGGER.warn(e.getMessage(), e);
+            model.addAttribute("exception", e.getMessage());
+        }
+        return "manager/editStation";
+    }
+
+    @RequestMapping(value = "/updateStation/{id}", method = RequestMethod.POST)
+    public String updateBoard(@PathVariable("id") int id, @RequestParam String stationName, RedirectAttributes redirectAttributes){
+        try {
+            Station station = stationService.findStationById(id);
+            station.setName(stationName);
+            stationService.updateStation(station);
+            redirectAttributes.addFlashAttribute("message", "The station has been updated successfully!");
+        } catch (ServiceException e) {
+            LOGGER.warn(e.getError().getMessageForLog(), e);
+            redirectAttributes.addFlashAttribute("exception", e.getError().getMessage());
+        } catch (Exception e) {
+            LOGGER.warn(e.getMessage(), e);
+            redirectAttributes.addFlashAttribute("exception", e.getMessage());
+        }
+        return "redirect:/stations";
+    }
+
+    @RequestMapping(value = "deleteStation/{id}", method = RequestMethod.GET)
+    public String deleteBoard(@PathVariable("id") int id, RedirectAttributes redirectAttributes){
+        try {
+            Station station = stationService.findStationById(id);
+            stationService.deleteStation(station);
+            redirectAttributes.addFlashAttribute("message", "The station has been deleted successfully!");
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
             redirectAttributes.addFlashAttribute("exception", e.getError().getMessage());

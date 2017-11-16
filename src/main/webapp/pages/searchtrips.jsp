@@ -8,11 +8,22 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <html class="chrome">
 <c:import url="head.jsp"/>
 
 <body class="theme-red ls-closed">
-<c:import url="navbar.jsp"/>
+
+<sec:authorize var="loggedIn" access="isAuthenticated()"/>
+<c:choose>
+    <c:when test="${loggedIn}">
+        <c:import url="user/navbar_user.jsp"/>
+    </c:when>
+    <c:otherwise>
+        <c:import url="navbar.jsp"/>
+    </c:otherwise>
+</c:choose>
+
 <section class="content">
     <div class="container-fluid">
         <div class="row clearfix">
@@ -100,6 +111,12 @@
 <!-- Slimscroll Plugin Js -->
 <script src="${pageContext.request.contextPath}/resources/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
 
+<!-- Jquery Validation Plugin Css -->
+<script src="${pageContext.request.contextPath}/resources/plugins/jquery-validation/jquery.validate.js"></script>
+
+<!-- Sweet Alert Plugin Js -->
+<script src="${pageContext.request.contextPath}/resources/plugins/sweetalert/sweetalert.min.js"></script>
+
 <!-- Waves Effect Plugin Js -->
 <script src="${pageContext.request.contextPath}/resources/plugins/node-waves/waves.js"></script>
 
@@ -119,8 +136,7 @@
 <!-- Demo Js -->
 <script src="${pageContext.request.contextPath}/resources/js/demo.js"></script>
 
-<!-- Jquery Validation Plugin Css -->
-<script src="${pageContext.request.contextPath}/resources/plugins/jquery-validation/jquery.validate.js"></script>
+
 
 <script src="${pageContext.request.contextPath}/resources/js/pages/forms/advanced-form-elements.js"></script>
 

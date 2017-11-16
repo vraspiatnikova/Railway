@@ -1,6 +1,7 @@
 package com.tsystems.jschool.railway.controllers;
 
 import com.tsystems.jschool.railway.dto.NewRouteDto;
+import com.tsystems.jschool.railway.dto.RouteDto;
 import com.tsystems.jschool.railway.dto.SaveRouteDto;
 import com.tsystems.jschool.railway.exceptions.ControllerException;
 import com.tsystems.jschool.railway.exceptions.ErrorController;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.apache.log4j.Logger;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -151,5 +153,55 @@ public class RouteController {
             model.addAttribute("exception", e.getMessage());
         }
         return "message";
+    }
+
+    @RequestMapping(value = "editRoute/{id}", method = RequestMethod.GET)
+    public String editTrain(@PathVariable("id") int id, Model model){
+        try {
+            Route route = routeService.findRouteById(id);
+            RouteDto routeDto = routeService.constructRouteDto(route);
+            model.addAttribute("route", routeDto);
+            model.addAttribute("id", id);
+        } catch (ServiceException e) {
+            LOGGER.warn(e.getError().getMessageForLog(), e);
+            model.addAttribute("exception", e.getError().getMessage());
+        } catch (Exception e) {
+            LOGGER.warn(e.getMessage(), e);
+            model.addAttribute("exception", e.getMessage());
+        }
+        return "manager/editRoute";
+    }
+
+    @RequestMapping(value = "/updateRoute/{id}", method = RequestMethod.POST)
+    public String updateBoard(@PathVariable("id") int id, @RequestParam String routeNumber, RedirectAttributes redirectAttributes){
+        try {
+            Route route = routeService.findRouteById(id);
+            route.setNumber(routeNumber);
+            routeService.updateRoute(route);
+            redirectAttributes.addFlashAttribute("message", "The route has been updated successfully!");
+        } catch (ServiceException e) {
+            LOGGER.warn(e.getError().getMessageForLog(), e);
+            redirectAttributes.addFlashAttribute("exception", e.getError().getMessage());
+        } catch (Exception e) {
+            LOGGER.warn(e.getMessage(), e);
+            redirectAttributes.addFlashAttribute("exception", e.getMessage());
+        }
+        return "redirect:/allRoutes";
+    }
+
+    @RequestMapping(value = "deleteRoute/{id}", method = RequestMethod.GET)
+    public String deleteBoard(@PathVariable("id") int id, RedirectAttributes redirectAttributes){
+        try {
+            Route route = routeService.findRouteById(id);
+            routeService.deleteRoute(route);
+            redirectAttributes.addFlashAttribute("message", "The route has been deleted successfully!");
+        } catch (ServiceException e) {
+            LOGGER.warn(e.getError().getMessageForLog(), e);
+            redirectAttributes.addFlashAttribute("exception", e.getError().getMessage());
+        } catch (Exception e) {
+            LOGGER.warn(e.getMessage(), e);
+            redirectAttributes.addFlashAttribute("exception", e.getMessage());
+        }
+        return "redirect:/allRoutes";
     }
 }

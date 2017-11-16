@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%--
   Created by IntelliJ IDEA.
   User: Вика
@@ -11,7 +12,16 @@
 <c:import url="head.jsp"/>
 
 <body class="theme-red ls-closed">
-<c:import url="navbar.jsp"/>
+
+<sec:authorize var="loggedIn" access="isAuthenticated()"/>
+<c:choose>
+    <c:when test="${loggedIn}">
+        <c:import url="user/navbar_user.jsp"/>
+    </c:when>
+    <c:otherwise>
+        <c:import url="navbar.jsp"/>
+    </c:otherwise>
+</c:choose>
 
 <section class="content">
     <div class="container-fluid">

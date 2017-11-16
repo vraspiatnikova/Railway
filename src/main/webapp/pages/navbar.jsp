@@ -8,7 +8,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!-- Page Loader -->
-<div class="page-loader-wrapper" style="display: none;">
+<div class="page-loader-wrapper">
     <div class="loader">
         <div class="preloader">
             <div class="spinner-layer pl-red">
@@ -25,7 +25,7 @@
 </div>
 <!-- #END# Page Loader -->
 <!-- Overlay For Sidebars -->
-<div class="overlay" style="display: none;"></div>
+<div class="overlay"></div>
 <!-- #END# Overlay For Sidebars -->
 <!-- Top Bar -->
 <nav class="navbar">
@@ -36,7 +36,13 @@
             <a class="navbar-brand">RAILWAY</a>
         </div>
         <div class="collapse navbar-collapse" id="navbar-collapse">
-
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="${pageContext.request.contextPath}/login">
+                        <i class="material-icons">account_circle</i>
+                    </a>
+                </li>
+            </ul>
         </div>
     </div>
 </nav>
@@ -48,13 +54,13 @@
         <div class="menu">
             <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 368px;">
                 <ul class="list" style="overflow: hidden; width: auto; height: 368px;">
+                    <%--<li class="active">--%>
+                        <%--<a href="${pageContext.request.contextPath}/" class=" waves-effect waves-block">--%>
+                            <%--<i class="material-icons">home</i>--%>
+                            <%--<span>Home</span>--%>
+                        <%--</a>--%>
+                    <%--</li>--%>
                     <li class="active">
-                        <a href="${pageContext.request.contextPath}/" class="toggled waves-effect waves-block">
-                            <i class="material-icons">home</i>
-                            <span>Home</span>
-                        </a>
-                    </li>
-                    <li>
                         <a href="${pageContext.request.contextPath}/boardByStation" class=" waves-effect waves-block">
                             <i class="material-icons">text_fields</i>
                             <span>Station timetable</span>
@@ -66,13 +72,16 @@
                             <span>Find the trip</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="${pageContext.request.contextPath}/login" class=" waves-effect waves-block">
-                        <i class="material-icons">update</i>
-                        <span>Sign in</span>
-                        </a>
-                    </li>
-                </ul><div class="slimScrollBar" style="background: rgba(0, 0, 0, 0.5); width: 4px; position: absolute; top: 0px; opacity: 0.4; display: none; border-radius: 0px; z-index: 99; right: 1px; height: 368px;"></div><div class="slimScrollRail" style="width: 4px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 0px; background: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px;"></div></div>
+                    <%--<li>--%>
+                        <%--<a href="${pageContext.request.contextPath}/login" class=" waves-effect waves-block">--%>
+                        <%--<i class="material-icons">update</i>--%>
+                        <%--<span>Sign in</span>--%>
+                        <%--</a>--%>
+                    <%--</li>--%>
+                </ul>
+                <div class="slimScrollBar" style="background: rgba(0, 0, 0, 0.5); width: 4px; position: absolute; top: 0px; opacity: 0.4; display: none; border-radius: 0px; z-index: 99; right: 1px; height: 368px;"></div>
+                <div class="slimScrollRail" style="width: 4px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 0px; background: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px;"></div>
+            </div>
         </div>
         <!-- #Menu -->
     </aside>

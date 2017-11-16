@@ -106,7 +106,6 @@ public class TicketServiceImpl implements TicketService {
             for(Ticket ticket : findTicketsByPassenger(passenger)) {
                 tickets.add(constructTicket(ticket));
             }
-
             return tickets;
         } catch (DaoException e) {
             LOGGER.error(e.getMessage(), e);
