@@ -32,7 +32,11 @@ import java.util.Locale;
 public class ManagerBoardController {
 
     private static final Logger LOGGER = Logger.getLogger(ManagerBoardController.class);
+    private static final DateFormat dateFormat = new SimpleDateFormat("EEEE dd MMMM yyyy - HH:mm", Locale.ENGLISH);
     private final BoardService boardService;
+    private String exception = "exception";
+    private String message = "message";
+    private String redirectAllTrips = "redirect:/allTrainsRoutes";
 
     @Autowired
     public ManagerBoardController(BoardService boardService) {
@@ -46,13 +50,16 @@ public class ManagerBoardController {
                            @RequestParam("daysOfWeek") String daysOfWeek, RedirectAttributes redirectAttributes){
         LOGGER.info("try to add new trip: route number " + route + " , train name " + trainName
                 + " start date "+ startDate+" end date "+endDate+" time "+time+" days of week "+daysOfWeek);
+        String redirectAddRoute = "redirect:/addroute/" + trainId;
         try {
             List<DateTime> dates = new ArrayList<>();
             DateTimeFormatter fmt = DateTimeFormat.forPattern("EEEE dd MMMM yyyy");
             DateTimeFormatter pattern = fmt.withLocale(Locale.ENGLISH);
+
             DateTime start = pattern.parseDateTime(startDate);
             DateTime end = pattern.parseDateTime(endDate);
             if (end.isBefore(start)) throw new ControllerException(ErrorController.INCORRECT_START_END);
+
             String[] selectedDays = daysOfWeek.split(",");
             List<Integer> days = new ArrayList<>();
             for (String s: selectedDays){
@@ -64,6 +71,7 @@ public class ManagerBoardController {
                     case "Thursday": days.add(DateTimeConstants.THURSDAY); break;
                     case "Friday": days.add(DateTimeConstants.FRIDAY); break;
                     case "Saturday": days.add(DateTimeConstants.SATURDAY); break;
+                    default: break;
                 }
             }
 
@@ -78,28 +86,25 @@ public class ManagerBoardController {
                     startTmp = startTmp.plusDays(1);
                 }
             }
-            if (!boardService.findBoardByTrainNameAndRoute(trainName, route).isEmpty())
-                throw new ControllerException(ErrorController.DUPLICATE_TRAINS_ROUTE);
-
-            boardService.addBoard(dates, trainName, route);
+            boardService.addBoards(dates, trainName, route);
 
             LOGGER.info("new trip: route number " + route + " , train name " + trainName
                     + " start date "+ startDate+" end date "+endDate+" time "+time+" days of week "+daysOfWeek);
-            redirectAttributes.addFlashAttribute("message", "The trip has been added successfully!");
+            redirectAttributes.addFlashAttribute(message, "The trip has been added successfully!");
         } catch (ControllerException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
-            redirectAttributes.addFlashAttribute("exception", e.getError().getMessage());
-            return "redirect:/addroute/" + trainId;
+            redirectAttributes.addFlashAttribute(exception, e.getError().getMessage());
+            return redirectAddRoute;
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
-            redirectAttributes.addFlashAttribute("exception", e.getError().getMessage());
-            return "redirect:/addroute/" + trainId;
+            redirectAttributes.addFlashAttribute(exception, e.getError().getMessage());
+            return redirectAddRoute;
         } catch (Exception e) {
             LOGGER.warn(e.getMessage(), e);
-            redirectAttributes.addFlashAttribute("exception", e.getMessage());
-            return "redirect:/addroute/" + trainId;
+            redirectAttributes.addFlashAttribute(exception, e.getMessage());
+            return redirectAddRoute;
         }
-        return "redirect:/allTrainsRoutes";
+        return redirectAllTrips;
     }
 
     @RequestMapping(value = "/allTrainsRoutes", method = RequestMethod.GET)
@@ -111,10 +116,10 @@ public class ManagerBoardController {
             model.addAttribute("listBoards", boardDtos);
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
-            model.addAttribute("exception", e.getError().getMessage());
+            model.addAttribute(exception, e.getError().getMessage());
         } catch (Exception e) {
             LOGGER.warn(e.getMessage(), e);
-            model.addAttribute("exception", e.getMessage());
+            model.addAttribute(exception, e.getMessage());
         }
         return "manager/alltrainsroutes";
     }
@@ -123,15 +128,17 @@ public class ManagerBoardController {
     public String editTrip(@PathVariable("id") int id, Model model){
         try {
             Board board = boardService.findBoardById(id);
+            String dateTime = dateFormat.format(board.getDateTime());
             BoardDto boardDto = boardService.constructBoardDto(board);
+            model.addAttribute("dateTime", dateTime);
             model.addAttribute("board", boardDto);
             model.addAttribute("id", id);
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
-            model.addAttribute("exception", e.getError().getMessage());
+            model.addAttribute(exception, e.getError().getMessage());
         } catch (Exception e) {
             LOGGER.warn(e.getMessage(), e);
-            model.addAttribute("exception", e.getMessage());
+            model.addAttribute(exception, e.getMessage());
         }
         return "manager/editTrip";
     }
@@ -140,18 +147,18 @@ public class ManagerBoardController {
     public String updateBoard(@PathVariable("id") int id, @RequestParam String date, RedirectAttributes redirectAttributes){
         try {
             Board board = boardService.findBoardById(id);
-            DateFormat dateFormat = new SimpleDateFormat("EEEE dd MMMM yyyy - HH:mm", Locale.ENGLISH);
-            board.setDateTime(dateFormat.parse(date));
-            boardService.updateBoard(board);
-            redirectAttributes.addFlashAttribute("message", "The trip has been updated successfully!");
+            Board newBoard = boardService.findBoardById(id);
+            newBoard.setDateTime(dateFormat.parse(date));
+            boardService.updateBoard(board, newBoard);
+            redirectAttributes.addFlashAttribute(message, "The trip has been updated successfully!");
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
-            redirectAttributes.addFlashAttribute("exception", e.getError().getMessage());
+            redirectAttributes.addFlashAttribute(exception, e.getError().getMessage());
         } catch (Exception e) {
             LOGGER.warn(e.getMessage(), e);
-            redirectAttributes.addFlashAttribute("exception", e.getMessage());
+            redirectAttributes.addFlashAttribute(exception, e.getMessage());
         }
-        return "redirect:/allTrainsRoutes";
+        return redirectAllTrips;
     }
 
     @RequestMapping(value = "deleteBoard/{id}", method = RequestMethod.GET)
@@ -159,15 +166,15 @@ public class ManagerBoardController {
         try {
             Board board = boardService.findBoardById(id);
             boardService.deleteBoard(board);
-            redirectAttributes.addFlashAttribute("message", "The trip has been deleted successfully!");
+            redirectAttributes.addFlashAttribute(message, "The trip has been deleted successfully!");
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
-            redirectAttributes.addFlashAttribute("exception", e.getError().getMessage());
+            redirectAttributes.addFlashAttribute(exception, e.getError().getMessage());
         } catch (Exception e) {
             LOGGER.warn(e.getMessage(), e);
-            redirectAttributes.addFlashAttribute("exception", e.getMessage());
+            redirectAttributes.addFlashAttribute(exception, e.getMessage());
         }
-        return "redirect:/allTrainsRoutes";
+        return redirectAllTrips;
     }
 
     @RequestMapping("registredpassengers/{id}")
@@ -179,10 +186,10 @@ public class ManagerBoardController {
             model.addAttribute("allPassengers", passengers);
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
-            model.addAttribute("exception", e.getError().getMessage());
+            model.addAttribute(exception, e.getError().getMessage());
         } catch (Exception e) {
             LOGGER.warn(e.getMessage(), e);
-            model.addAttribute("exception", e.getMessage());
+            model.addAttribute(exception, e.getMessage());
         }
         return "manager/registredpassengers";
     }

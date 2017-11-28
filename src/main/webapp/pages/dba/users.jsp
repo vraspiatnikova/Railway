@@ -16,6 +16,7 @@
         <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
+                    <c:import url="../message.jsp"/>
                     <div class="header">
                         <h2>
                             ALL USERS
@@ -26,7 +27,6 @@
                             <thead>
                             <tr>
                                 <th>Email</th>
-                                <th>Password</th>
                                 <th>Role</th>
                                 <th>Edit</th>
                             </tr>
@@ -34,7 +34,6 @@
                             <tfoot>
                             <tr>
                                 <th>Email</th>
-                                <th>Password</th>
                                 <th>Role</th>
                                 <th>Edit</th>
                             </tr>
@@ -43,7 +42,6 @@
                             <c:forEach items="${listUsers}" var="user">
                                 <tr>
                                     <td>${user.email}</td>
-                                    <td>${user.password}</td>
                                     <td>${user.role}</td>
                                     <td>
                                         <a href ="<c:url value='/editUser/${user.id}'/>">

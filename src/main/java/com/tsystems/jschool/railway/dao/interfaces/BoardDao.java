@@ -2,7 +2,6 @@ package com.tsystems.jschool.railway.dao.interfaces;
 
 import com.tsystems.jschool.railway.exceptions.DaoException;
 import com.tsystems.jschool.railway.persistence.Board;
-import com.tsystems.jschool.railway.persistence.Route;
 
 import java.util.Date;
 import java.util.List;

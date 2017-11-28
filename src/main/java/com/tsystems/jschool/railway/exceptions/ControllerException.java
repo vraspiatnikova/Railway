@@ -2,9 +2,10 @@ package com.tsystems.jschool.railway.exceptions;
 
 public class ControllerException extends Exception{
 
-    private ErrorController error;
+    private final ErrorController error;
 
     public ControllerException(ErrorController error, Throwable cause) {
+        super(error.getMessage(), cause);
         this.error = error;
     }
 

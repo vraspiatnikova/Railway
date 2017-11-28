@@ -50,7 +50,7 @@ public class StationServiceImplTest {
     @Test(expected = ServiceException.class)
     public void testAddExistStation() throws DaoException, ServiceException {
         when(stationDao.findByName(existStation.getName())).thenReturn(existStation);
-        verify(stationService.addStation(existStation));
+        stationService.addStation(existStation);
     }
 
     @Test

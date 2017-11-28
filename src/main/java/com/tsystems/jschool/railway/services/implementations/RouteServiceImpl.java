@@ -26,13 +26,15 @@ public class RouteServiceImpl implements RouteService {
     private final RouteDao routeDao;
     private final WaypointDao waypointDao;
     private final BoardDao boardDao;
+    private final TicketDao ticketDao;
 
     @Autowired
-    public RouteServiceImpl(StationDao stationDao, RouteDao routeDao, WaypointDao waypointDao, BoardDao boardDao) {
+    public RouteServiceImpl(StationDao stationDao, RouteDao routeDao, WaypointDao waypointDao, BoardDao boardDao, TicketDao ticketDao) {
         this.stationDao = stationDao;
         this.routeDao = routeDao;
         this.waypointDao = waypointDao;
         this.boardDao = boardDao;
+        this.ticketDao = ticketDao;
     }
 
     @Override
@@ -136,6 +138,13 @@ public class RouteServiceImpl implements RouteService {
     public void updateRoute(Route route) throws ServiceException {
         LOGGER.info("try to update route with id (" + route.getId() + ")");
         try {
+            List<Board> boards = boardDao.findBoardByRouteNumber(route.getNumber());
+            for (Board board: boards){
+                if (!ticketDao.findTicketsByBoard(board).isEmpty()){
+                    throw new ServiceException(ErrorService.CANNOT_UPDATE_ROUTE);
+                }
+            }
+            if (routeDao.findByNumber(route.getNumber()) != null) throw new ServiceException(ErrorService.DUPLICATE_ROUTE);
             routeDao.update(route);
         } catch (DaoException e) {
             LOGGER.error(e.getMessage(), e);

@@ -20,6 +20,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class BoardServiceImpl implements BoardService {
@@ -44,15 +45,35 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional
-    public void addBoard(List<DateTime> dateTimeList, String trainName, String routeNumber) throws ServiceException {
-        LOGGER.info("try to add trip with train name " + trainName + " and route number " + routeNumber);
+    public void addBoards(List<DateTime> dateTimeList, String trainName, String routeNumber) throws ServiceException {
         try {
             Route route = routeDao.findByNumber(routeNumber);
             Train train = trainDao.findByName(trainName);
-            for (DateTime dateTime : dateTimeList) {
-                boardDao.create(new Board(dateTime.toDate(), route, train));
+            List<Board> boards = boardDao.findBoardByTrainName(trainName);
+            if (!boards.isEmpty()) {
+                for (Board board : boards) {
+                    Date start = board.getDateTime();
+                    Date end = board.getRoute().findLastWaypoint().departureDate(start);
+                    for (DateTime dateTime : dateTimeList) {
+                        Date newStart = dateTime.toDate();
+                        Date newEnd = route.findLastWaypoint().departureDate(newStart);
+                        if (!newStart.after(end) || !newStart.before(start) ||
+                                !newEnd.after(end) || !newEnd.before(start) ||
+                                (start.after(newStart) && end.after(newStart) && start.before(newEnd) && end.before(newEnd))) {
+                            throw new ServiceException(ErrorService.DUPLICATE_TRIP);
+                        }
+                    }
+                }
             }
-            sender.sendMessage("boards added");
+            else {
+                for (DateTime dateTime : dateTimeList) {
+                    Date date = dateTime.toDate();
+                    LOGGER.info("try to add trip with date: " + date + ", train name " + train.getName() + " and route number " + route.getNumber());
+                    boardDao.create(new Board(date, route, train));
+                    LOGGER.info("try to send message 'boards added' to topic");
+                    sender.sendMessage("boards added");
+                }
+            }
         } catch (JMSException e) {
             LOGGER.error(e.getMessage(), e);
             throw new ServiceException(ErrorService.JMS_EXCEPTION, e);
@@ -66,9 +87,14 @@ public class BoardServiceImpl implements BoardService {
     @Transactional
     public List<Board> getAllBoards() throws ServiceException {
         LOGGER.info("try to get all boards");
-        List<Board> listOfBoards;
+        List<Board> listOfBoards = new ArrayList<>();
         try {
-            listOfBoards = boardDao.findAll();
+            List<Board> tmp = boardDao.findAll();
+            for (Board board: tmp){
+                if (board.getRoute().findLastWaypoint().departureDate(board.getDateTime()).compareTo(new Date())>0){
+                    listOfBoards.add(board);
+                }
+            }
             Collections.sort(listOfBoards);
         } catch (DaoException e) {
             LOGGER.error(e.getMessage(), e);
@@ -93,7 +119,57 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional
+    public void updateBoard(Board board, Board newBoard) throws ServiceException {
+        LOGGER.info("try to update board with id (" + board.getId() + ")");
+        try {
+            boardDao.update(newBoard);
+            Date oldDate = board.getDateTime();
+            Date newDate = newBoard.getDateTime();
+            String msg = "edit " + Integer.toString(board.getId());
+            long duration;
+            if (oldDate.compareTo(newDate) > 0){
+                duration = oldDate.getTime() - newDate.getTime();
+                msg += " -";
+            }
+            else {
+                duration = newDate.getTime() - oldDate.getTime();
+                msg += " ";
+            }
+            long delta = TimeUnit.MILLISECONDS.toMinutes(duration);
+            msg += Long.toString(delta);
+            sender.sendMessage(msg);
+        } catch (JMSException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new ServiceException(ErrorService.JMS_EXCEPTION, e);
+        } catch (DaoException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new ServiceException(ErrorService.DATABASE_EXCEPTION, e);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void deleteBoard(Board board) throws ServiceException {
+        LOGGER.info("try to delete board with id (" + board.getId() + ")");
+        try {
+            if (!ticketDao.findTicketsByBoard(board).isEmpty()){
+                throw new ServiceException(ErrorService.CANNOT_DELETE_BOARD);
+            }
+            boardDao.delete(board);
+            sender.sendMessage("delete " + board.getId());
+        } catch (JMSException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new ServiceException(ErrorService.JMS_EXCEPTION, e);
+        } catch (DaoException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new ServiceException(ErrorService.DATABASE_EXCEPTION, e);
+        }
+    }
+
+    @Override
+    @Transactional
     public BoardDto constructBoardDto(Board board) {
+        LOGGER.info("try to construct trip with board id (" + board.getId() + ")");
         BoardDto boardDto = new BoardDto();
         boardDto.setBoardId(board.getId());
         StringBuilder routeWaypoints = new StringBuilder();
@@ -127,7 +203,7 @@ public class BoardServiceImpl implements BoardService {
     @Override
     @Transactional
     public SuitableTripDto constractSuitableTripDto(Board board, String stationFrom, String stationTo) throws ServiceException {
-        LOGGER.info("try to construct suitable trip");
+        LOGGER.info("try to construct suitable trip from " + stationFrom + " to " + stationTo);
         try {
             SuitableTripDto suitableTripDto = new SuitableTripDto();
 
@@ -173,29 +249,105 @@ public class BoardServiceImpl implements BoardService {
         try {
             List<SuitableTripDto> suitableTripDtos = new ArrayList<>();
             DateFormat dateFormat = new SimpleDateFormat("EEEE dd MMMM yyyy - HH:mm", Locale.ENGLISH);
-            try {
-                Date dateTimeFrom = dateFormat.parse(searchTripDto.getDateTimeFrom());
-                Date dateTimeTo = dateFormat.parse(searchTripDto.getDateTimeTo());
-                List<Board> suitableBoards = boardDao.findAllBoardsBetweenDates(dateTimeFrom, dateTimeTo);
-                String stationFrom = searchTripDto.getStationFrom();
-                String stationTo = searchTripDto.getStationTo();
+            Date dateTimeFrom = dateFormat.parse(searchTripDto.getDateTimeFrom());
+            Date dateTimeTo = dateFormat.parse(searchTripDto.getDateTimeTo());
+            List<Board> suitableBoards = boardDao.findAllBoardsBetweenDates(dateTimeFrom, dateTimeTo);
+            String stationFrom = searchTripDto.getStationFrom();
+            String stationTo = searchTripDto.getStationTo();
 
-                for(Board board : suitableBoards) {
-                    SuitableTripDto suitableTripDto = constractSuitableTripDto(board, stationFrom, stationTo);
-                    if (suitableTripDto != null){
-                        suitableTripDtos.add(suitableTripDto);
-                    }
+            for(Board board : suitableBoards) {
+                SuitableTripDto suitableTripDto = constractSuitableTripDto(board, stationFrom, stationTo);
+                if (suitableTripDto != null){
+                    suitableTripDtos.add(suitableTripDto);
                 }
-            } catch (ParseException e) {
-                throw new ServiceException(ErrorService.INCORRECT_DATE_FORMAT, e);
             }
             suitableTripDtos.sort(new SortedSuitableTripDto());
             return suitableTripDtos;
-
+        } catch (ParseException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new ServiceException(ErrorService.INCORRECT_DATE_FORMAT, e);
         } catch (DaoException e) {
             LOGGER.error(e.getMessage(), e);
             throw new ServiceException(ErrorService.DATABASE_EXCEPTION, e);
         }
+    }
+
+    private BoardByStationDto constructBoardByStationDto(Board board, String stationName) throws ServiceException {
+        try {
+            BoardByStationDto boardByStationDto = new BoardByStationDto();
+
+            boardByStationDto.setBoardId(board.getId());
+            boardByStationDto.setTrainName(board.getTrain().getName());
+            Route route = board.getRoute();
+            String routeName = route.findFirstWaypoint().getStation().getName()+" - "+route.findLastWaypoint().getStation().getName();
+            boardByStationDto.setRoute(routeName);
+
+            Waypoint wp = waypointDao.findWaypointByStationNameAndRouteId(stationName, route.getId());
+            if (wp == null) throw new ServiceException(ErrorService.TRIP_NOT_EXIST);
+
+            boardByStationDto.setArrivaDatelTime(wp.arrivalDateTime(board.getDateTime()));
+            boardByStationDto.setDepatureDateTime(wp.departureDateTime(board.getDateTime()));
+
+            return boardByStationDto;
+        } catch (DaoException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new ServiceException(ErrorService.DATABASE_EXCEPTION, e);
+        }
+    }
+
+    @Override
+    @Transactional
+    public List<BoardByStationDto> getAllBoardByStationDto(String stationName) throws ServiceException {
+        LOGGER.info("try to get all boards by station " + stationName);
+        try {
+            List<BoardByStationDto> boardByStationDtos = new ArrayList<>();
+            List<BoardByStationDto> result = new ArrayList<>();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+            List<Waypoint> waypoints = waypointDao.findWaypointByStationName(stationName);
+            Set<Route> routes = new HashSet<>();
+            for (Waypoint wp: waypoints){
+                routes.add(wp.getRoute());
+            }
+            Set<Board> boards = new HashSet<>();
+            for (Route route: routes){
+                boards.addAll(route.getBoards());
+            }
+            for(Board board : boards) {
+                boardByStationDtos.add(constructBoardByStationDto(board, stationName));
+            }
+            for (BoardByStationDto boardByStationDto: boardByStationDtos){
+                if (simpleDateFormat.parse(boardByStationDto.getDepatureDateTime()).compareTo(new Date()) > 0){
+                result.add(boardByStationDto);
+                }
+            }
+            result.sort(new SortedBoardByStationDto());
+            return result;
+        } catch (ParseException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new ServiceException(ErrorService.INCORRECT_DATE_FORMAT, e);
+        } catch (DaoException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new ServiceException(ErrorService.DATABASE_EXCEPTION, e);
+        }
+    }
+
+    @Override
+    @Transactional
+    public List<BoardByStationDto> getFirstTenBoardByStationDtos(String stationName){
+        LOGGER.info("try to get first ten boards by station " + stationName);
+        List<BoardByStationDto> boardByStationDtos = new ArrayList<>(10);
+        try {
+            List<BoardByStationDto> allBoardByStationDto = getAllBoardByStationDto(stationName);
+            if (allBoardByStationDto.size() <= 10){
+                boardByStationDtos = allBoardByStationDto;
+            }
+            else {
+                boardByStationDtos = allBoardByStationDto.subList(0, 10);
+            }
+        } catch (ServiceException e) {
+            LOGGER.warn(e.getError().getMessageForLog(), e);
+        }
+        return boardByStationDtos;
     }
 
     @Override
@@ -217,53 +369,6 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional
-    public List<BoardByStationDto> getAllBoardByStationDto(String stationName) throws ServiceException {
-        try {
-            List<BoardByStationDto> boardByStationDtos = new ArrayList<>();
-            List<Waypoint> waypoints = waypointDao.findWaypointByStationName(stationName);
-            Set<Route> routes = new HashSet<>();
-            for (Waypoint wp: waypoints){
-                routes.add(wp.getRoute());
-            }
-            Set<Board> boards = new HashSet<>();
-            for (Route route: routes){
-                boards.addAll(route.getBoards());
-            }
-            for(Board board : boards) {
-                boardByStationDtos.add(constructBoardByStationDto(board, stationName));
-            }
-            boardByStationDtos.sort(new SortedBoardByStationDto());
-            return boardByStationDtos;
-        } catch (DaoException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new ServiceException(ErrorService.DATABASE_EXCEPTION, e);
-        }
-    }
-
-    private BoardByStationDto constructBoardByStationDto(Board board, String stationName) throws ServiceException {
-        try {
-            BoardByStationDto boardByStationDto = new BoardByStationDto();
-
-            boardByStationDto.setTrainName(board.getTrain().getName());
-            Route route = board.getRoute();
-            String routeName = route.findFirstWaypoint().getStation().getName()+" - "+route.findLastWaypoint().getStation().getName();
-            boardByStationDto.setRoute(routeName);
-
-            Waypoint wp = waypointDao.findWaypointByStationNameAndRouteId(stationName, route.getId());
-            if (wp == null) throw new ServiceException(ErrorService.TRIP_NOT_EXIST);
-
-            boardByStationDto.setArrivaDatelTime(wp.arrivalDateTime(board.getDateTime()));
-            boardByStationDto.setDepatureDateTime(wp.departureDateTime(board.getDateTime()));
-
-            return boardByStationDto;
-        } catch (DaoException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new ServiceException(ErrorService.DATABASE_EXCEPTION, e);
-        }
-    }
-
-    @Override
-    @Transactional
     public List<Board> findBoardByTrainNameAndRoute(String trainName, String routeNumber) throws ServiceException {
         List<Board> boardList;
         LOGGER.info("try to get all boards by train name and route");
@@ -274,38 +379,5 @@ public class BoardServiceImpl implements BoardService {
             throw new ServiceException(ErrorService.DATABASE_EXCEPTION, e);
         }
         return boardList;
-    }
-
-    @Override
-    @Transactional
-    public void updateBoard(Board board) throws ServiceException {
-        try {
-            boardDao.update(board);
-            sender.sendMessage("board updated");
-        } catch (JMSException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new ServiceException(ErrorService.JMS_EXCEPTION, e);
-        } catch (DaoException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new ServiceException(ErrorService.DATABASE_EXCEPTION, e);
-        }
-    }
-
-    @Override
-    @Transactional
-    public void deleteBoard(Board board) throws ServiceException {
-        try {
-            if (!ticketDao.findTicketsByBoard(board).isEmpty()){
-                throw new ServiceException(ErrorService.CANNOT_DELETE_BOARD);
-            }
-            boardDao.delete(board);
-            sender.sendMessage("board deleted");
-        } catch (JMSException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new ServiceException(ErrorService.JMS_EXCEPTION, e);
-        } catch (DaoException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new ServiceException(ErrorService.DATABASE_EXCEPTION, e);
-        }
     }
 }

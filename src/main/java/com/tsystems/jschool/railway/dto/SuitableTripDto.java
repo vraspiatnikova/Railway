@@ -6,6 +6,7 @@ public class SuitableTripDto {
     private int boardId;
     private int waypointFromId;
     private int waypointToId;
+    private int ticketId;
     private String trainName;
     private String route;
     private String depatureDateTime;
@@ -14,7 +15,12 @@ public class SuitableTripDto {
     private String stationTo;
     private BigDecimal price;
 
-    public SuitableTripDto() {
+    public int getTicketId() {
+        return ticketId;
+    }
+
+    public void setTicketId(int ticketId) {
+        this.ticketId = ticketId;
     }
 
     public int getBoardId() {
@@ -95,5 +101,33 @@ public class SuitableTripDto {
 
     public void setStationTo(String stationTo) {
         this.stationTo = stationTo;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SuitableTripDto that = (SuitableTripDto) o;
+
+        if (!trainName.equals(that.trainName)) return false;
+        if (!route.equals(that.route)) return false;
+        if (!depatureDateTime.equals(that.depatureDateTime)) return false;
+        if (!arrivalDateTime.equals(that.arrivalDateTime)) return false;
+        if (!stationFrom.equals(that.stationFrom)) return false;
+        if (!stationTo.equals(that.stationTo)) return false;
+        return price.equals(that.price);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = trainName.hashCode();
+        result = 31 * result + route.hashCode();
+        result = 31 * result + depatureDateTime.hashCode();
+        result = 31 * result + arrivalDateTime.hashCode();
+        result = 31 * result + stationFrom.hashCode();
+        result = 31 * result + stationTo.hashCode();
+        result = 31 * result + price.hashCode();
+        return result;
     }
 }

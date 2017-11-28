@@ -1,5 +1,6 @@
 package com.tsystems.jschool.railway.services.implementations;
 
+import com.tsystems.jschool.railway.dao.interfaces.PassengerDao;
 import com.tsystems.jschool.railway.exceptions.DaoException;
 import com.tsystems.jschool.railway.dao.interfaces.UserDao;
 import com.tsystems.jschool.railway.persistence.User;
@@ -19,10 +20,12 @@ public class UserServiceImpl implements UserService {
 
     private static final Logger LOGGER = Logger.getLogger(UserServiceImpl.class);
     private final UserDao userDao;
+    private final PassengerDao passengerDao;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao) {
+    public UserServiceImpl(UserDao userDao, PassengerDao passengerDao) {
         this.userDao = userDao;
+        this.passengerDao = passengerDao;
     }
 
     @Override
@@ -93,6 +96,9 @@ public class UserServiceImpl implements UserService {
     public void updateUser(User user) throws ServiceException {
         LOGGER.info("try to update user with email " + user.getEmail());
         try {
+            if (userDao.findUserByEmail(user.getEmail()) != null) {
+                throw new ServiceException(ErrorService.DUPLICATE_USER);
+            }
             userDao.update(user);
         } catch (DaoException e) {
             LOGGER.error(e.getMessage(), e);
@@ -105,6 +111,9 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(User user) throws ServiceException {
         LOGGER.info("try to delete user with email " + user.getEmail());
         try {
+            if (passengerDao.findPassengerByUserInfo(user) != null){
+                throw new ServiceException(ErrorService.CANNOT_DELETE_USER);
+            }
             userDao.delete(user);
         } catch (DaoException e) {
             LOGGER.error(e.getMessage(), e);

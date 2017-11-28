@@ -2,7 +2,7 @@ package com.tsystems.jschool.railway.exceptions;
 
 public class ServiceException extends Exception {
 
-    private ErrorService error;
+    private final ErrorService error;
 
     public ServiceException(ErrorService error, Throwable cause) {
         super(error.getMessage(), cause);

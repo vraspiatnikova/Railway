@@ -6,6 +6,8 @@ import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -23,9 +25,11 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     protected void handle(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         String targetUrl = determineTargetUrl(authentication);
         if (response.isCommitted()) {
-            System.out.println("Can't redirect");
             return;
         }
+        MultiValueMap<String, String> queryParams =
+                UriComponentsBuilder.fromUriString(request.getHeader("Referer")).build().getQueryParams();
+        if(!queryParams.isEmpty()) targetUrl = "/buyticket/"+ queryParams.get("board").get(0)+"/"+ queryParams.get("from").get(0) +"/"+queryParams.get("to").get(0);
         redirectStrategy.sendRedirect(request, response, targetUrl);
     }
 
@@ -42,9 +46,9 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         }
 
         if (isManager(roles)) {
-            url = "/admin_start_page";
+            url = "/allTrainsRoutes";
         } else if (isUser(roles)) {
-            url = "/myTickets";
+            url = "/myInfo";
         } else if (isAdmin(roles)) {
             url = "/users";
         } else {
@@ -65,10 +69,12 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         return roles.contains("ROLE_ADMIN");
     }
 
+    @Override
     public void setRedirectStrategy(RedirectStrategy redirectStrategy) {
         this.redirectStrategy = redirectStrategy;
     }
 
+    @Override
     protected RedirectStrategy getRedirectStrategy() {
         return redirectStrategy;
     }

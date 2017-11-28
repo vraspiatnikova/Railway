@@ -1,10 +1,19 @@
 package com.tsystems.jschool.railway.dto;
 
 public class BoardByStationDto {
+    private int boardId;
     private String trainName;
     private String route;
     private String depatureDateTime;
     private String arrivaDatelTime;
+
+    public int getBoardId() {
+        return boardId;
+    }
+
+    public void setBoardId(int boardId) {
+        this.boardId = boardId;
+    }
 
     public String getTrainName() {
         return trainName;

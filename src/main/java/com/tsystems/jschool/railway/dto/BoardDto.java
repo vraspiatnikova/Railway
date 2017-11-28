@@ -49,4 +49,26 @@ public class BoardDto {
     public void setDate(String date) {
         this.date = date;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        BoardDto boardDto = (BoardDto) o;
+
+        if (boardId != boardDto.boardId) return false;
+        if (!trainName.equals(boardDto.trainName)) return false;
+        if (!routeWaypoints.equals(boardDto.routeWaypoints)) return false;
+        return date.equals(boardDto.date);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = boardId;
+        result = 31 * result + trainName.hashCode();
+        result = 31 * result + routeWaypoints.hashCode();
+        result = 31 * result + date.hashCode();
+        return result;
+    }
 }

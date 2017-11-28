@@ -25,14 +25,14 @@
                         <h2>ADD NEW STATION</h2>
                     </div>
                     <div class="body">
-                        <form:form action="addStation" method="post" modelAttribute="station">
+                        <form:form id="trains" novalidate = "novalidate" action="addStation" method="post" modelAttribute="station">
                             <table class="table">
                                 <tr>
                                     <td><form:label path="name">Station name</form:label></td>
                                     <td>
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <form:input path="name" type="text" class="form-control" placeholder="Name" />
+                                                <form:input path="name" type="text" class="form-control" placeholder="Name" name="name"/>
                                             </div>
                                         </div>
                                     </td>
@@ -109,6 +109,9 @@
 <!-- Slimscroll Plugin Js -->
 <script src="${pageContext.request.contextPath}/resources/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
 
+<!-- Jquery Validation Plugin Css -->
+<script src="${pageContext.request.contextPath}/resources/plugins/jquery-validation/jquery.validate.js"></script>
+
 <!-- Waves Effect Plugin Js -->
 <script src="${pageContext.request.contextPath}/resources/plugins/node-waves/waves.js"></script>
 
@@ -136,6 +139,7 @@
 <script src="${pageContext.request.contextPath}/resources/js/admin.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/pages/forms/basic-form-elements.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/pages/tables/jquery-datatable.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/pages/forms/form-validation.js"></script>
 
 <!-- Demo Js -->
 <script src="${pageContext.request.contextPath}/resources/js/demo.js"></script>

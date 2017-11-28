@@ -3,7 +3,6 @@ package com.tsystems.jschool.railway.persistence;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.sql.Timestamp;
 @NamedQueries({
         @NamedQuery(name = "Ticket.findTicketsByBoard",
                 query = "SELECT ticket FROM Ticket ticket WHERE ticket.board = :board"),
@@ -21,9 +20,6 @@ public class Ticket {
     private Waypoint waypointFrom;
     private Waypoint waypointTo;
     private Date date;
-
-    public Ticket() {
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -5,14 +5,12 @@ import com.tsystems.jschool.railway.exceptions.ErrorController;
 import com.tsystems.jschool.railway.exceptions.ServiceException;
 import com.tsystems.jschool.railway.persistence.User;
 import com.tsystems.jschool.railway.persistence.roles.UserRole;
-import com.tsystems.jschool.railway.security.SecurityController;
 import com.tsystems.jschool.railway.services.interfaces.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,12 +25,13 @@ public class UserController {
 
     private static final Logger LOGGER = Logger.getLogger(UserController.class);
     private final UserService userService;
-    private final SecurityController securityController;
+    private String exception = "exception";
+    private String message = "message";
+    private String redirectUsers = "redirect:/users";
 
     @Autowired
-    public UserController(UserService userService, SecurityController securityController) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.securityController = securityController;
     }
 
     @RequestMapping(value = "users", method = RequestMethod.GET)
@@ -41,10 +40,10 @@ public class UserController {
             model.addAttribute("listUsers", userService.getAllUsers());
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
-            model.addAttribute("exception", e.getError().getMessage());
+            model.addAttribute(exception, e.getError().getMessage());
         } catch (Exception e) {
             LOGGER.warn(e.getMessage(), e);
-            model.addAttribute("exception", e.getMessage());
+            model.addAttribute(exception, e.getMessage());
         }
         return "dba/users";
     }
@@ -58,10 +57,10 @@ public class UserController {
             model.addAttribute("id", id);
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
-            model.addAttribute("exception", e.getError().getMessage());
+            model.addAttribute(exception, e.getError().getMessage());
         } catch (Exception e) {
             LOGGER.warn(e.getMessage(), e);
-            model.addAttribute("exception", e.getMessage());
+            model.addAttribute(exception, e.getMessage());
         }
         return "dba/editUser";
     }
@@ -72,15 +71,15 @@ public class UserController {
             User user = userService.findUserById(id);
             user.setRole(UserRole.valueOf(role));
             userService.updateUser(user);
-            redirectAttributes.addFlashAttribute("message", "The user has been updated successfully!");
+            redirectAttributes.addFlashAttribute(message, "The user has been updated successfully!");
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
-            redirectAttributes.addFlashAttribute("exception", e.getError().getMessage());
+            redirectAttributes.addFlashAttribute(exception, e.getError().getMessage());
         } catch (Exception e) {
             LOGGER.warn(e.getMessage(), e);
-            redirectAttributes.addFlashAttribute("exception", e.getMessage());
+            redirectAttributes.addFlashAttribute(exception, e.getMessage());
         }
-        return "redirect:/users";
+        return redirectUsers;
     }
 
     @RequestMapping(value = "deleteUser/{id}", method = RequestMethod.GET)
@@ -88,15 +87,15 @@ public class UserController {
         try {
             User user = userService.findUserById(id);
             userService.deleteUser(user);
-            redirectAttributes.addFlashAttribute("message", "The user has been deleted successfully!");
+            redirectAttributes.addFlashAttribute(message, "The user has been deleted successfully!");
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
-            redirectAttributes.addFlashAttribute("exception", e.getError().getMessage());
+            redirectAttributes.addFlashAttribute(exception, e.getError().getMessage());
         } catch (Exception e) {
             LOGGER.warn(e.getMessage(), e);
-            redirectAttributes.addFlashAttribute("exception", e.getMessage());
+            redirectAttributes.addFlashAttribute(exception, e.getMessage());
         }
-        return "redirect:/users";
+        return redirectUsers;
     }
 
     @RequestMapping(value = "newUser", method = RequestMethod.GET)
@@ -108,6 +107,7 @@ public class UserController {
     @RequestMapping(value = "/addUser", method = RequestMethod.POST)
     public String addNewUser(@RequestParam String email, @RequestParam String password,
                              @RequestParam String confirm, @RequestParam String role, RedirectAttributes redirectAttributes){
+        String redirectNewUser = "redirect:/newUser";
         try {
             email = email.trim();
             Pattern p = Pattern.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
@@ -125,21 +125,21 @@ public class UserController {
             String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
             User user = new User(email, hashedPassword, UserRole.valueOf(role));
             userService.addUser(user);
-            redirectAttributes.addFlashAttribute("message", "You have registered a new user successfully!");
+            redirectAttributes.addFlashAttribute(message, "You have registered a new user successfully!");
         } catch (ControllerException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
-            redirectAttributes.addFlashAttribute("exception", e.getError().getMessage());
-            return "redirect:/newUser";
+            redirectAttributes.addFlashAttribute(exception, e.getError().getMessage());
+            return redirectNewUser;
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
-            redirectAttributes.addFlashAttribute("exception", e.getError().getMessage());
+            redirectAttributes.addFlashAttribute(exception, e.getError().getMessage());
             redirectAttributes.addFlashAttribute("email", email);
-            return "redirect:/newUser";
+            return redirectNewUser;
         } catch (Exception e) {
             LOGGER.warn(e.getMessage(), e);
-            redirectAttributes.addFlashAttribute("exception", e.getMessage());
-            return "redirect:/newUser";
+            redirectAttributes.addFlashAttribute(exception, e.getMessage());
+            return redirectNewUser;
         }
-        return "redirect:/users";
+        return redirectUsers;
     }
 }

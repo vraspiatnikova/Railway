@@ -12,14 +12,10 @@ public interface StationService {
 
     List<Station> getAllStations() throws ServiceException;
 
-    @Transactional
     Station findStationById(Integer id) throws ServiceException;
 
-    @Transactional
     void updateStation(Station station) throws ServiceException;
 
-    @Transactional
     void deleteStation(Station station) throws ServiceException;
 
-//    Station getStationById(Integer id) throws ServiceException;
 }

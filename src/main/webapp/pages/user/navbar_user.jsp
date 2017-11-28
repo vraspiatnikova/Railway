@@ -49,6 +49,12 @@
             <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 368px;">
                 <ul class="list" style="overflow: hidden; width: auto; height: 368px;">
                     <li class="active">
+                        <a href="${pageContext.request.contextPath}/myInfo" class=" waves-effect waves-block">
+                            <i class="material-icons">account_box</i>
+                            <span>My info</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="${pageContext.request.contextPath}/myTickets" class=" waves-effect waves-block">
                             <i class="material-icons">assignment</i>
                             <span>My tickets</span>

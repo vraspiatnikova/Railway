@@ -58,31 +58,31 @@
                         <h2>PASSENGER'S INFO</h2>
                     </div>
                     <div class="body">
-                        <form method="POST" novalidate = "novalidate" action="${pageContext.request.contextPath}/addTicket">
+                        <form  id="form_validation" method="POST" novalidate = "novalidate" action="${pageContext.request.contextPath}/addTicket">
                             <input type="hidden" value="${trip.arrivalDateTime}" name="dateTime" >
                             <input type="hidden" value="${board.id}" name="boardId">
                             <input type="hidden" value="${wpFrom.id}" name="wpFromId">
                             <input type="hidden" value="${wpTo.id}" name="wpToId">
                             <div class="form-group form-float">
                                 <div class="form-line">
-                                    <input type="text" class="form-control" name="firstName" value="${firstName}" required="" aria-required="true">
+                                    <input type="text" class="form-control" name="firstName" value="${passenger.firstName}" required="" aria-required="true">
                                     <label class="form-label">First name</label>
                                 </div>
                             </div>
                             <div class="form-group form-float">
                                 <div class="form-line">
-                                    <input type="text" class="form-control" name="lastName" value="${lastName}" required="" aria-required="true">
+                                    <input type="text" class="form-control" name="lastName" value="${passenger.lastName}" required="" aria-required="true">
                                     <label class="form-label">Last name</label>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" class="datepicker form-control" name="birthdate" placeholder="Please choose a birth date" value="${birthdate}" required="" aria-required="true">
+                                    <input type="text" class="datepicker form-control" name="birthdate" placeholder="Please choose a birth date" value="${birthDate}" required="" aria-required="true">
                                 </div>
                             </div>
                             <div class="form-group form-float">
                                 <div class="form-line">
-                                    <input type="number" class="form-control" name="passport" value="${passport}" required="" aria-required="true">
+                                    <input type="number" class="form-control" name="passport" minlength="10" value="${passenger.passport}" required="" aria-required="true">
                                     <label class="form-label">Passport</label>
                                 </div>
                             </div>
@@ -110,13 +110,10 @@
 <script src="${pageContext.request.contextPath}/resources/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
 
 <!-- Jquery Validation Plugin Css -->
-<script src="${pageContext.request.contextPath}resources/plugins/jquery-validation/jquery.validate.js"></script>
-
-<!-- JQuery Steps Plugin Js -->
-<script src="${pageContext.request.contextPath}resources/plugins/jquery-steps/jquery.steps.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/jquery-validation/jquery.validate.js"></script>
 
 <!-- Sweet Alert Plugin Js -->
-<script src="${pageContext.request.contextPath}resources/plugins/sweetalert/sweetalert.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/sweetalert/sweetalert.min.js"></script>
 
 <!-- Waves Effect Plugin Js -->
 <script src="${pageContext.request.contextPath}/resources/plugins/node-waves/waves.js"></script>
@@ -133,6 +130,7 @@
 <!-- Custom Js -->
 <script src="${pageContext.request.contextPath}/resources/js/admin.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/pages/forms/basic-form-elements.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/pages/forms/form-validation.js"></script>
 
 <!-- Demo Js -->
 <script src="${pageContext.request.contextPath}/resources/js/demo.js"></script>

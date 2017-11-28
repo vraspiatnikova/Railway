@@ -76,6 +76,6 @@
 
 <!-- Custom Js -->
 <script src="${pageContext.request.contextPath}/resources/js/admin.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/pages/forms/basic-form-elements.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/pages/examples/sign-in.js"></script>
 
 </body></html>

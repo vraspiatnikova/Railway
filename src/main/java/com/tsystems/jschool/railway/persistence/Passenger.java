@@ -84,16 +84,19 @@ public class Passenger {
         if (o == null || getClass() != o.getClass()) return false;
 
         Passenger passenger = (Passenger) o;
-        return passport.equals(passenger.passport);
+
+        if (!passport.equals(passenger.passport)) return false;
+        if (!firstName.equals(passenger.firstName)) return false;
+        if (!lastName.equals(passenger.lastName)) return false;
+        return birthdate.equals(passenger.birthdate);
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + passport.hashCode();
-        result = 31 * result + firstName.hashCode();
+        int result = firstName.hashCode();
         result = 31 * result + lastName.hashCode();
         result = 31 * result + birthdate.hashCode();
+        result = 31 * result + passport.hashCode();
         return result;
     }
 

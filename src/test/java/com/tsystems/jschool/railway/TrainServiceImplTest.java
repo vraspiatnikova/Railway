@@ -55,7 +55,7 @@ public class TrainServiceImplTest {
     @Test(expected = ServiceException.class)
     public void testAddExistTrain() throws DaoException, ServiceException {
         when(trainDao.findByName(existTrain.getName())).thenReturn(existTrain);
-        verify(trainService.addTrain(existTrain));
+        trainService.addTrain(existTrain);
     }
 
     @Test
@@ -74,7 +74,7 @@ public class TrainServiceImplTest {
 
     @Test
     public void testDeleteTrain() throws DaoException, ServiceException{
-        trainDao.delete(newTrain);
+        trainService.deleteTrain(newTrain);
         when(trainDao.findById(newTrain.getId())).thenReturn(null);
     }
 

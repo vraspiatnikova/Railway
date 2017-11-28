@@ -34,6 +34,7 @@
                                 <th>Arrival station</th>
                                 <th>Arrival date</th>
                                 <th>Price</th>
+                                <th>Cancel</th>
                             </tr>
                             </thead>
                             <tfoot>
@@ -45,6 +46,7 @@
                                 <th>Arrival station</th>
                                 <th>Arrival date</th>
                                 <th>Price</th>
+                                <th>Cancel</th>
                             </tr>
                             </tfoot>
                             <tbody>
@@ -57,6 +59,13 @@
                                     <td>${ticket.stationTo}</td>
                                     <td>${ticket.depatureDateTime}</td>
                                     <td>${ticket.price}</td>
+                                    <td>
+                                        <a href ="<c:url value='/deleteTicket/${ticket.ticketId}'/>">
+                                            <button type="button" class="btn btn-danger btn-circle waves-effect waves-circle waves-float">
+                                                <i class="material-icons">cancel</i>
+                                            </button>
+                                        </a>
+                                    </td>
                                 </tr>
                             </c:forEach>
                             </tbody>

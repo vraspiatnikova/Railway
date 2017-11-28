@@ -48,12 +48,12 @@
         <div class="menu">
             <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 368px;">
                 <ul class="list" style="overflow: hidden; width: auto; height: 368px;">
-                        <li class="active">
-                            <a href="${pageContext.request.contextPath}/admin_start_page" class="toggled waves-effect waves-block">
-                                <i class="material-icons">home</i>
-                                <span>Home</span>
-                            </a>
-                        </li>
+                    <li class="active">
+                        <a href="${pageContext.request.contextPath}/allTrainsRoutes" class=" waves-effect waves-block">
+                            <i class="material-icons">import_export</i>
+                            <span>All Trips</span>
+                        </a>
+                    </li>
                         <li>
                             <a href="${pageContext.request.contextPath}/trains" class=" waves-effect waves-block">
                                 <i class="material-icons">train</i>
@@ -70,12 +70,6 @@
                             <a href="${pageContext.request.contextPath}/createRoute" class=" waves-effect waves-block">
                                 <i class="material-icons">swap_calls</i>
                                 <span>Create route</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="${pageContext.request.contextPath}/allTrainsRoutes" class=" waves-effect waves-block">
-                                <i class="material-icons">import_export</i>
-                                <span>All Trips</span>
                             </a>
                         </li>
                         <li>

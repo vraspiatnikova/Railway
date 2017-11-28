@@ -27,14 +27,14 @@
                         <h2>ADD NEW TRAIN</h2>
                     </div>
                     <div class="body">
-                        <form:form method="POST" action="addTrain" modelAttribute="train" id="form_validation" novalidate = "novalidate">
+                        <form:form method="POST" action="addTrain" modelAttribute="train" id="trains" novalidate = "novalidate">
                             <table class="table">
                                 <tr>
                                     <td><form:label path="name">Name</form:label></td>
                                     <td>
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <form:input path="name" type="text" value="" class="form-control" required="" aria-required="true" aria-invalid="true" placeholder="Train name"/>
+                                                <form:input path="name" type="text" value="" class="form-control" name="name" placeholder="Train name"/>
                                             </div>
                                         </div>
                                     </td>
@@ -44,7 +44,7 @@
                                 <td>
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <form:input path="capacity" type="text" value = "18" min="18" max="1080" required="" aria-required="true" class="form-control" placeholder="Number of seats"/>
+                                            <form:input path="capacity" type="text" value = "18" name="capacity" class="form-control"/>
                                         </div>
                                     </div>
                                 </td>

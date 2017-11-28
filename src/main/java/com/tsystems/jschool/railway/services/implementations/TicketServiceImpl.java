@@ -6,6 +6,7 @@ import com.tsystems.jschool.railway.dao.interfaces.BoardDao;
 import com.tsystems.jschool.railway.dao.interfaces.PassengerDao;
 import com.tsystems.jschool.railway.dao.interfaces.TicketDao;
 import com.tsystems.jschool.railway.dao.interfaces.WaypointDao;
+import com.tsystems.jschool.railway.mail.MailService;
 import com.tsystems.jschool.railway.persistence.*;
 import com.tsystems.jschool.railway.exceptions.ErrorService;
 import com.tsystems.jschool.railway.exceptions.ServiceException;
@@ -15,6 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.apache.log4j.Logger;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -28,13 +32,52 @@ public class TicketServiceImpl implements TicketService {
     private final BoardDao boardDao;
     private final WaypointDao waypointDao;
     private final PassengerDao passengerDao;
+    private final MailService mailService;
 
     @Autowired
-    public TicketServiceImpl(TicketDao ticketDao, BoardDao boardDao, WaypointDao waypointDao, PassengerDao passengerDao) {
+    public TicketServiceImpl(TicketDao ticketDao, BoardDao boardDao, WaypointDao waypointDao, PassengerDao passengerDao, MailService mailService) {
         this.ticketDao = ticketDao;
         this.boardDao = boardDao;
         this.waypointDao = waypointDao;
         this.passengerDao = passengerDao;
+        this.mailService = mailService;
+    }
+
+    @Override
+    @Transactional
+    public Ticket findTicketById(Integer id) throws ServiceException {
+        LOGGER.info("try to find ticket by id (" + id + ")");
+        Ticket ticket;
+        try {
+            ticket = ticketDao.findById(id);
+        } catch (DaoException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new ServiceException(ErrorService.DATABASE_EXCEPTION, e);
+        }
+        return ticket;
+    }
+
+    @Override
+    @Transactional
+    public void deleteTicket(Ticket ticket) throws ServiceException {
+        LOGGER.info("try to delete ticket with id (" + ticket.getId() + ")");
+        DateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+        try {
+            Calendar calendar = Calendar.getInstance();
+            Date date = format.parse(ticket.getWaypointFrom().arrivalDateTime(ticket.getBoard().getDateTime()));
+            calendar.setTime(date);
+            calendar.add(Calendar.DATE, -1);
+            if (calendar.getTime().before(new Date())){
+                throw new ServiceException(ErrorService.CANNOT_CANCEL_TICKET);
+            }
+            ticketDao.delete(ticket);
+        } catch (ParseException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new ServiceException(ErrorService.INCORRECT_DATE_FORMAT, e);
+        } catch (DaoException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new ServiceException(ErrorService.DATABASE_EXCEPTION, e);
+        }
     }
 
     @Override
@@ -65,16 +108,13 @@ public class TicketServiceImpl implements TicketService {
             for (Ticket ticket : tickets) {
                 if (ticket.getPassenger().equals(passenger)) throw new ServiceException(ErrorService.DUPLICATE_PASSENGER);
             }
-            Passenger pass = passengerDao.findPassengerByUserInfo(passenger.getUserInfo());
-            if (pass == null) {
-                pass = passengerDao.create(passenger);
-            }
             Ticket ticket = new Ticket();
-            ticket.setPassenger(pass);
+            ticket.setPassenger(passenger);
             ticket.setBoard(board);
             ticket.setWaypointFrom(wpFrom);
             ticket.setWaypointTo(wpTo);
             ticket.setPrice();
+            mailService.sendBuyTicketEmail(passenger, constructTicket(ticket));
             return ticketDao.create(ticket);
         } catch (DaoException e) {
             LOGGER.error(e.getMessage(), e);
@@ -113,8 +153,9 @@ public class TicketServiceImpl implements TicketService {
         }
     }
 
-    private SuitableTripDto constructTicket(Ticket ticket) throws ServiceException {
+    private SuitableTripDto constructTicket(Ticket ticket) {
         SuitableTripDto ticketDto = new SuitableTripDto();
+        ticketDto.setTicketId(ticket.getId());
         Board board = ticket.getBoard();
         ticketDto.setTrainName(board.getTrain().getName());
         Route route = board.getRoute();
@@ -127,4 +168,5 @@ public class TicketServiceImpl implements TicketService {
         ticketDto.setPrice(ticket.getPrice());
         return ticketDto;
     }
+
 }

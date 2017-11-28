@@ -4,7 +4,6 @@ import com.tsystems.jschool.railway.exceptions.DaoException;
 import com.tsystems.jschool.railway.exceptions.ErrorDao;
 import com.tsystems.jschool.railway.dao.interfaces.BoardDao;
 import com.tsystems.jschool.railway.persistence.Board;
-import com.tsystems.jschool.railway.persistence.Route;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.TypedQuery;

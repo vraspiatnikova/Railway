@@ -19,6 +19,79 @@ $(function () {
         }
     });
 
+    $('#routeForm').validate({
+        rules: {
+            routeNumber: {
+                required: true
+            },
+            stations: {
+                required: true
+            },
+            travelTime: {
+                required: true
+            },
+            stopTime: {
+                required: true
+            }
+        },
+        highlight: function (input) {
+            $(input).parents('.form-line').addClass('error');
+        },
+        unhighlight: function (input) {
+            $(input).parents('.form-line').removeClass('error');
+        },
+        errorPlacement: function (error, element) {
+            $(element).parents('.form-group').append(error);
+        }
+    });
+
+    $("#find-trip").validate({
+        rules: {
+            stationFrom: {
+                required: true
+            },
+            stationTo: {
+                required: true
+            },
+            dateTimeFrom: {
+                required: true
+            },
+            dateTimeTo: {
+                required: true
+            }
+        },
+        highlight: function (input) {
+            $(input).parents('.form-line').addClass('error');
+        },
+        unhighlight: function (input) {
+            $(input).parents('.form-line').removeClass('error');
+        },
+        errorPlacement: function (error, element) {
+            $(element).parents('.form-group').append(error);
+        }
+});
+    $("#trains").validate({
+        rules: {
+            name: {
+                required: true
+            },
+            capacity: {
+                required: true,
+                min: 18,
+                max: 1080
+            }
+        },
+        highlight: function (input) {
+            $(input).parents('.form-line').addClass('error');
+        },
+        unhighlight: function (input) {
+            $(input).parents('.form-line').removeClass('error');
+        },
+        errorPlacement: function (error, element) {
+            $(element).parents('.form-group').append(error);
+        }
+    });
+
     //Advanced Form Validation
     $('#form_advanced_validation').validate({
         rules: {

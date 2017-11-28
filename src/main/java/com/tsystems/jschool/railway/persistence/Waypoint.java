@@ -131,4 +131,11 @@ public class Waypoint implements Comparable{
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
         return dateFormat.format(calendar.getTime());
     }
+
+    public Date departureDate(Date date){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MINUTE, this.travelStopTime);
+        return calendar.getTime();
+    }
 }

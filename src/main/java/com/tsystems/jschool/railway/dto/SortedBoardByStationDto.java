@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Comparator;
+import java.util.Date;
 
 public class SortedBoardByStationDto implements Comparator<BoardByStationDto> {
 
@@ -16,15 +17,11 @@ public class SortedBoardByStationDto implements Comparator<BoardByStationDto> {
     @Override
     public int compare(BoardByStationDto o1, BoardByStationDto o2) {
         DateFormat format = new SimpleDateFormat(DATE_FORMAT);
-        Calendar c1 = Calendar.getInstance();
-        Calendar c2 = Calendar.getInstance();
         int res = 0;
-        try {
-            c1.setTime(format.parse(o1.getArrivaDatelTime()));
-            c2.setTime(format.parse(o2.getArrivaDatelTime()));
-            if (c1.before(c2)) res = -1;
-            if (c1.after(c2)) res = 1;
-            if (c1.equals(c2)) res = 0;
+        try{
+            Date date1 = format.parse(o1.getArrivaDatelTime());
+            Date date2 = format.parse(o2.getArrivaDatelTime());
+            res = date1.compareTo(date2);
         } catch (ParseException e) {
             LOGGER.error(e.getMessage(), e);
         }

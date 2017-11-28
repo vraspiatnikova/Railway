@@ -71,7 +71,7 @@
                                     <a href="<c:url value='/buyticket/${trip.boardId}/${trip.waypointFromId}/${trip.waypointToId}'/>">Buy ticket</a>
                                 </c:when>
                                 <c:otherwise>
-                                    <a href="<c:url value='/login'/>">Buy ticket</a>
+                                    <a href="<c:url value='/login?board=${trip.boardId}&from=${trip.waypointFromId}&to=${trip.waypointToId}'/>">Buy ticket</a>
                                 </c:otherwise>
                             </c:choose>
 

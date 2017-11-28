@@ -34,14 +34,14 @@
                         <h2>FIND THE TRIP</h2>
                     </div>
                     <div class="body">
-                        <form:form id="find-trip"  method="POST" action="findTrip" modelAttribute="searchTripDto">
+                        <form:form id="find-trip" novalidate="novalidate" method="POST" action="findTrip" modelAttribute="searchTripDto">
                             <table class="table">
                                 <tr>
                                     <td><form:label path="stationFrom">Select the station of departure :</form:label></td>
                                     <td>
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <form:select class="form-control show-tick" path="stationFrom" data-live-search="true" required = "">
+                                                <form:select class="form-control show-tick" path="stationFrom" data-live-search="true" name="stationFrom" >
                                                 <form:option value="">station of departure</form:option>
                                                     <c:forEach items="${allStations}" var="station">
                                                     <form:option value="${station.name}">${station.name}</form:option>
@@ -52,11 +52,11 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><form:label path="stationFrom">Select the station of arrival :</form:label></td>
+                                    <td><form:label path="stationTo">Select the station of arrival :</form:label></td>
                                     <td>
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <form:select class="form-control show-tick" path="stationTo" data-live-search="true" required = "">
+                                                <form:select class="form-control show-tick" path="stationTo" data-live-search="true" name="stationTo" >
                                                 <form:option value="">station of arrival</form:option>
                                                     <c:forEach items="${allStations}" var="station">
                                                     <form:option value="${station.name}">${station.name}</form:option>
@@ -71,7 +71,7 @@
                                     <td>
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <form:input path="dateTimeFrom" type="text" class="datetimepicker form-control" placeholder="Please choose date & time"/>
+                                                <form:input path="dateTimeFrom" type="text" class="datetimepicker form-control" placeholder="Please choose date & time" name="dateTimeFrom" />
                                             </div>
                                         </div>
                                     </td>
@@ -81,7 +81,7 @@
                                     <td>
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <form:input path="dateTimeTo" type="text" class="datetimepicker form-control" placeholder="Please choose date & time"/>
+                                                <form:input path="dateTimeTo" type="text" class="datetimepicker form-control" placeholder="Please choose date & time" name="dateTimeTo"/>
                                             </div>
                                         </div>
                                     </td>
@@ -132,13 +132,11 @@
 <!-- Custom Js -->
 <script src="${pageContext.request.contextPath}/resources/js/admin.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/pages/forms/basic-form-elements.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/pages/forms/form-validation.js"></script>
 
 <!-- Demo Js -->
 <script src="${pageContext.request.contextPath}/resources/js/demo.js"></script>
 
-
-
-<script src="${pageContext.request.contextPath}/resources/js/pages/forms/advanced-form-elements.js"></script>
 
 </body></html>
 

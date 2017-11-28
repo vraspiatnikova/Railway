@@ -24,10 +24,10 @@
                     </div>
                     <div class="body">
                         <form method="post" action="${pageContext.request.contextPath}/updateBoard/${id}">
-                            <label for="date">Date time</label>
+                            <label for="date">Date and time</label>
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" id="date" name="date" class="datetimepicker form-control" placeholder="Please choose date & time" required>
+                                    <input type="text" id="date" name="date" class="datetimepicker form-control" value="${dateTime}" required>
                                 </div>
                             </div>
                             <label for="train">Train Number</label>

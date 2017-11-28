@@ -1,4 +1,4 @@
-package com.tsystems.jschool.railway.webServices;
+package com.tsystems.jschool.railway.webservices;
 
 import com.tsystems.jschool.railway.exceptions.ServiceException;
 import com.tsystems.jschool.railway.persistence.Station;

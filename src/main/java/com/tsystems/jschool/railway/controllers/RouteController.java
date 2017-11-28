@@ -33,6 +33,8 @@ public class RouteController {
     private static final Logger LOGGER = Logger.getLogger(RouteController.class);
     private final RouteService routeService;
     private final TrainService trainService;
+    private String exception = "exception";
+    private String message = "message";
 
     @Autowired
     public RouteController(RouteService routeService, TrainService trainService) {
@@ -47,16 +49,14 @@ public class RouteController {
             Train train = trainService.findTrainById(id);
             model.addAttribute("train", train);
             model.addAttribute("allRoutes", routeService.getAllRoutes());
-            return "manager/addroute";
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
-            model.addAttribute("exception", e.getError().getMessage());
-            return "manager/addroute";
+            model.addAttribute(exception, e.getError().getMessage());
         } catch (Exception e) {
             LOGGER.warn(e.getMessage(), e);
-            model.addAttribute("exception", e.getMessage());
-            return "manager/addroute";
+            model.addAttribute(exception, e.getMessage());
         }
+        return "manager/addroute";
     }
 
     @RequestMapping(value = "allRoutes", method = RequestMethod.GET)
@@ -65,16 +65,14 @@ public class RouteController {
         try {
             model.addAttribute("route", new Route());
             model.addAttribute("allRoutes", routeService.getAllRoutesDto());
-            return "manager/routes";
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
-            model.addAttribute("exception", e.getError().getMessage());
-            return "manager/routes";
+            model.addAttribute(exception, e.getError().getMessage());
         } catch (Exception e) {
             LOGGER.warn(e.getMessage(), e);
-            model.addAttribute("exception", e.getMessage());
-            return "manager/routes";
+            model.addAttribute(exception, e.getMessage());
         }
+        return "manager/routes";
     }
 
     @RequestMapping(value = "createRoute", method = RequestMethod.GET)
@@ -85,10 +83,10 @@ public class RouteController {
             model.addAttribute("allStations", newRouteDto.getStations());
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
-            model.addAttribute("exception", e.getError().getMessage());
+            model.addAttribute(exception, e.getError().getMessage());
         } catch (Exception e) {
             LOGGER.warn(e.getMessage(), e);
-            model.addAttribute("exception", e.getMessage());
+            model.addAttribute(exception, e.getMessage());
         }
         return "manager/newroute";
     }
@@ -141,16 +139,16 @@ public class RouteController {
             saveRouteDto.setWaypointTravelStopTime(waypointTravelStopTime);
 
             routeService.saveRoute(saveRouteDto);
-            model.addAttribute("message", "The route has been saved successfully!");
+            model.addAttribute(message, "The route has been saved successfully!");
         } catch (ControllerException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
-            model.addAttribute("exception", e.getError().getMessage());
+            model.addAttribute(exception, e.getError().getMessage());
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
-            model.addAttribute("exception", e.getError().getMessage());
+            model.addAttribute(exception, e.getError().getMessage());
         } catch (Exception e) {
             LOGGER.warn(e.getMessage(), e);
-            model.addAttribute("exception", e.getMessage());
+            model.addAttribute(exception, e.getMessage());
         }
         return "message";
     }
@@ -164,10 +162,10 @@ public class RouteController {
             model.addAttribute("id", id);
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
-            model.addAttribute("exception", e.getError().getMessage());
+            model.addAttribute(exception, e.getError().getMessage());
         } catch (Exception e) {
             LOGGER.warn(e.getMessage(), e);
-            model.addAttribute("exception", e.getMessage());
+            model.addAttribute(exception, e.getMessage());
         }
         return "manager/editRoute";
     }
@@ -178,13 +176,13 @@ public class RouteController {
             Route route = routeService.findRouteById(id);
             route.setNumber(routeNumber);
             routeService.updateRoute(route);
-            redirectAttributes.addFlashAttribute("message", "The route has been updated successfully!");
+            redirectAttributes.addFlashAttribute(message, "The route has been updated successfully!");
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
-            redirectAttributes.addFlashAttribute("exception", e.getError().getMessage());
+            redirectAttributes.addFlashAttribute(exception, e.getError().getMessage());
         } catch (Exception e) {
             LOGGER.warn(e.getMessage(), e);
-            redirectAttributes.addFlashAttribute("exception", e.getMessage());
+            redirectAttributes.addFlashAttribute(exception, e.getMessage());
         }
         return "redirect:/allRoutes";
     }
@@ -194,13 +192,13 @@ public class RouteController {
         try {
             Route route = routeService.findRouteById(id);
             routeService.deleteRoute(route);
-            redirectAttributes.addFlashAttribute("message", "The route has been deleted successfully!");
+            redirectAttributes.addFlashAttribute(message, "The route has been deleted successfully!");
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
-            redirectAttributes.addFlashAttribute("exception", e.getError().getMessage());
+            redirectAttributes.addFlashAttribute(exception, e.getError().getMessage());
         } catch (Exception e) {
             LOGGER.warn(e.getMessage(), e);
-            redirectAttributes.addFlashAttribute("exception", e.getMessage());
+            redirectAttributes.addFlashAttribute(exception, e.getMessage());
         }
         return "redirect:/allRoutes";
     }

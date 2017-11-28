@@ -1,7 +1,6 @@
 package com.tsystems.jschool.railway.persistence;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Date;
 @NamedQueries({
@@ -12,7 +11,7 @@ import java.util.Date;
         @NamedQuery(name = "Board.findBoardByTrainName", query = "SELECT board FROM Board board " +
                 "WHERE board.train.name =:trainName"),
         @NamedQuery(name = "Board.findBoardByTrainNameAndRoute", query = "SELECT board FROM Board board " +
-                "WHERE board.route.number =:routeNumber AND board.train.name =:trainName")
+                "WHERE board.route.number =:routeNumber AND board.train.name =:trainName"),
 })
 @Entity
 @Table(name = "board", schema = "railway")

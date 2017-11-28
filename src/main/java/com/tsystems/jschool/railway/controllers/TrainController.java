@@ -17,6 +17,9 @@ public class TrainController {
 
     private static final Logger LOGGER = Logger.getLogger(TrainController.class);
     private final TrainService trainService;
+    private String exception = "exception";
+    private String message = "message";
+    private String redirectTrains = "redirect:/trains";
 
     @Autowired
     public TrainController(TrainService trainService) {
@@ -31,10 +34,10 @@ public class TrainController {
             model.addAttribute("listTrains", this.trainService.getAllTrains());
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
-            model.addAttribute("exception", e.getError().getMessage());
+            model.addAttribute(exception, e.getError().getMessage());
         } catch (Exception e) {
             LOGGER.warn(e.getMessage(), e);
-            model.addAttribute("exception", e.getMessage());
+            model.addAttribute(exception, e.getMessage());
         }
         return "manager/trains";
     }
@@ -48,21 +51,21 @@ public class TrainController {
                     throw new ControllerException(ErrorController.INCORRECT_CAPACITY);
                 trainService.addTrain(train);
                 LOGGER.info("new train with name " + train.getName() + " and capacity " + train.getCapacity() +" has been added");
-                redirectAttributes.addFlashAttribute("message", "The train has been added successfully!");
+                redirectAttributes.addFlashAttribute(message, "The train has been added successfully!");
             } else {
                 throw new ControllerException(ErrorController.INCORRECT_TRAIN_NAME);
             }
         } catch (ControllerException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
-            redirectAttributes.addFlashAttribute("exception", e.getError().getMessage());
+            redirectAttributes.addFlashAttribute(exception, e.getError().getMessage());
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
-            redirectAttributes.addFlashAttribute("exception", e.getError().getMessage());
+            redirectAttributes.addFlashAttribute(exception, e.getError().getMessage());
         } catch (Exception e) {
             LOGGER.warn(e.getMessage(), e);
-            redirectAttributes.addFlashAttribute("exception", e.getMessage());
+            redirectAttributes.addFlashAttribute(exception, e.getMessage());
         }
-        return "redirect:/trains";
+        return redirectTrains;
     }
 
     @RequestMapping(value = "editTrain/{id}", method = RequestMethod.GET)
@@ -73,45 +76,45 @@ public class TrainController {
             model.addAttribute("id", id);
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
-            model.addAttribute("exception", e.getError().getMessage());
+            model.addAttribute(exception, e.getError().getMessage());
         } catch (Exception e) {
             LOGGER.warn(e.getMessage(), e);
-            model.addAttribute("exception", e.getMessage());
+            model.addAttribute(exception, e.getMessage());
         }
         return "manager/editTrain";
     }
 
     @RequestMapping(value = "/updateTrain/{id}", method = RequestMethod.POST)
-    public String updateBoard(@PathVariable("id") int id, @RequestParam String trainName, @RequestParam String capacity, RedirectAttributes redirectAttributes){
+    public String updateTrain(@PathVariable("id") int id, @RequestParam String trainName, @RequestParam String capacity, RedirectAttributes redirectAttributes){
         try {
             Train train = trainService.findTrainById(id);
             train.setName(trainName);
             train.setCapacity(Integer.parseInt(capacity));
             trainService.updateTrain(train);
-            redirectAttributes.addFlashAttribute("message", "The train has been updated successfully!");
+            redirectAttributes.addFlashAttribute(message, "The train has been updated successfully!");
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
-            redirectAttributes.addFlashAttribute("exception", e.getError().getMessage());
+            redirectAttributes.addFlashAttribute(exception, e.getError().getMessage());
         } catch (Exception e) {
             LOGGER.warn(e.getMessage(), e);
-            redirectAttributes.addFlashAttribute("exception", e.getMessage());
+            redirectAttributes.addFlashAttribute(exception, e.getMessage());
         }
-        return "redirect:/trains";
+        return redirectTrains;
     }
 
     @RequestMapping(value = "deleteTrain/{id}", method = RequestMethod.GET)
-    public String deleteBoard(@PathVariable("id") int id, RedirectAttributes redirectAttributes){
+    public String deleteTrain(@PathVariable("id") int id, RedirectAttributes redirectAttributes){
         try {
             Train train = trainService.findTrainById(id);
             trainService.deleteTrain(train);
-            redirectAttributes.addFlashAttribute("message", "The train has been deleted successfully!");
+            redirectAttributes.addFlashAttribute(message, "The train has been deleted successfully!");
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
-            redirectAttributes.addFlashAttribute("exception", e.getError().getMessage());
+            redirectAttributes.addFlashAttribute(exception, e.getError().getMessage());
         } catch (Exception e) {
             LOGGER.warn(e.getMessage(), e);
-            redirectAttributes.addFlashAttribute("exception", e.getMessage());
+            redirectAttributes.addFlashAttribute(exception, e.getMessage());
         }
-        return "redirect:/trains";
+        return redirectTrains;
     }
 }

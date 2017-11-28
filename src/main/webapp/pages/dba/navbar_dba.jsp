@@ -8,7 +8,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!-- Page Loader -->
-<div class="page-loader-wrapper">
+<div class="page-loader-wrapper" style="display: none;">
     <div class="loader">
         <div class="preloader">
             <div class="spinner-layer pl-red">
@@ -25,7 +25,7 @@
 </div>
 <!-- #END# Page Loader -->
 <!-- Overlay For Sidebars -->
-<div class="overlay"></div>
+<div class="overlay" style="display: none;"></div>
 <!-- #END# Overlay For Sidebars -->
 <!-- Top Bar -->
 <nav class="navbar">
@@ -36,8 +36,7 @@
             <a class="navbar-brand">RAILWAY</a>
         </div>
         <div class="collapse navbar-collapse" id="navbar-collapse">
-            <ul class="nav navbar-nav navbar-right">
-            </ul>
+
         </div>
     </div>
 </nav>
@@ -47,6 +46,7 @@
     <aside id="leftsidebar" class="sidebar">
         <!-- Menu -->
         <div class="menu">
+            <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 368px;">
             <ul class="list">
                 <li class="active">
                     <a href="${pageContext.request.contextPath}/users" class=" waves-effect waves-block">
@@ -66,7 +66,10 @@
                         <span>Sign out </span>
                     </a>
                 </li>
-            </ul><div class="slimScrollBar" style="background: rgba(0, 0, 0, 0.5); width: 4px; position: absolute; top: 0px; opacity: 0.4; display: none; border-radius: 0px; z-index: 99; right: 1px; height: 368px;"></div><div class="slimScrollRail" style="width: 4px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 0px; background: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px;"></div></div>
+            </ul>
+                <div class="slimScrollBar" style="background: rgba(0, 0, 0, 0.5); width: 4px; position: absolute; top: 0px; opacity: 0.4; display: none; border-radius: 0px; z-index: 99; right: 1px; height: 368px;"></div>
+                <div class="slimScrollRail" style="width: 4px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 0px; background: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px;"></div>
+            </div>
         </div>
         <!-- #Menu -->
     </aside>

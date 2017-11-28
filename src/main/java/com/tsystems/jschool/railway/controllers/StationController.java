@@ -17,6 +17,9 @@ public class StationController {
 
     private static final Logger LOGGER = Logger.getLogger(StationController.class);
     private final StationService stationService;
+    private String exception = "exception";
+    private String message = "message";
+    private String redirectStations = "redirect:/stations";
 
     @Autowired
     public StationController(StationService stationService) {
@@ -29,16 +32,14 @@ public class StationController {
         try {
             model.addAttribute("station", new Station());
             model.addAttribute("listStations", this.stationService.getAllStations());
-            return "manager/stations";
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
-            model.addAttribute("exception", e.getError().getMessage());
-            return "manager/stations";
+            model.addAttribute(exception, e.getError().getMessage());
         } catch (Exception e) {
             LOGGER.warn(e.getMessage(), e);
-            model.addAttribute("exception", e.getMessage());
-            return "manager/stations";
+            model.addAttribute(exception, e.getMessage());
         }
+        return "manager/stations";
     }
 
     @RequestMapping(value = "addStation", method = RequestMethod.POST)
@@ -48,22 +49,22 @@ public class StationController {
             if (station.getName().trim().length() != 0) {
                 stationService.addStation(station);
                 LOGGER.info("new station with name "  + station.getName() +" has been added");
-                redirectAttributes.addFlashAttribute("message", "The station has been added successfully!");
+                redirectAttributes.addFlashAttribute(message, "The station has been added successfully!");
             }
             else {
                 throw new ControllerException(ErrorController.INCORRECT_STATION_NAME);
             }
         } catch (ControllerException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
-            redirectAttributes.addFlashAttribute("exception", e.getError().getMessage());
+            redirectAttributes.addFlashAttribute(exception, e.getError().getMessage());
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
-            redirectAttributes.addFlashAttribute("exception", e.getError().getMessage());
+            redirectAttributes.addFlashAttribute(exception, e.getError().getMessage());
         } catch (Exception e) {
             LOGGER.warn(e.getMessage(), e);
-            redirectAttributes.addFlashAttribute("exception", e.getMessage());
+            redirectAttributes.addFlashAttribute(exception, e.getMessage());
         }
-        return "redirect:/stations";
+        return redirectStations;
     }
 
     @RequestMapping(value = "editStation/{id}", method = RequestMethod.GET)
@@ -74,10 +75,10 @@ public class StationController {
             model.addAttribute("id", id);
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
-            model.addAttribute("exception", e.getError().getMessage());
+            model.addAttribute(exception, e.getError().getMessage());
         } catch (Exception e) {
             LOGGER.warn(e.getMessage(), e);
-            model.addAttribute("exception", e.getMessage());
+            model.addAttribute(exception, e.getMessage());
         }
         return "manager/editStation";
     }
@@ -88,15 +89,15 @@ public class StationController {
             Station station = stationService.findStationById(id);
             station.setName(stationName);
             stationService.updateStation(station);
-            redirectAttributes.addFlashAttribute("message", "The station has been updated successfully!");
+            redirectAttributes.addFlashAttribute(message, "The station has been updated successfully!");
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
-            redirectAttributes.addFlashAttribute("exception", e.getError().getMessage());
+            redirectAttributes.addFlashAttribute(exception, e.getError().getMessage());
         } catch (Exception e) {
             LOGGER.warn(e.getMessage(), e);
-            redirectAttributes.addFlashAttribute("exception", e.getMessage());
+            redirectAttributes.addFlashAttribute(exception, e.getMessage());
         }
-        return "redirect:/stations";
+        return redirectStations;
     }
 
     @RequestMapping(value = "deleteStation/{id}", method = RequestMethod.GET)
@@ -104,14 +105,14 @@ public class StationController {
         try {
             Station station = stationService.findStationById(id);
             stationService.deleteStation(station);
-            redirectAttributes.addFlashAttribute("message", "The station has been deleted successfully!");
+            redirectAttributes.addFlashAttribute(message, "The station has been deleted successfully!");
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
-            redirectAttributes.addFlashAttribute("exception", e.getError().getMessage());
+            redirectAttributes.addFlashAttribute(exception, e.getError().getMessage());
         } catch (Exception e) {
             LOGGER.warn(e.getMessage(), e);
-            redirectAttributes.addFlashAttribute("exception", e.getMessage());
+            redirectAttributes.addFlashAttribute(exception, e.getMessage());
         }
-        return "redirect:/stations";
+        return redirectStations;
     }
 }
