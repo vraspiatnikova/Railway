@@ -129,6 +129,12 @@ public class BoardServiceImplTest {
     }
 
     @Test
+    public void testNotFindBoardById() throws DaoException, ServiceException {
+        when(boardDao.findById(-1)).thenReturn(null);
+        Assert.assertEquals(null, boardService.findBoardById(-1));
+    }
+
+    @Test
     public void testConstructBoardDto(){
         assertEquals(boardService.constructBoardDto(newBoard), newBoardDto);
     }

@@ -1,6 +1,8 @@
 package com.tsystems.jschool.railway.mail;
 
 import com.tsystems.jschool.railway.dto.SuitableTripDto;
+import com.tsystems.jschool.railway.exceptions.ErrorService;
+import com.tsystems.jschool.railway.exceptions.ServiceException;
 import com.tsystems.jschool.railway.persistence.Passenger;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,16 +33,17 @@ public class MailServiceImpl implements MailService{
     }
 
     @Override
-    public void sendBuyTicketEmail(Passenger passenger, SuitableTripDto ticket) {
+    public void sendBuyTicketEmail(Passenger passenger, SuitableTripDto ticket) throws ServiceException {
         sendEmail(getMessagePreparator(passenger, ticket));
     }
 
-    private void sendEmail(MimeMessagePreparator messagePreparator) {
+    private void sendEmail(MimeMessagePreparator messagePreparator) throws ServiceException {
         try {
             mailSender.send(messagePreparator);
         }
         catch (MailException e) {
             LOGGER.error(e.getMessage(), e);
+            throw new ServiceException(ErrorService.EMAIL_EXCEPTION);
         }
 
     }
@@ -50,7 +53,7 @@ public class MailServiceImpl implements MailService{
             public void prepare(MimeMessage mimeMessage) throws Exception {
                 MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "utf-8");
                 helper.setSubject("Your ticket at Railway");
-                helper.setFrom("vika.raspiatnikova@gmail.com");
+                helper.setFrom("noreply.railway@gmail.com");
                 helper.setTo(passenger.getUserInfo().getEmail());
 
                 Map<String, Object> model = new HashMap<>();
@@ -63,15 +66,15 @@ public class MailServiceImpl implements MailService{
         };
     }
 
-    public String getTemplateContent(String template, Map<String, Object> model){
-        StringBuffer content = new StringBuffer();
+    public String getTemplateContent(String template, Map<String, Object> model) throws ServiceException {
+        StringBuilder content = new StringBuilder();
         try{
             content.append(FreeMarkerTemplateUtils.processTemplateIntoString(
                     freemarkerConfiguration.getConfiguration().getTemplate(template), model));
             return content.toString();
         } catch(Exception e){
             LOGGER.error(e.getMessage(), e);
-            return "";
+            throw new ServiceException(ErrorService.EMAIL_EXCEPTION);
         }
     }
 }

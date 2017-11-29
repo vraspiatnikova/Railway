@@ -48,6 +48,51 @@ public class UserController {
         return "dba/users";
     }
 
+    @RequestMapping(value = "newUser", method = RequestMethod.GET)
+    public String getNewUser(Model model){
+        model.addAttribute("roles", UserRole.values());
+        return "dba/newuser";
+    }
+
+    @RequestMapping(value = "/addUser", method = RequestMethod.POST)
+    public String addNewUser(@RequestParam String email, @RequestParam String password,
+                             @RequestParam String confirm, @RequestParam String role, RedirectAttributes redirectAttributes){
+        String redirectNewUser = "redirect:/newUser";
+        try {
+            email = email.trim();
+            Pattern p = Pattern.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
+            Matcher m = p.matcher(email);
+            boolean isEmail = m.matches();
+            if (!isEmail) {
+                throw new ControllerException(ErrorController.INCORRECT_EMAIL);
+            }
+            if (password.length() < 4 || password.length() > 20) {
+                throw new ControllerException(ErrorController.INCORRECT_PASSWORD);
+            }
+            if (!confirm.equals(password)) {
+                throw new ControllerException(ErrorController.INCORRECT_CONFIRM_PASSWORD);
+            }
+            String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+            User user = new User(email, hashedPassword, UserRole.valueOf(role));
+            userService.addUser(user);
+            redirectAttributes.addFlashAttribute(message, "You have registered a new user successfully!");
+        } catch (ControllerException e) {
+            LOGGER.warn(e.getError().getMessageForLog(), e);
+            redirectAttributes.addFlashAttribute(exception, e.getError().getMessage());
+            return redirectNewUser;
+        } catch (ServiceException e) {
+            LOGGER.warn(e.getError().getMessageForLog(), e);
+            redirectAttributes.addFlashAttribute(exception, e.getError().getMessage());
+            redirectAttributes.addFlashAttribute("email", email);
+            return redirectNewUser;
+        } catch (Exception e) {
+            LOGGER.warn(e.getMessage(), e);
+            redirectAttributes.addFlashAttribute(exception, e.getMessage());
+            return redirectNewUser;
+        }
+        return redirectUsers;
+    }
+
     @RequestMapping(value = "editUser/{id}", method = RequestMethod.GET)
     public String editTrain(@PathVariable("id") int id, Model model){
         try {
@@ -94,51 +139,6 @@ public class UserController {
         } catch (Exception e) {
             LOGGER.warn(e.getMessage(), e);
             redirectAttributes.addFlashAttribute(exception, e.getMessage());
-        }
-        return redirectUsers;
-    }
-
-    @RequestMapping(value = "newUser", method = RequestMethod.GET)
-    public String getNewUser(Model model){
-        model.addAttribute("roles", UserRole.values());
-        return "dba/newuser";
-    }
-
-    @RequestMapping(value = "/addUser", method = RequestMethod.POST)
-    public String addNewUser(@RequestParam String email, @RequestParam String password,
-                             @RequestParam String confirm, @RequestParam String role, RedirectAttributes redirectAttributes){
-        String redirectNewUser = "redirect:/newUser";
-        try {
-            email = email.trim();
-            Pattern p = Pattern.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
-            Matcher m = p.matcher(email);
-            boolean isEmail = m.matches();
-            if (!isEmail) {
-                throw new ControllerException(ErrorController.INCORRECT_EMAIL);
-            }
-            if (password.length() < 4 || password.length() > 20) {
-                throw new ControllerException(ErrorController.INCORRECT_PASSWORD);
-            }
-            if (!confirm.equals(password)) {
-                throw new ControllerException(ErrorController.INCORRECT_CONFIRM_PASSWORD);
-            }
-            String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-            User user = new User(email, hashedPassword, UserRole.valueOf(role));
-            userService.addUser(user);
-            redirectAttributes.addFlashAttribute(message, "You have registered a new user successfully!");
-        } catch (ControllerException e) {
-            LOGGER.warn(e.getError().getMessageForLog(), e);
-            redirectAttributes.addFlashAttribute(exception, e.getError().getMessage());
-            return redirectNewUser;
-        } catch (ServiceException e) {
-            LOGGER.warn(e.getError().getMessageForLog(), e);
-            redirectAttributes.addFlashAttribute(exception, e.getError().getMessage());
-            redirectAttributes.addFlashAttribute("email", email);
-            return redirectNewUser;
-        } catch (Exception e) {
-            LOGGER.warn(e.getMessage(), e);
-            redirectAttributes.addFlashAttribute(exception, e.getMessage());
-            return redirectNewUser;
         }
         return redirectUsers;
     }

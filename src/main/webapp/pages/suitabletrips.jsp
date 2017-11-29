@@ -122,7 +122,15 @@
 <script src="${pageContext.request.contextPath}/resources/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
 
 <!-- Custom Js -->
-<script src="${pageContext.request.contextPath}/resources/js/admin.js"></script>
+<sec:authorize var="loggedIn" access="isAuthenticated()"/>
+<c:choose>
+    <c:when test="${loggedIn}">
+        <script src="${pageContext.request.contextPath}/resources/js/admin.js"></script>
+    </c:when>
+    <c:otherwise>
+        <script src="${pageContext.request.contextPath}/resources/js/test.js"></script>
+    </c:otherwise>
+</c:choose>
 <script src="${pageContext.request.contextPath}/resources/js/pages/forms/basic-form-elements.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/pages/tables/jquery-datatable.js"></script>
 

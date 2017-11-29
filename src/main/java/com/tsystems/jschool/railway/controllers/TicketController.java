@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.apache.log4j.Logger;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -44,11 +45,12 @@ public class TicketController {
         this.ticketService = ticketService;
         this.userService = userService;
         this.passengerService = passengerService;
+
     }
 
     @RequestMapping("buyticket/{boardid}/{wpfromid}/{wptoid}")
     public String buyTicketPage(@PathVariable("boardid") int boardId, @PathVariable("wpfromid") int wpFromId,
-                           @PathVariable("wptoid") int wpToId, Model model){
+                           @PathVariable("wptoid") int wpToId, Model model, HttpServletRequest request){
         LOGGER.info("try to get buy ticket page");
         try {
             Board board = boardService.findBoardById(boardId);
@@ -95,28 +97,22 @@ public class TicketController {
             if (passport.trim().length() < 10) {
                 throw new ControllerException(ErrorController.INCORRECT_PASSENGER_PASSPORT);
             }
-
-            try {
-                Date birthdateDate = dateFormat.parse(birthdate);
-                if (birthdateDate.after(new Date())){
-                    throw new ControllerException(ErrorController.INCORRECT_PASSENGER_BIRTHDATE);
-                }
-                DateFormat dateTimeFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-                Date startDate = dateTimeFormat.parse(dateTime);
-                if (passenger != null){
-                    passenger.setFirstName(firstName);
-                    passenger.setLastName(lastName);
-                    passenger.setPassport(passport);
-                    passenger.setBirthdate(birthdateDate);
-                    passenger = passengerService.updatePassenger(passenger);
-                } else{
-                    passenger = new Passenger(firstName, lastName, birthdateDate, passport, user);
-                    passenger = passengerService.addPassenger(passenger);
-                }
-                ticketService.buyTicket(passenger, boardId, wpFromId, wpToId, startDate);
-            } catch (ParseException e) {
-                throw new ControllerException(ErrorController.INCORRECT_DATE_FORMAT);
+            Date birthdateDate = parseDate(birthdate, dateFormat);
+            if (birthdateDate.after(new Date())){
+                throw new ControllerException(ErrorController.INCORRECT_PASSENGER_BIRTHDATE);
             }
+            Date startDate = parseDate(dateTime, new SimpleDateFormat("yyyy/MM/dd HH:mm"));
+            if (passenger != null){
+                passenger.setFirstName(firstName);
+                passenger.setLastName(lastName);
+                passenger.setPassport(passport);
+                passenger.setBirthdate(birthdateDate);
+                passenger = passengerService.updatePassenger(passenger);
+            } else{
+                passenger = new Passenger(firstName, lastName, birthdateDate, passport, user);
+                passenger = passengerService.addPassenger(passenger);
+            }
+            ticketService.buyTicket(passenger, boardId, wpFromId, wpToId, startDate);
             model.addAttribute(message, "You have bought a ticket successfully!");
         } catch (ControllerException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
@@ -132,6 +128,15 @@ public class TicketController {
             return redirectBuyTicket;
         }
         return "user/message_user";
+    }
+    private Date parseDate(String dateString, DateFormat format) throws ControllerException {
+        Date date;
+        try {
+            date = format.parse(dateString);
+        } catch (ParseException e) {
+            throw new ControllerException(ErrorController.INCORRECT_DATE_FORMAT);
+        }
+        return date;
     }
 
     @RequestMapping(value = "myTickets", method = RequestMethod.GET)

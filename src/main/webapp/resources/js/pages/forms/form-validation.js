@@ -28,10 +28,12 @@ $(function () {
                 required: true
             },
             travelTime: {
-                required: true
+                required: true,
+                min: 0
             },
             stopTime: {
-                required: true
+                required: true,
+                min: 0
             }
         },
         highlight: function (input) {

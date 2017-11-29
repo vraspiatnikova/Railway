@@ -77,6 +77,9 @@ public class StationServiceImpl implements StationService {
     public void updateStation(Station station) throws ServiceException {
         LOGGER.info("try to update station with id (" + station.getId() + ")");
         try {
+            if (stationDao.findByName(station.getName()) != null) {
+                throw new ServiceException(ErrorService.DUPLICATE_STATION);
+            }
             stationDao.update(station);
         } catch (DaoException e) {
             LOGGER.error(e.getMessage(), e);

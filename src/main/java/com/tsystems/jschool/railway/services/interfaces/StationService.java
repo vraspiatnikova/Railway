@@ -2,7 +2,6 @@ package com.tsystems.jschool.railway.services.interfaces;
 
 import com.tsystems.jschool.railway.persistence.Station;
 import com.tsystems.jschool.railway.exceptions.ServiceException;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

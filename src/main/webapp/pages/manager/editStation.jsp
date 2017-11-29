@@ -23,7 +23,7 @@
                         </h2>
                     </div>
                     <div class="body">
-                        <form method="post" action="${pageContext.request.contextPath}/updateStation/${id}">
+                        <form id="form_validation" method="post" novalidate="novalidate" action="${pageContext.request.contextPath}/updateStation/${id}">
                             <label for="stationName">Station name</label>
                             <div class="form-group">
                                 <div class="form-line">
@@ -57,6 +57,9 @@
 <!-- Slimscroll Plugin Js -->
 <script src="${pageContext.request.contextPath}/resources/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
 
+<!-- Jquery Validation Plugin Css -->
+<script src="${pageContext.request.contextPath}/resources/plugins/jquery-validation/jquery.validate.js"></script>
+
 <!-- Waves Effect Plugin Js -->
 <script src="${pageContext.request.contextPath}/resources/plugins/node-waves/waves.js"></script>
 
@@ -72,6 +75,7 @@
 <!-- Custom Js -->
 <script src="${pageContext.request.contextPath}/resources/js/admin.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/pages/forms/basic-form-elements.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/pages/forms/form-validation.js"></script>
 
 <!-- Demo Js -->
 <script src="${pageContext.request.contextPath}/resources/js/demo.js"></script>

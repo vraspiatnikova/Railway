@@ -5,6 +5,7 @@ import com.tsystems.jschool.railway.persistence.Passenger;
 import com.tsystems.jschool.railway.persistence.User;
 
 public interface PassengerService {
+
     Passenger findPassengerByUser(User user) throws ServiceException;
 
     Passenger findPassengerById(Integer id) throws ServiceException;

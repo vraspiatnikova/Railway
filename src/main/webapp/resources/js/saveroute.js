@@ -14,9 +14,11 @@ jQuery(document).on('click', '[name="delWaypoint"]:not(.disabled)', function () 
 });
 
 jQuery(document).on('click', '[name="saveRoute"]', function () {
-    var pst = {};
+    if (jQuery('#routeForm').valid()){
+        var pst = {};
     pst.routeNumber = jQuery('[name="routeNumber"]').val();
     pst.waypoints = [];
+
     jQuery('.waypoint-row').each(function () {
         pst.waypoints.push({
             station: jQuery(this).find('[name="stations"]').val(),
@@ -24,9 +26,11 @@ jQuery(document).on('click', '[name="saveRoute"]', function () {
             stopTime: jQuery(this).find('[name="stopTime"]').val()
         })
     });
+
     console.log(pst);
     var json = JSON.stringify(pst);
     jQuery.post('saveroute', {json: json}, function (data) {
         jQuery('#routeForm').after(data);
     })
+}
 });

@@ -18,7 +18,8 @@ public enum ErrorController {
     DUPLICATE_STATIONS_IN_ROUTE(15, "The route cannot contain duplicate stations", "duplicate stations in the route"),
     INCORRECT_START_END(16, "The start date must be before the end date", "start date is after end date"),
     INCORRECT_START_DATE(17, "The start date cannot be before current date", "start date is before current"),
-    TICKET_NOT_FOUND(18, "You dont't have such ticket", "not found ticket by user");
+    TICKET_NOT_FOUND(18, "You dont't have such ticket", "not found ticket by user"),
+    PASSENGER_NOT_FOUND(19, "No such passenger found", "not found passenger by user");
 
 
     private final int id;

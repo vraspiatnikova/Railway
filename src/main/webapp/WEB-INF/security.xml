@@ -13,8 +13,6 @@ http://www.springframework.org/schema/security/spring-security-4.0.xsd">
         <intercept-url pattern="/signup" access="permitAll"/>
         <intercept-url pattern="/searchTrip" access="permitAll"/>
         <intercept-url pattern="/findTrip" access="permitAll"/>
-        <intercept-url pattern="/boardByStation" access="permitAll"/>
-        <intercept-url pattern="/showBoardByStation" access="permitAll"/>
 
         <intercept-url pattern="/user_start_page" access="hasRole('ROLE_USER')"/>
         <intercept-url pattern="/searchTripUser" access="hasRole('ROLE_USER')"/>
@@ -26,6 +24,8 @@ http://www.springframework.org/schema/security/spring-security-4.0.xsd">
         <intercept-url pattern="/myTickets" access="hasRole('ROLE_USER')"/>
         <intercept-url pattern="/myInfo" access="hasRole('ROLE_USER')"/>
         <intercept-url pattern="/updatePassenger/**" access="hasRole('ROLE_USER')"/>
+        <intercept-url pattern="/boardByStation" access="hasRole('ROLE_USER')"/>
+        <intercept-url pattern="/showBoardByStation" access="hasRole('ROLE_USER')"/>
 
         <intercept-url pattern="/admin_start_page" access="hasRole('ROLE_MANAGER')"/>
         <intercept-url pattern="/stations" access="hasRole('ROLE_MANAGER')"/>

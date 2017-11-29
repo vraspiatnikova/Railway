@@ -23,7 +23,7 @@
                         </h2>
                     </div>
                     <div class="body">
-                        <form method="post" action="${pageContext.request.contextPath}/updateTrain/${id}">
+                        <form id="form_validation" method="post" novalidate="novalidate" action="${pageContext.request.contextPath}/updateTrain/${id}">
                             <label for="trainName">Train Number</label>
                             <div class="form-group">
                                 <div class="form-line">
@@ -33,7 +33,7 @@
                             <label for="capacity">Capacity</label>
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" id="capacity" name="capacity" class="form-control" value="${train.capacity}" required>
+                                    <input type="text" id="capacity" min="18" max="1080" name="capacity" class="form-control" value="${train.capacity}" required>
                                 </div>
                             </div>
                             <div class="row clearfix">
@@ -63,6 +63,9 @@
 <!-- Slimscroll Plugin Js -->
 <script src="${pageContext.request.contextPath}/resources/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
 
+<!-- Jquery Validation Plugin Css -->
+<script src="${pageContext.request.contextPath}/resources/plugins/jquery-validation/jquery.validate.js"></script>
+
 <!-- Waves Effect Plugin Js -->
 <script src="${pageContext.request.contextPath}/resources/plugins/node-waves/waves.js"></script>
 
@@ -78,6 +81,7 @@
 <!-- Custom Js -->
 <script src="${pageContext.request.contextPath}/resources/js/admin.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/pages/forms/basic-form-elements.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/pages/forms/form-validation.js"></script>
 
 <!-- Demo Js -->
 <script src="${pageContext.request.contextPath}/resources/js/demo.js"></script>

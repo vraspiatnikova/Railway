@@ -57,11 +57,10 @@ public class RouteServiceImplTest {
 
     @Test
     public void testNotFindRouteById() throws DaoException, ServiceException {
-        when(routeDao.findById(400)).thenReturn(null);
         when(routeDao.findById(-1)).thenReturn(null);
-        Assert.assertEquals(routeService.findRouteById(400), null);
-        Assert.assertEquals(routeService.findRouteById(-1), null);
+        Assert.assertEquals(null, routeService.findRouteById(-1));
     }
+
     @Test
     public void testDeleteRoute() throws DaoException, ServiceException{
         routeDao.delete(newRoute);

@@ -9,6 +9,7 @@ import com.tsystems.jschool.railway.exceptions.ServiceException;
 import java.util.List;
 
 public interface RouteService {
+
     NewRouteDto getNewRoute() throws ServiceException;
 
     void saveRoute(SaveRouteDto saveRouteDto) throws ServiceException;

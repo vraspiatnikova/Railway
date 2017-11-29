@@ -5,6 +5,7 @@ import com.tsystems.jschool.railway.dto.RouteDto;
 import com.tsystems.jschool.railway.dto.SaveRouteDto;
 import com.tsystems.jschool.railway.exceptions.ControllerException;
 import com.tsystems.jschool.railway.exceptions.ErrorController;
+import com.tsystems.jschool.railway.exceptions.ErrorService;
 import com.tsystems.jschool.railway.exceptions.ServiceException;
 import com.tsystems.jschool.railway.persistence.Route;
 import com.tsystems.jschool.railway.persistence.Train;
@@ -47,6 +48,7 @@ public class RouteController {
         LOGGER.info("try to get add route page");
         try {
             Train train = trainService.findTrainById(id);
+            if (train == null) throw new ServiceException(ErrorService.TRAIN_NOT_EXIST);
             model.addAttribute("train", train);
             model.addAttribute("allRoutes", routeService.getAllRoutes());
         } catch (ServiceException e) {
@@ -106,8 +108,6 @@ public class RouteController {
             saveRouteDto.setRouteNumber(routeNumber);
             JSONArray waypoints = obj.getJSONArray("waypoints");
 
-            Integer prevTravelStopTime = -1;
-
             for (int i = 0; i < waypoints.length(); i++) {
                 String station = waypoints.getJSONObject(i).getString("station");
                 if (station.trim().length() == 0) throw new ControllerException(ErrorController.INCORRECT_STATION_NAME);
@@ -118,7 +118,6 @@ public class RouteController {
                 Integer travelTime = Integer.parseInt(travelTimeStr);
                 Integer travelStopTime = Integer.parseInt(stopTimeStr);
 
-                prevTravelStopTime = travelStopTime;
                 waypointStations.add(station);
                 waypointTravellTime.add(travelTime);
                 waypointTravelStopTime.add(travelStopTime);
@@ -157,6 +156,7 @@ public class RouteController {
     public String editTrain(@PathVariable("id") int id, Model model){
         try {
             Route route = routeService.findRouteById(id);
+            if (route == null) throw new ServiceException(ErrorService.TRIP_NOT_EXIST);
             RouteDto routeDto = routeService.constructRouteDto(route);
             model.addAttribute("route", routeDto);
             model.addAttribute("id", id);
@@ -174,6 +174,8 @@ public class RouteController {
     public String updateBoard(@PathVariable("id") int id, @RequestParam String routeNumber, RedirectAttributes redirectAttributes){
         try {
             Route route = routeService.findRouteById(id);
+            if (route == null) throw new ServiceException(ErrorService.TRIP_NOT_EXIST);
+            if (routeNumber.length() == 0) throw new ControllerException(ErrorController.INCORRECT_ROUTE_NUMBER);
             route.setNumber(routeNumber);
             routeService.updateRoute(route);
             redirectAttributes.addFlashAttribute(message, "The route has been updated successfully!");
@@ -191,6 +193,7 @@ public class RouteController {
     public String deleteBoard(@PathVariable("id") int id, RedirectAttributes redirectAttributes){
         try {
             Route route = routeService.findRouteById(id);
+            if (route == null) throw new ServiceException(ErrorService.TRIP_NOT_EXIST);
             routeService.deleteRoute(route);
             redirectAttributes.addFlashAttribute(message, "The route has been deleted successfully!");
         } catch (ServiceException e) {

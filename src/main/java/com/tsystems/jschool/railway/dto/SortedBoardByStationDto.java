@@ -5,14 +5,13 @@ import org.apache.log4j.Logger;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 
 public class SortedBoardByStationDto implements Comparator<BoardByStationDto> {
 
     private static final Logger LOGGER = Logger.getLogger(SortedBoardByStationDto.class);
-    public final String DATE_FORMAT = "yyyy/MM/dd HH:mm";
+    public static final String DATE_FORMAT = "yyyy/MM/dd HH:mm";
 
     @Override
     public int compare(BoardByStationDto o1, BoardByStationDto o2) {

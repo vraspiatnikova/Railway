@@ -39,9 +39,10 @@ public class BoardController {
     public String searchTrips(Model model){
         LOGGER.info("try to get search trips page");
         try {
+            List<Station> stations = stationService.getAllStations();
             model.addAttribute("searchTripDto", new SearchTripDto());
             model.addAttribute("station", new Station());
-            model.addAttribute("allStations", this.stationService.getAllStations());
+            model.addAttribute("allStations", stations);
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
             model.addAttribute(exception, e.getError().getMessage());

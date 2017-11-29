@@ -6,6 +6,7 @@ import com.tsystems.jschool.railway.exceptions.ServiceException;
 import java.util.List;
 
 public interface UserService {
+
     User findUserById(Integer id) throws ServiceException;
 
     User findUserByEmail(String email) throws ServiceException;

@@ -28,6 +28,7 @@ public class SecurityController {
     private static final Logger LOGGER = Logger.getLogger(SecurityController.class);
     private final UserService userService;
 
+
     @Autowired
     public SecurityController(UserService userService) {
         this.userService = userService;
@@ -41,6 +42,8 @@ public class SecurityController {
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     public String signUpUser(ModelMap model, @RequestParam String email, @RequestParam String password,
                              @RequestParam String confirm) {
+        String signup = "/signup";
+        String exception = "exception";
         try {
             email = email.trim();
             Pattern p = Pattern.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
@@ -63,17 +66,17 @@ public class SecurityController {
             return "redirect:/login";
         } catch (ControllerException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
-            model.addAttribute("exception", e.getError().getMessage());
-            return "/signup";
+            model.addAttribute(exception, e.getError().getMessage());
+            return signup;
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
-            model.addAttribute("exception", e.getError().getMessage());
+            model.addAttribute(exception, e.getError().getMessage());
             model.addAttribute("email", email);
-            return "/signup";
+            return signup;
         } catch (Exception e) {
             LOGGER.warn(e.getMessage(), e);
-            model.addAttribute("exception", e.getMessage());
-            return "/signup";
+            model.addAttribute(exception, e.getMessage());
+            return signup;
         }
     }
 
@@ -83,7 +86,7 @@ public class SecurityController {
         if (auth != null){
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
-        return "redirect:/boardByStation";
+        return "redirect:/searchTrip";
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)

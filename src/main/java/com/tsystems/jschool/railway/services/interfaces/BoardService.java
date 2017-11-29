@@ -7,12 +7,8 @@ import com.tsystems.jschool.railway.dto.SuitableTripDto;
 import com.tsystems.jschool.railway.persistence.Board;
 import com.tsystems.jschool.railway.persistence.Passenger;
 import com.tsystems.jschool.railway.exceptions.ServiceException;
-import com.tsystems.jschool.railway.persistence.Route;
-import com.tsystems.jschool.railway.persistence.Train;
 import org.joda.time.DateTime;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.List;
 
 public interface BoardService {

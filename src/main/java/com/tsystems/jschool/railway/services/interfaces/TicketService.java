@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 public interface TicketService {
+
     Ticket findTicketById(Integer id) throws ServiceException;
 
     void deleteTicket(Ticket ticket) throws ServiceException;

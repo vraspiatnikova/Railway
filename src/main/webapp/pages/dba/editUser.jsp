@@ -17,6 +17,7 @@
         <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
+                    <c:import url="../message.jsp"/>
                     <div class="header">
                         <h2>
                             USER'S INFO

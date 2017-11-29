@@ -32,8 +32,9 @@ import java.util.Locale;
 public class ManagerBoardController {
 
     private static final Logger LOGGER = Logger.getLogger(ManagerBoardController.class);
-    private static final DateFormat dateFormat = new SimpleDateFormat("EEEE dd MMMM yyyy - HH:mm", Locale.ENGLISH);
     private final BoardService boardService;
+
+    private DateFormat dateFormat = new SimpleDateFormat("EEEE dd MMMM yyyy - HH:mm", Locale.ENGLISH);
     private String exception = "exception";
     private String message = "message";
     private String redirectAllTrips = "redirect:/allTrainsRoutes";

@@ -24,7 +24,7 @@
                         </h2>
                     </div>
                     <div class="body">
-                        <form role="form" id="routeForm">
+                        <form role="form" id="routeForm" novalidate="novalidate">
                             <label for="route_num">Route number</label>
                             <div class="form-group">
                                 <div class="form-line">
@@ -126,6 +126,9 @@
 <!-- Slimscroll Plugin Js -->
 <script src="${pageContext.request.contextPath}/resources/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
 
+<!-- Jquery Validation Plugin Css -->
+<script src="${pageContext.request.contextPath}/resources/plugins/jquery-validation/jquery.validate.js"></script>
+
 <!-- Waves Effect Plugin Js -->
 <script src="${pageContext.request.contextPath}/resources/plugins/node-waves/waves.js"></script>
 
@@ -141,6 +144,7 @@
 <!-- Custom Js -->
 <script src="${pageContext.request.contextPath}/resources/js/admin.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/pages/forms/basic-form-elements.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/pages/forms/form-validation.js"></script>
 
 <!-- Demo Js -->
 <script src="${pageContext.request.contextPath}/resources/js/demo.js"></script>

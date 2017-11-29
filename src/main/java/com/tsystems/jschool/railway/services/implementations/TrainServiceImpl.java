@@ -90,6 +90,7 @@ public class TrainServiceImpl implements TrainService {
     public void updateTrain(Train train) throws ServiceException {
         LOGGER.info("try to update train with name " + train.getName());
         try {
+            if (trainDao.findByName(train.getName()) != null) throw new ServiceException(ErrorService.DUPLICATE_TRAIN);
             trainDao.update(train);
         } catch (DaoException e) {
             LOGGER.error(e.getMessage(), e);

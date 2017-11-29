@@ -51,19 +51,7 @@ public class BoardServiceImpl implements BoardService {
             Train train = trainDao.findByName(trainName);
             List<Board> boards = boardDao.findBoardByTrainName(trainName);
             if (!boards.isEmpty()) {
-                for (Board board : boards) {
-                    Date start = board.getDateTime();
-                    Date end = board.getRoute().findLastWaypoint().departureDate(start);
-                    for (DateTime dateTime : dateTimeList) {
-                        Date newStart = dateTime.toDate();
-                        Date newEnd = route.findLastWaypoint().departureDate(newStart);
-                        if (!newStart.after(end) || !newStart.before(start) ||
-                                !newEnd.after(end) || !newEnd.before(start) ||
-                                (start.after(newStart) && end.after(newStart) && start.before(newEnd) && end.before(newEnd))) {
-                            throw new ServiceException(ErrorService.DUPLICATE_TRIP);
-                        }
-                    }
-                }
+                checkDuplicateTrips(boards, dateTimeList, route);
             }
             else {
                 for (DateTime dateTime : dateTimeList) {
@@ -80,6 +68,22 @@ public class BoardServiceImpl implements BoardService {
         } catch (DaoException e) {
             LOGGER.error(e.getMessage(), e);
             throw new ServiceException(ErrorService.DATABASE_EXCEPTION, e);
+        }
+    }
+
+    private void checkDuplicateTrips(List<Board> boards, List<DateTime> dateTimeList, Route route) throws ServiceException {
+        for (Board board : boards) {
+            Date start = board.getDateTime();
+            Date end = board.getRoute().findLastWaypoint().departureDate(start);
+            for (DateTime dateTime : dateTimeList) {
+                Date newStart = dateTime.toDate();
+                Date newEnd = route.findLastWaypoint().departureDate(newStart);
+                if (!newStart.after(end) || !newStart.before(start) ||
+                        !newEnd.after(end) || !newEnd.before(start) ||
+                        (start.after(newStart) && end.after(newStart) && start.before(newEnd) && end.before(newEnd))) {
+                    throw new ServiceException(ErrorService.DUPLICATE_TRIP);
+                }
+            }
         }
     }
 

@@ -6,6 +6,7 @@ import com.tsystems.jschool.railway.exceptions.ServiceException;
 import java.util.List;
 
 public interface TrainService {
+
     Train addTrain(Train train) throws ServiceException;
 
     Train findTrainById(Integer id) throws ServiceException;

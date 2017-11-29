@@ -23,7 +23,8 @@ public enum ErrorService {
     CANNOT_DELETE_USER(19, "You cannot delete this user!", "there is a passenger with user"),
     DUPLICATE_TRIP(20, "The trip cannot be added, this train is occupied", "train is occupied"),
     CANNOT_UPDATE_ROUTE(21, "You cannot update route as there are tickets", "cannot update route"),
-    CANNOT_CANCEL_TICKET(22, "You cannot cancel a ticket 24 hours prior to departure", "cannot cancel ticket");
+    CANNOT_CANCEL_TICKET(22, "You cannot cancel a ticket 24 hours prior to departure", "cannot cancel ticket"),
+    EMAIL_EXCEPTION(23, "An error occur while sending e-mail", "email sending exception");
 
     private final int id;
     private final String message;

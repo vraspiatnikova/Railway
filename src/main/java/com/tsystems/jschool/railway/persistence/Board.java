@@ -22,13 +22,13 @@ public class Board implements Comparable<Board>{
     private Train train;
     private Collection<Ticket> tickets;
 
+    public Board() {
+    }
+
     public Board(Date dateTime, Route route, Train train) {
         this.dateTime = dateTime;
         this.route = route;
         this.train = train;
-    }
-
-    public Board() {
     }
 
     @Id

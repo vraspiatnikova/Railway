@@ -2,6 +2,7 @@ package com.tsystems.jschool.railway.controllers;
 
 import com.tsystems.jschool.railway.exceptions.ControllerException;
 import com.tsystems.jschool.railway.exceptions.ErrorController;
+import com.tsystems.jschool.railway.exceptions.ErrorService;
 import com.tsystems.jschool.railway.exceptions.ServiceException;
 import com.tsystems.jschool.railway.persistence.Train;
 import com.tsystems.jschool.railway.services.interfaces.TrainService;
@@ -44,7 +45,7 @@ public class TrainController {
 
     @RequestMapping(value = "addTrain", method = RequestMethod.POST)
     public String addTrain(@ModelAttribute("train") Train train, RedirectAttributes redirectAttributes){
-        LOGGER.info("try to add new train with name " + train.getName() + " and capacity " + train.getCapacity());
+        LOGGER.info("try to add new train with name " + train.getName() + ", capacity " + train.getCapacity());
         try {
             if (train.getName().trim().length() != 0) {
                 if (train.getCapacity() < 18 || train.getCapacity() > 1080)
@@ -72,6 +73,9 @@ public class TrainController {
     public String editTrain(@PathVariable("id") int id, Model model){
         try {
             Train train = trainService.findTrainById(id);
+            if (train == null) {
+                throw new ServiceException(ErrorService.TRAIN_NOT_EXIST);
+            }
             model.addAttribute("train", train);
             model.addAttribute("id", id);
         } catch (ServiceException e) {
@@ -88,10 +92,20 @@ public class TrainController {
     public String updateTrain(@PathVariable("id") int id, @RequestParam String trainName, @RequestParam String capacity, RedirectAttributes redirectAttributes){
         try {
             Train train = trainService.findTrainById(id);
-            train.setName(trainName);
-            train.setCapacity(Integer.parseInt(capacity));
-            trainService.updateTrain(train);
-            redirectAttributes.addFlashAttribute(message, "The train has been updated successfully!");
+            if (train == null) {
+                throw new ServiceException(ErrorService.TRAIN_NOT_EXIST);
+            }
+            if (train.getName().trim().length() != 0) {
+                if (train.getCapacity() < 18 || train.getCapacity() > 1080)
+                    throw new ControllerException(ErrorController.INCORRECT_CAPACITY);
+                train.setName(trainName);
+                train.setCapacity(Integer.parseInt(capacity));
+                trainService.updateTrain(train);
+                LOGGER.info("train with name " + train.getName() + " and capacity " + train.getCapacity() +" has been updated");
+                redirectAttributes.addFlashAttribute(message, "The train has been updated successfully!");
+            } else {
+                throw new ControllerException(ErrorController.INCORRECT_TRAIN_NAME);
+            }
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
             redirectAttributes.addFlashAttribute(exception, e.getError().getMessage());
@@ -106,8 +120,11 @@ public class TrainController {
     public String deleteTrain(@PathVariable("id") int id, RedirectAttributes redirectAttributes){
         try {
             Train train = trainService.findTrainById(id);
-            trainService.deleteTrain(train);
-            redirectAttributes.addFlashAttribute(message, "The train has been deleted successfully!");
+            if(train != null) {
+                trainService.deleteTrain(train);
+                redirectAttributes.addFlashAttribute(message, "The train has been deleted successfully!");
+            }
+            else throw new ServiceException(ErrorService.TRAIN_NOT_EXIST);
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
             redirectAttributes.addFlashAttribute(exception, e.getError().getMessage());

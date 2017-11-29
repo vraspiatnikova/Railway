@@ -8,9 +8,6 @@ public class RouteDto {
     private String routeNumber;
     private String routeWaypoints;
 
-    public RouteDto() {
-    }
-
     public int getId() {
         return id;
     }

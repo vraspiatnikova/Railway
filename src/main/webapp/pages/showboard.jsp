@@ -12,17 +12,7 @@
 <c:import url="head.jsp"/>
 
 <body class="theme-red ls-closed">
-
-<sec:authorize var="loggedIn" access="isAuthenticated()"/>
-<c:choose>
-    <c:when test="${loggedIn}">
-        <c:import url="user/navbar_user.jsp"/>
-    </c:when>
-    <c:otherwise>
-        <c:import url="navbar.jsp"/>
-    </c:otherwise>
-</c:choose>
-
+<c:import url="user/navbar_user.jsp"/>
 <section class="content">
     <div class="container-fluid">
         <div class="card">

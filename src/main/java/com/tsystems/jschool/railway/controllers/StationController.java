@@ -2,6 +2,7 @@ package com.tsystems.jschool.railway.controllers;
 
 import com.tsystems.jschool.railway.exceptions.ControllerException;
 import com.tsystems.jschool.railway.exceptions.ErrorController;
+import com.tsystems.jschool.railway.exceptions.ErrorService;
 import com.tsystems.jschool.railway.exceptions.ServiceException;
 import com.tsystems.jschool.railway.persistence.Station;
 import com.tsystems.jschool.railway.services.interfaces.StationService;
@@ -71,6 +72,7 @@ public class StationController {
     public String editTrain(@PathVariable("id") int id, Model model){
         try {
             Station station = stationService.findStationById(id);
+            if (station == null) throw new ServiceException(ErrorService.STATION_NOT_EXIST);
             model.addAttribute("station", station);
             model.addAttribute("id", id);
         } catch (ServiceException e) {
@@ -87,9 +89,12 @@ public class StationController {
     public String updateBoard(@PathVariable("id") int id, @RequestParam String stationName, RedirectAttributes redirectAttributes){
         try {
             Station station = stationService.findStationById(id);
-            station.setName(stationName);
-            stationService.updateStation(station);
-            redirectAttributes.addFlashAttribute(message, "The station has been updated successfully!");
+            if (station == null) throw new ServiceException(ErrorService.STATION_NOT_EXIST);
+            if (station.getName().trim().length() != 0) {
+                station.setName(stationName);
+                stationService.updateStation(station);
+                redirectAttributes.addFlashAttribute(message, "The station has been updated successfully!");
+            }
         } catch (ServiceException e) {
             LOGGER.warn(e.getError().getMessageForLog(), e);
             redirectAttributes.addFlashAttribute(exception, e.getError().getMessage());
@@ -104,6 +109,7 @@ public class StationController {
     public String deleteBoard(@PathVariable("id") int id, RedirectAttributes redirectAttributes){
         try {
             Station station = stationService.findStationById(id);
+            if (station == null) throw new ServiceException(ErrorService.STATION_NOT_EXIST);
             stationService.deleteStation(station);
             redirectAttributes.addFlashAttribute(message, "The station has been deleted successfully!");
         } catch (ServiceException e) {

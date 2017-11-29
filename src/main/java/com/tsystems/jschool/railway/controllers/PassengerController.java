@@ -60,6 +60,7 @@ public class PassengerController {
                                   @RequestParam String birthdate, @RequestParam String passport, RedirectAttributes redirectAttributes){
         try {
             Passenger passenger = passengerService.findPassengerById(id);
+            if (passenger == null) throw new ControllerException(ErrorController.PASSENGER_NOT_FOUND);
             Date birthdateDate = dateFormat.parse(birthdate);
             passenger.setFirstName(firstName);
             passenger.setLastName(lastName);
@@ -82,11 +83,9 @@ public class PassengerController {
                                   @RequestParam String birthdate, @RequestParam String passport, RedirectAttributes redirectAttributes){
         try {
             User user = ticketController.findUserByEmail();
-            Date birthdateDate;
-            try {
-                birthdateDate = dateFormat.parse(birthdate);
-            } catch (ParseException e) {
-                throw new ControllerException(ErrorController.INCORRECT_DATE_FORMAT);
+            Date birthdateDate = parseBirthdate(birthdate);
+            if (birthdateDate.after(new Date())){
+                throw new ControllerException(ErrorController.INCORRECT_PASSENGER_BIRTHDATE);
             }
             Passenger passenger = new Passenger(firstName, lastName, birthdateDate, passport, user);
             passengerService.addPassenger(passenger);
@@ -101,5 +100,15 @@ public class PassengerController {
             redirectAttributes.addFlashAttribute(exception, e.getMessage());
         }
         return "redirect:/myInfo";
+    }
+
+    private Date parseBirthdate(String birthdate) throws ControllerException {
+        Date dateOfBirth;
+        try {
+            dateOfBirth = dateFormat.parse(birthdate);
+        } catch (ParseException e) {
+            throw new ControllerException(ErrorController.INCORRECT_DATE_FORMAT);
+        }
+        return dateOfBirth;
     }
 }
